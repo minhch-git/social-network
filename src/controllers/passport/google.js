@@ -24,6 +24,7 @@ function applyPassportGoogle() {
               req.flash('success', tranSuccess.login_success(user.fullName))
             )
           let newUserItem = {
+            username: profile.emails[0].value.split('@')[0],
             firstName: profile.name.familyName,
             lastName: profile.name.givenName,
             local: { isActive: true, password: profile.id + uuidV4() },

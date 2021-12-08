@@ -78,13 +78,6 @@ const userSchema = mongoose.Schema(
 )
 
 userSchema.pre('save', async function (next) {
-  // create username
-  if (this.isModified('username')) {
-    this.username =
-      this.local.email?.split('@')[0] ||
-      this.facebook.email?.split('@')[0] ||
-      this.google.email?.split('@')[0]
-  }
   // only hash the password if it has been modified (or is new)
   if (this.isModified('local.password')) {
     this.local.password = await bcrypt.hash(this.local.password, 8)

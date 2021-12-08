@@ -15,6 +15,7 @@ const createUserLocal = async userBody => {
     throw createError.BadRequest('Email already exists')
   }
   let item = {
+    username: email.split('@')[0],
     firstName,
     lastName,
     local: {
