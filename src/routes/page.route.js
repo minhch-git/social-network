@@ -37,6 +37,7 @@ router.get('/search', requireLoggedIn, (req, res) => {
     success: req.flash('success'),
     pageTitle: 'Search',
     userLoggedIn: req.user,
+    selectedPage: 'search',
   })
 })
 
@@ -46,6 +47,7 @@ router.get('/message', requireLoggedIn, (req, res) => {
     success: req.flash('success'),
     pageTitle: 'Message',
     userLoggedIn: req.user,
+    selectedPage: 'message',
   })
 })
 router.get('/profile', requireLoggedIn, (req, res) => {
@@ -54,6 +56,7 @@ router.get('/profile', requireLoggedIn, (req, res) => {
     success: req.flash('success'),
     pageTitle: 'Profile',
     userLoggedIn: req.user,
+    selectedPage: 'profile',
   })
 })
 
@@ -62,6 +65,7 @@ router.get('/', requireLoggedIn, (req, res) => {
     errors: req.flash('errors'),
     success: req.flash('success'),
     pageTitle: 'Home',
+    selectedPage: 'home',
     userLoggedIn: req.user,
     userLoggedInJs: JSON.stringify({
       id: req.user.id,
