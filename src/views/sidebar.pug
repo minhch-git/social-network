@@ -1,0 +1,41 @@
+.sidebar
+  //- Logo
+  .logo
+    img(src='./assets/img/shuttle.svg', alt='Dong A')
+
+    //- Menu
+  .menu
+    ul.menu-list
+      //- Home
+      li.menu-item.active
+        a(href='/')
+          i.fas.fa-home
+      //- Search
+      li.menu-item
+        a(href='/search')
+          i.fas.fa-search
+      //- Notifications
+      li.menu-item
+        a(href='/')
+          i.fas.fa-bell
+      //- Message
+      li.menu-item
+        a(href='/message')
+          i.far.fa-envelope
+      //- Profile
+      li.menu-item
+        a(href='/profile')
+          i.fas.fa-user
+      //- Logout
+      li.menu-item.logout
+        a(href='/auth/logout')
+          i.fas.fa-sign-out-alt
+
+    //- Account menu
+  .account-menu
+    //- avatar
+    .avatar
+      span.dot.activate
+      img(src=userLoggedIn.profilePic, alt='avatar')
+    //- Modal
+    //- Actions

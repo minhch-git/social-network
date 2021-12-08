@@ -1,0 +1,49 @@
+.message
+  .container
+    .row.chat_list
+      //- <div class="chat_list">
+      //- Chat list title
+      .chat_list_title
+        .head_title
+          h5 Chats
+        .head_icon
+          a(href='')
+            i.fas.fa-search
+          a(href='')
+            i.fas.fa-plus
+      //- Chat list options
+      .chat_list_options
+        a(href='')
+          button.open_button.active Active
+        a(href='')
+          button.open_button Done
+        a(href='')
+          button.open_button.unread_button(disabled='') Unread
+      //- Chat list friend
+      .chat_list_friends.scroll
+        //- Members
+        .row.chat_list_member.active
+          .col-lg-3.member_avatar
+            img(src='https://cdn.icon-icons.com/icons2/1371/PNG/512/batman_90804.png', alt='')
+          .col-lg-9.member_body
+            .member_name
+              h5 Tonny
+            .member_text
+              p You: Have nice day!
+          .col-2.member_time
+            span.time_active 25m
+        //- Members
+        .row.chat_list_member
+          .col-lg-3.member_avatar
+            img(src='https://cdn.icon-icons.com/icons2/1371/PNG/512/batman_90804.png', alt='')
+          .col-lg-9.member_body
+            .member_name
+              h5 Tonny
+            .member_text
+              p You: Have nice day!
+          .col-2.member_time
+            span.time_active 25m
+        //- Members
+      .chat_list_help
+        a(href='') Help!
+        i.fas.fa-info

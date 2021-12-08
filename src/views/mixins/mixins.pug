@@ -1,0 +1,107 @@
+mixin createPostForm(user)
+  .post_form-container
+    .user_image-container
+      img(src=`${user.profilePic}`, alt="User's profile picture")
+    .textarea_container
+      textarea#postTextarea.text-primary(placeholder="What's happending?")
+      .buttons_container
+        //- user input: remove disabled
+        button#submitPostButton(disabled='') Post
+
+mixin createCoverPhotoUploadModal()
+  #coverImageModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Thay đổi ảnh bìa?
+          button.btn-close(type='button', data-bs-dismiss='modal')
+        //- Modal body
+        .modal-body
+          label(for='')
+          input#coverImageChange(type='file', name='cover-image')
+          .container-fluid.mt-3
+            .row
+              .col-lg-12
+                img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
+                button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Sửa
+        //- Modal footer
+        .modal-footer
+          button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createImageUploadModal()
+  #avatarModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Thay đổi ảnh đại diện?
+          button.btn-close(type='button', data-bs-dismiss='modal')
+        //- Modal body
+        .modal-body
+          label(for='')
+          input#avatarChange(type='file', name='avatar')
+          .container-fluid.mt-3
+            .row
+              .col-lg-12
+                img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
+                button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Cập nhập
+        //- Modal footer
+        .modal-footer
+          button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createPinnedPostModal()
+  #pinPostModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Ghim bài viết này?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bài viết này sẽ xuất hiện đầu tiên trong bài viết của bạn.
+        //- Modal footer
+        .modal-footer
+          button#submitPinPost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createUnpinPostModal()
+  #unpinPostModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Bỏ ghim bài viết?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bài viết đã ghim sẽ được bỏ.
+        //- Modal footer
+        .modal-footer
+          button#submitUnpinPost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createDeletePostModal()
+  #deletePostModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Xóa bài viết?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bạn có chắc chắn muốn xóa bài viết này không?
+        //- Modal footer
+        .modal-footer
+          button#submitDeletePost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createPostModal()
+  +createDeletePostModal()
+  +createPinnedPostModal()
+  +createUnpinPostModal()
+  
