@@ -31,10 +31,21 @@ const register = async (req, res) => {
       user.local.verifyToken
     }`
     // Send mail
-    emailService.sendEmailRegister(user.local.email, url)
-
-    req.flash('success', tranSuccess.userCreated(user.local.email))
-    return res.redirect('/auth/login')
+    emailService
+      .sendEmailRegister(user.local.email, url)
+      .then(success => {
+        req.flash('success', tranSuccess.userCreated(user.local.email))
+        return res.redirect('/auth/login')
+      })
+      .catch(async error => {
+        // remove account
+        await userService.deleteUserById(user._id)
+        req.flash(
+          'errors',
+          (error.errors && error.errors[0]) || transErrors.account_in_use
+        )
+        return res.redirect('/auth/register')
+      })
   } catch (error) {
     req.flash(
       'errors',

@@ -47,7 +47,7 @@ const sendEmailRegister = async (to, url) => {
   const title = `<span>Welcome !</span> And thank you for registering !`
   const desc = `Please validate your email by clicking the button below 🙂`
   const htmlContent = transEmail.template(title, desc, url, text)
-  await sendEmail(to, subject, htmlContent)
+  return sendEmail(to, subject, htmlContent)
 }
 
 /**
