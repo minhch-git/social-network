@@ -24,53 +24,48 @@ mixin createCoverPhotoUploadModal()
           button#submitCoverPhoto.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
+mixin createImageUploadModal()
+  #avatarUploadModal.modal.fade(tabindex='-1', aria-labelledby='imageUploadModalLabel', aria-hidden='true')
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        .modal-header
+          p.modal-title.text-primary Thay đổi ảnh đại diện?
+          button.btn-close(type='button', data-bs-dismiss='modal')
+        .modal-body
+          input#avatarPhoto(type="file", name="avatarPhoto")
+      
+          .avatar-preview__container 
+                
+        .modal-footer
+          button#submitAvatarPhoto.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
-//- mixin createCoverPhotoUploadModal()
-//-   #coverImageModal.modal
+
+
+//- mixin createImageUploadModal()
+//-   #avatarModal.modal
 //-     .modal-dialog
 //-       .modal-content.bg-grey-dim
 //-         //- Modal Header
 //-         .modal-header
-//-           p.modal-title.text-primary Thay đổi ảnh bìa?
+//-           p.modal-title.text-primary Thay đổi ảnh đại diện?
 //-           button.btn-close(type='button', data-bs-dismiss='modal')
 //-         //- Modal body
 //-         .modal-body
 //-           label(for='')
-//-           input#coverImageChange(type='file', name='cover-image')
+//-           input#avatarChange(type='file', name='avatar')
 //-           .container-fluid.mt-3
 //-             .row
 //-               .col-lg-12
 //-                 img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
-//-                 button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Sửa
+//-                 button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Cập nhập
 //-         //- Modal footer
 //-         .modal-footer
 //-           button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
 //-           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
-mixin createImageUploadModal()
-  #avatarModal.modal
-    .modal-dialog
-      .modal-content.bg-grey-dim
-        //- Modal Header
-        .modal-header
-          p.modal-title.text-primary Thay đổi ảnh đại diện?
-          button.btn-close(type='button', data-bs-dismiss='modal')
-        //- Modal body
-        .modal-body
-          label(for='')
-          input#avatarChange(type='file', name='avatar')
-          .container-fluid.mt-3
-            .row
-              .col-lg-12
-                img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
-                button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Cập nhập
-        //- Modal footer
-        .modal-footer
-          button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
-          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
-
 mixin createPinnedPostModal()
-  #pinPostModal.modal
+  #pinPostModal.modal.fade
     .modal-dialog
       .modal-content.bg-grey-dim
         //- Modal Header
@@ -86,7 +81,7 @@ mixin createPinnedPostModal()
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
 mixin createUnpinPostModal()
-  #unpinPostModal.modal
+  #unpinPostModal.modal.fade
     .modal-dialog
       .modal-content.bg-grey-dim
         //- Modal Header
@@ -102,7 +97,7 @@ mixin createUnpinPostModal()
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
 mixin createDeletePostModal()
-  #deletePostModal.modal
+  #deletePostModal.modal.fade
     .modal-dialog
       .modal-content.bg-grey-dim
         //- Modal Header
@@ -118,7 +113,7 @@ mixin createDeletePostModal()
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
 mixin retweetPostModal()
-  #retweetPostModal.modal
+  #retweetPostModal.modal.fade
     .modal-dialog
       .modal-content.bg-grey-dim
         //- Modal Header

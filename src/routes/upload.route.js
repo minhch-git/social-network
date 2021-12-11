@@ -15,9 +15,9 @@ router.post(
 )
 
 router.post(
-  '/',
+  '/avatarPhoto',
   requireLoggedIn,
-  uploadStorage.single('avatar'),
+  uploadStorage.single('coppedAvatar'),
   upload,
   uploadController.uploadAvatar
 )

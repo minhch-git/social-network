@@ -30,11 +30,6 @@ const previewImage = (input, selector, namePreview, optionsCopper) => {
       image.setAttribute('id', namePreview)
       image.src = e.target.result
       imagePreviewContainer.appendChild(image)
-      // cropper image
-      if (cropper !== undefined) {
-        cropper.destroy()
-      }
-
       cropper = new Cropper(image, optionsCopper)
 
       // prevent event zoom
@@ -86,12 +81,25 @@ const submitImage = (input, keyImage, api) => {
   })
 }
 
+// Preview avatar and cropper
+$('#avatarPhoto').onchange = e => {
+  previewImage(e.target, '.avatar-preview__container', 'avatarPreview', {
+    aspectRatio: 16 / 16,
+    background: false,
+  })
+}
+
 // Preview cover and cropper
 $('#coverPhoto').onchange = e =>
   previewImage(e.target, '.cover-preview__container', 'coverPreview', {
     aspectRatio: 16 / 9,
     background: false,
   })
+
+// submit avatar photo file data to server
+$('#submitAvatarPhoto').onclick = e => {
+  submitImage($('#avatarPhoto'), 'coppedAvatar', '/uploads/avatarPhoto')
+}
 
 // submit cover photo file data to server
 $('#submitCoverPhoto').onclick = e => {
@@ -101,4 +109,9 @@ $('#submitCoverPhoto').onclick = e => {
 $('#coverPhotoUploadModal').addEventListener('hide.bs.modal', e => {
   $('#coverPhoto').value = ''
   $('.cover-preview__container').innerHTML = ''
+})
+
+$('#avatarUploadModal').addEventListener('hide.bs.modal', e => {
+  $('#avatarPhoto').value = ''
+  $('.avatar-preview__container').innerHTML = ''
 })
