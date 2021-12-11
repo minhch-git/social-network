@@ -3,6 +3,7 @@ import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
 import { postService, userService } from '../services'
 import { tranSuccess } from '../../lang/en'
+import User from '../models/user.model'
 
 /**
  * Create a post
@@ -25,7 +26,7 @@ const createPost = catchAsync(async (req, res) => {
 const getPosts = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['postedBy'])
   let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
-  options.populate = 'postedBy'
+  options.populate = 'postedBy,retweetData,retweetData.postedBy'
   const result = await postService.queryPosts(filter, options)
   res.send(result)
 })
@@ -50,7 +51,10 @@ const getPost = catchAsync(async (req, res) => {
  */
 const updatePost = catchAsync(async (req, res) => {
   if (req.body.pinned) {
-    await postService.updatePosts({ postedBy: req.user.id }, { pinned: false })
+    await postService.updatePosts(
+      { postedBy: req.user._id, pinned: true },
+      { pinned: false }
+    )
   }
 
   const postUpdated = await postService.updatePostById(
@@ -68,10 +72,13 @@ const updatePost = catchAsync(async (req, res) => {
 const deletePost = catchAsync(async (req, res) => {
   let filter = {
     postedBy: req.user._id,
-    postId: req.params.postId,
+    _id: req.params.postId,
   }
-  const post = await postService.findOneAndDeletePost(filter)
-  res.status(200).json({ post, message: tranSuccess.deleted_success('post') })
+  const post = await postService.deletePost(filter)
+  if (!post) throw createError.NotFound('Not found post')
+  return res
+    .status(200)
+    .json({ post, message: tranSuccess.deleted_success('post') })
 })
 
 /**
@@ -98,10 +105,53 @@ const likePost = catchAsync(async (req, res) => {
 
 /**
  * Like post
- * @PATCH posts/:postId/like
+ * @PATCH posts/:postId/retweet
  * @access private
  */
-const retweetPost = catchAsync(async (req, res) => {})
+const retweetPost = catchAsync(async (req, res) => {
+  // Get content
+  const { postId } = req.params
+  const userId = req.user._id
+
+  // Try and delete post
+  const deletedPost = await postService.deletePost({
+    postedBy: userId,
+    retweetData: postId,
+  })
+
+  // Create options
+  let option = deletedPost ? '$pull' : '$addToSet'
+  let repost = deletedPost
+
+  // If not found repost => create new post
+  if (!repost) {
+    const newItem = {
+      postedBy: userId,
+      retweetData: postId,
+    }
+    repost = await postService.createPost(newItem)
+  }
+
+  // Insert user retweet
+  req.user = await userService.updateUser(
+    { _id: userId },
+    {
+      [option]: { retweets: repost._id },
+    }
+  )
+
+  // Insert post retweet
+  let post = await postService.updatePostById(postId, {
+    [option]: { retweetUsers: userId },
+  })
+  post = await User.populate(repost, [
+    'postedBy',
+    'retweetData',
+    'retweetData.postedBy',
+  ])
+  // Success
+  res.status(200).json({ message: 'Chia sẻ bài viết thành công.', post })
+})
 
 export default {
   createPost,

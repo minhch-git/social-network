@@ -13,7 +13,7 @@ const defaultRoutes = [
     route: postRoutes,
   },
   {
-    path: '/upload',
+    path: '/uploads',
     route: uploadRoutes,
   },
   {

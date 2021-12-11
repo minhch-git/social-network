@@ -2,93 +2,124 @@ const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
 
 const createPostHtml = post => {
+  let isRetweet = post.retweetData !== undefined
+  let retweetBy = isRetweet ? post.postedBy.fullName : null
+  post = isRetweet ? post.retweetData : post
   const { postedBy } = post
+
+  let retweetText = ''
+  if (isRetweet) {
+    retweetText = `
+      <span>
+        <i class="fas fa-retweet"></i> Retweeted by
+        <a href="/profile/${retweetBy}">@${retweetBy}</a> 
+      </span>
+    `
+  }
+
+  // handel action post of me
+  // button delete
+  let buttonDelete = ''
+  let buttonPinned = ''
+  let pinnedText = ''
+  if (postedBy.id === userLoggedIn.id) {
+    buttonDelete = `
+      <button
+        class="button-delete-post button_open-modal button_action-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#deletePostModal"
+      >
+      <i class="remove-pointer-events fas fa-times"></i>
+    </button>
+    `
+
+    buttonPinned = `
+    <button class="button-pinned-post button_open-modal button_action-sm ${
+      post.pinned ? 'active' : ''
+    }" 
+      data-bs-toggle="modal" 
+      data-bs-target="${post.pinned ? '#unpinPostModal' : '#pinPostModal'}"
+    >
+      <i class="remove-pointer-events fas fa-thumbtack"></i>
+    </button>
+    `
+    if (post.pinned) {
+      pinnedText = `
+        <div class="pinnedText"><i class="fas fa-thumbtack"></i> <span>Pinned by ${postedBy.fullName}</span></div>
+      `
+    }
+  }
+
   const timestamp = timeDifference(new Date(), new Date(post.createdAt))
 
   return `
-  <div class="post" data-id="${post.id}"" >
-    <div class="post_main-content-container">
-      <div class="user_image-container">
-        <img src="${postedBy.profilePic}" alt="User's profile picture" />
-      </div>
-      <div class="post_content-container">
-        <div class="post_header">
-          <a class="displayName" href="/profile/">${postedBy.fullName}</a>
-          <span class="username">@${postedBy.username}</span>
-          <span class="date">${timestamp}</span>
-
-          <button class="button-pinned-post button_open-modal button_action-sm ${
-            post.pinned ? 'active' : ''
-          }" 
-            data-bs-toggle="modal" 
-            data-bs-target="${
-              post.pinned ? '#unpinPostModal' : '#pinPostModal'
-            }"
-          >
-            <i class="remove-pointer-events fas fa-thumbtack"></i>
-          </button>
-          <button
-            class="button-delete-post button_open-modal button_action-sm ${
-              postedBy.id !== userLoggedIn.id && 'd-none'
-            }"
-            data-bs-toggle="modal"
-            data-bs-target="#deletePostModal"
-            data-id="${post.id}"
-          >
-            <i class="remove-pointer-events fas fa-times"></i>
-          </button>
+    <div class="post ${isRetweet ? 'post-retweet' : ''}" data-id="${post.id}"" >
+      ${pinnedText}
+      <div class="post_action-container">${retweetText}</div>
+      <div class="post_main-content-container">
+        <div class="user_image-container">
+          <img src="${postedBy.profilePic}" alt="User's profile picture" />
         </div>
-        <div class="post_body">
-          <span>${post.content}</span>
-        </div>
+        <div class="post_content-container">
+          <div class="post_header">
+            <a class="displayName" href="/profile/${postedBy.username}">${
+    postedBy.fullName
+  }</a>
+            <span class="username">@${postedBy.username}</span>
+            <span class="date">${timestamp}</span>
 
-        <div class="post_footer">
-          <div class="post_button-container">
-            <div class="post_button-container_content">
-              <button 
-                type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#replyModal"
-              >
-                <i class="far fa-comment"></i>
-              </button>
-            </div>
+            ${buttonPinned}          
+            ${buttonDelete}
+          </div>
+          <div class="post_body">
+            <span>${post.content}</span>
           </div>
 
-          <div class="post_button-container ${
-            post.retweetUsers.includes(userLoggedIn.id) && 'green'
-          }">
-            <div
-              class="
-                post_button-container_content
-                active
-                remove-pointer-events
-              "
-            >
-              <button class="retweet-button">
-                <i class="fas fa-retweet"></i>
-              </button>
-              <span class="number-retweets">${
-                post.retweetUsers.length ? post.retweetUsers.length : ''
-              }</span>
+          <div class="post_footer">
+            <div class="post_button-container">
+              <div class="post_button-container_content">
+                <button 
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#replyModal"
+                >
+                  <i class="far fa-comment"></i>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="post_button-container pink">
-            <div class="post_button-container_content ${
-              post.likes.includes(userLoggedIn.id) && 'active'
+
+            <div class="post_button-container green ${
+              postedBy.id === userLoggedIn.id ? 'remove-pointer-events' : ''
             }">
-              <button class="like-button" data-id="${post.id}" >
-                <i class="far fa-heart"></i>
-              </button>
-              <span class="number-likes">${
-                post.likes.length ? post.likes.length : ''
-              }</span>
+              <div
+                class=" post_button-container_content ${
+                  post.retweetUsers.includes(userLoggedIn.id) ? 'active' : ''
+                }"
+              >
+                <button class="retweet-button">
+                  <i class="fas fa-retweet"></i>
+                </button>
+                <span class="number-retweets">${
+                  post.retweetUsers.length ? post.retweetUsers.length : ''
+                }</span>
+              </div>
+            </div>
+            <div class="post_button-container pink">
+              <div class="post_button-container_content ${
+                post.likes.includes(userLoggedIn.id) ? 'active' : ''
+              }">
+                <button class="like-button" >
+                  <i class="far fa-heart"></i>
+                </button>
+                <span class="number-likes">${
+                  post.likes.length ? post.likes.length : ''
+                }</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   `
 }
 

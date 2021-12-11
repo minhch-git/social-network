@@ -2,13 +2,19 @@ import * as yup from 'yup'
 import { transValidations } from '../../lang/en'
 import config from './config.validation'
 const createPost = {
-  content: yup.string().required(),
+  content: yup.string(),
+  retweetData: yup.string(),
+  checkbox_selection: yup.string().when(['content', 'retweetData'], {
+    is: (content, retweetData) => !content && !retweetData,
+    then: yup.string().required('Vui lòng nhập nội dung bài post.'),
+  }),
 }
 
 const getPosts = {
   content: yup.string(),
   postedBy: yup.string(),
   replyTo: yup.string(),
+  retweetData: yup.string(),
 
   page: yup.number().integer(),
   limit: yup.number().integer(),

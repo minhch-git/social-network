@@ -9,26 +9,43 @@ mixin createPostForm(user)
         button#submitPostButton(disabled='') Post
 
 mixin createCoverPhotoUploadModal()
-  #coverImageModal.modal
+  #coverPhotoUploadModal.modal.fade(tabindex='-1', aria-labelledby='coverPhotoModalLabel', aria-hidden='true')
     .modal-dialog
       .modal-content.bg-grey-dim
-        //- Modal Header
         .modal-header
           p.modal-title.text-primary Thay đổi ảnh bìa?
           button.btn-close(type='button', data-bs-dismiss='modal')
-        //- Modal body
         .modal-body
-          label(for='')
-          input#coverImageChange(type='file', name='cover-image')
-          .container-fluid.mt-3
-            .row
-              .col-lg-12
-                img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
-                button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Sửa
-        //- Modal footer
+          input#coverPhoto(type="file", name="filePhoto")
+        
+          .cover-preview__container 
+                
         .modal-footer
-          button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button#submitCoverPhoto.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+
+//- mixin createCoverPhotoUploadModal()
+//-   #coverImageModal.modal
+//-     .modal-dialog
+//-       .modal-content.bg-grey-dim
+//-         //- Modal Header
+//-         .modal-header
+//-           p.modal-title.text-primary Thay đổi ảnh bìa?
+//-           button.btn-close(type='button', data-bs-dismiss='modal')
+//-         //- Modal body
+//-         .modal-body
+//-           label(for='')
+//-           input#coverImageChange(type='file', name='cover-image')
+//-           .container-fluid.mt-3
+//-             .row
+//-               .col-lg-12
+//-                 img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
+//-                 button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Sửa
+//-         //- Modal footer
+//-         .modal-footer
+//-           button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+//-           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
 mixin createImageUploadModal()
   #avatarModal.modal
@@ -100,8 +117,26 @@ mixin createDeletePostModal()
           button#submitDeletePost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
+mixin retweetPostModal()
+  #retweetPostModal.modal
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Xóa bài viết?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bạn có chắc chắn muốn xóa bài viết này không?
+        //- Modal footer
+        .modal-footer
+          button#submitReweetPost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+
 mixin createPostModal()
   +createDeletePostModal()
   +createPinnedPostModal()
   +createUnpinPostModal()
+  +retweetPostModal()
   

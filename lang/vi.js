@@ -47,7 +47,6 @@ const tranSuccess = {
   avatar_update: `Cập nhập ảnh đại diện thành công`,
   user_info_update: `Cập nhập thông tin cá nhân thành công`,
   user_password_update: 'Cập nhập mật khẩu thành công',
-  send_mail_success: 'Vui lòng kiểm tra email để xác nhật Reset-password',
 }
 
 const transEmail = {
@@ -60,6 +59,7 @@ const transEmail = {
       <h4>Nếu tin rằng email này là nhầm lẫn, hãy bỏ qua nó. Trân trọng</h4>
     `
   },
+  send_success: 'Vui lòng kiểm tra email để xác nhật Reset-password',
   send_failed: `Có lỗi trong quá trình gửi email, vui lòng liên hệ với bộ phận của chúng tôi.`,
 }
 

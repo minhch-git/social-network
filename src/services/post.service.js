@@ -11,7 +11,7 @@ import bcrypt from 'bcryptjs'
 const createPost = async postBody => {
   const newPost = new Post(postBody)
   await newPost.save()
-  await Post.populate(newPost, 'postedBy')
+  await Post.populate(newPost, ['postedBy', 'retweetData'])
   return newPost
 }
 
@@ -36,6 +36,16 @@ const queryPosts = async (filter, options) => {
 
 /**
  * Find post by id
+ * @param {Object} filter
+ * @returns {Promise<posts>}
+ */
+const getPosts = async filter => {
+  const posts = await Post.find(filter)
+  return posts
+}
+
+/**
+ * Find post by id
  * @param {ObjectId} postId
  * @returns {Promise<post>}
  */
@@ -53,7 +63,7 @@ const getPostById = async postId => {
 const updatePostById = async (postId, postBody) => {
   const postUpdated = await Post.findByIdAndUpdate(postId, postBody, {
     new: true,
-  })
+  }).populate('postedBy')
   if (!postUpdated) {
     throw createError.NotFound()
   }
@@ -90,20 +100,18 @@ const deletePostById = async postId => {
  * @param {Object} filter
  * @returns {Promise<post>}
  */
-const findOneAndDeletePost = async filter => {
+const deletePost = async filter => {
   const post = await Post.findOneAndDelete(filter)
-  if (!post) {
-    throw createError.NotFound()
-  }
   return post
 }
 
 export default {
   createPost,
   queryPosts,
+  getPosts,
   getPostById,
   updatePostById,
   updatePosts,
   deletePostById,
-  findOneAndDeletePost,
+  deletePost,
 }

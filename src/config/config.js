@@ -91,17 +91,17 @@ const config = {
     smtp: {
       host: smtpHost,
       port: smtpPort,
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
-        user: smtpUsername, // generated ethereal user
-        pass: smtpPassword, // generated ethereal password
+        user: smtpUsername,
+        pass: smtpPassword,
       },
     },
     from: emailFrom,
   },
   app: {
     max_event_listeners: 30,
-    upload_directory: 'src/uploads',
+    upload_directory: 'src/public/uploads',
     upload_limit_size: 1048576, // 1048576 byte = 1MB
     image_types: ['image/jpg', 'image/png', 'image/jpeg'],
   },

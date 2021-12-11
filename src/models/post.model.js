@@ -1,18 +1,28 @@
 import mongoose, { Schema } from 'mongoose'
 import toJSON from './plugins/toJson'
 import paginate from './plugins/paginate'
+import createHttpError from 'http-errors'
 
 const postSchema = new Schema(
   {
-    content: { type: String, trim: true, required: true },
+    content: { type: String, trim: true },
     postedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     pinned: Boolean,
     likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     retweetUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    replyTo: { type: Schema.Types.ObjectId, ref: 'Post' },
+    retweetData: { type: Schema.Types.ObjectId, ref: 'Post' },
+    // replyTo: { type: Schema.Types.ObjectId, ref: 'Post' },
   },
   { timestamps: true }
 )
+
+postSchema.pre('validate', function () {
+  if (this.content && this.retweetData) {
+    throw createHttpError.InternalServerError(
+      'Vui lòng nhập một trong hay trường content hoặc retweetData'
+    )
+  }
+})
 
 // add plugin that converts mongoose to json
 postSchema.plugin(toJSON)

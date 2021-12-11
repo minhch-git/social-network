@@ -18,13 +18,6 @@ router
     postController.createPost
   )
 
-router.patch(
-  '/:postId/like',
-  requireLoggedIn,
-  validate(postValidation.updatePost),
-  postController.likePost
-)
-
 router
   .route('/:postId')
   .delete(
@@ -37,5 +30,19 @@ router
     validate(postValidation.updatePost),
     postController.updatePost
   )
+
+router.patch(
+  '/:postId/like',
+  requireLoggedIn,
+  validate(postValidation.updatePost),
+  postController.likePost
+)
+
+router.post(
+  '/:postId/retweet',
+  requireLoggedIn,
+  validate(postValidation.updatePost),
+  postController.retweetPost
+)
 
 export default router

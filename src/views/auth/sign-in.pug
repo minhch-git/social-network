@@ -1,0 +1,23 @@
+
+
+.col.align-center.flex-col.sign-in
+  .form-wrapper.align-center
+    form.form.sign-in(action="/sign-in", method="POST")
+      .input-group
+        i.bx.bxs-user
+        input(type='text', placeholder='Email' name="email")
+      .input-group
+        i.bx.bxs-lock-alt
+        input(type='password', placeholder='Password' name="password")
+      button Sign in
+      p
+        b Forgot password?
+      p
+        span  Don&apos;t have an account? 
+        b#sign-up Sign up here
+  .form-wrapper
+    .social-list.align-center.sign-in
+      .align-center.facebook-bg
+        i.bx.bxl-facebook
+      .align-center.google-bg
+        i.bx.bxl-google

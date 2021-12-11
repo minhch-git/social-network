@@ -36,4 +36,18 @@ const uploadAvatar = async path => {
   return url
 }
 
-export default { upload, uploadAvatar }
+/**
+ * Upload file to cloudinary
+ * @param {string} path link to file image in local
+ *  @returns {Promise<url>}
+ */
+const uploadCoverPhoto = async path => {
+  const options = {
+    folder: 'coverPhoto',
+    crop: 'fill',
+  }
+  const url = await upload(path, options)
+  return url
+}
+
+export default { upload, uploadAvatar, uploadCoverPhoto }

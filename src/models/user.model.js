@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import slug from 'mongoose-slug-generator'
 import bcrypt from 'bcryptjs'
 import { roles } from '../config/roles'
 import { transValidations } from '../../lang/en'
@@ -19,12 +20,12 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    username: String,
+    username: { type: String, slug: ['firstName', 'lastName'], unique: true },
     address: { type: String, default: null },
     profilePic: {
       type: String,
       default:
-        'https://res.cloudinary.com/djvd6zhbg/image/upload/v1638333857/avatar/y2o8fkirkuvdpl0clkxj.jpg',
+        'https://res.cloudinary.com/djvd6zhbg/image/upload/v1639037693/avatar/avatar-default_emyynu.png',
     },
     coverPhoto: { type: String },
     likes: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
@@ -102,6 +103,7 @@ userSchema.methods = {
 }
 
 // add plugin that converts mongoose to json
+userSchema.plugin(slug)
 userSchema.plugin(toJSON)
 userSchema.plugin(paginate)
 

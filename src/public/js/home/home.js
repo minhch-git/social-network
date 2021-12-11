@@ -53,10 +53,11 @@ const loadPosts = async () => {
 }
 
 // Like post
-const likePost = async (postId, button) => {
+const likePost = async (postId, likeButton) => {
   await httpPatch(`/posts/${postId}/like`, {})
-  const isLiked = button.parentElement.classList.toggle('active')
-  const numberLikesBtn = button.parentElement.querySelector('span.number-likes')
+  const isLiked = likeButton.parentElement.classList.toggle('active')
+  const numberLikesBtn =
+    likeButton.parentElement.querySelector('span.number-likes')
   // displike
   if (!isLiked) {
     numberLikesBtn.innerHTML = +numberLikesBtn.innerHTML - 1
@@ -87,7 +88,7 @@ const pinPost = async (postId, postContainer) => {
   Swal.fire({
     position: 'top-end',
     icon: 'success',
-    title: `<span>${data.message}</span>`,
+    title: `<span>Ghim bài...</span>`,
     showConfirmButton: false,
     timer: 800,
     background: '#15202b',
@@ -98,6 +99,7 @@ const pinPost = async (postId, postContainer) => {
     '.button-pinned-post.active'
   )
   if (buttonPinning) {
+    postContainer.parentElement.querySelector('.pinnedText').remove()
     buttonPinning.classList.remove('active')
     buttonPinning.setAttribute('data-bs-target', '#pinPostModal')
   }
@@ -108,17 +110,18 @@ const pinPost = async (postId, postContainer) => {
   if (buttonPin) {
     buttonPin.classList.add('active')
     buttonPin.setAttribute('data-bs-target', '#unpinPostModal')
+    let pinnedHtml = `<div class="pinnedText"><i class="fas fa-thumbtack"></i> <span>Pinned by ${data.postUpdated.postedBy.fullName}</span></div>`
+    postContainer.insertAdjacentHTML('afterbegin', pinnedHtml)
   }
 }
 
 // Unpin post
-// Pin post
 const unpinPost = async (postId, postContainer) => {
   const data = await httpPatch(`/posts/${postId}`, { pinned: false })
   Swal.fire({
     position: 'top-end',
     icon: 'success',
-    title: `<span>${data.message}</span>`,
+    title: `<span>Bỏ ghim...</span>`,
     showConfirmButton: false,
     timer: 800,
     background: '#15202b',
@@ -130,6 +133,31 @@ const unpinPost = async (postId, postContainer) => {
   )
   buttonPinning.classList.remove('active')
   buttonPinning.setAttribute('data-bs-target', '#pinPostModal')
+  postContainer.parentElement.querySelector('.pinnedText').remove()
+}
+
+// retweet-button
+const retweetPost = async (postId, retweetButton) => {
+  const { post } = await httpPost(`/posts/${postId}/retweet`, {})
+
+  const isReweet = retweetButton.parentElement.classList.toggle('active')
+  const numberRetweetsBtn = retweetButton.parentElement.querySelector(
+    'span.number-retweets'
+  )
+  // Add or remove element
+
+  // unretweet
+  if (!isReweet) {
+    numberRetweetsBtn.innerHTML = +numberRetweetsBtn.innerHTML - 1
+    // remove post retweet
+    $(`.post-retweet[data-id="${postId}"]`).remove()
+    return
+  }
+
+  // retweet
+  numberRetweetsBtn.innerHTML = +numberRetweetsBtn.innerHTML + 1
+  // render post retweet
+  outputPost(post)
 }
 
 const handlePost = async () => {
@@ -142,9 +170,10 @@ const handlePost = async () => {
     }
 
     // Like post
-    if (e.target.closest('.like-button')) {
-      likePost(postId, e.target)
-    }
+    if (e.target.closest('.like-button')) likePost(postId, e.target)
+
+    // retweet post
+    if (e.target.closest('.retweet-button')) retweetPost(postId, e.target)
   }
 
   $('#pinPostModal').addEventListener('shown.bs.modal', e => {

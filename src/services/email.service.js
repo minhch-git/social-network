@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer'
-import { google } from 'googleapis'
 import config, { node_env } from '../config/config'
 import logger from '../config/logger'
 import { transEmail } from '../../lang/en'
+
 // create stmp transporter
 const transporter = nodemailer.createTransport(config.email.smtp)
 
@@ -11,9 +11,10 @@ if (node_env !== 'test') {
   transporter
     .verify()
     .then(() => logger.info('Connected to email server'))
-    .catch(() =>
+    .catch(err =>
       logger.warn(
-        'Unable to connect to email server. Make sure you have configured the SMTP options in .env'
+        'Unable to connect to email server. Make sure you have configured the SMTP options in .env',
+        err
       )
     )
 }
@@ -23,6 +24,7 @@ if (node_env !== 'test') {
  * @param {string} to
  * @param {string} subject
  * @param {text|html} htmlContent
+ * @returns {Promise<transporter>}
  */
 const sendEmail = async (to, subject, htmlContent) => {
   let info = {
@@ -31,13 +33,14 @@ const sendEmail = async (to, subject, htmlContent) => {
     subject: subject,
     html: htmlContent,
   }
-  await transporter.sendMail(info)
+  return transporter.sendMail(info)
 }
 
 /**
  * Send email register
  * @param {string} to
  * @param {string} url
+ * @returns {Promise<transporter>}
  */
 const sendEmailRegister = async (to, url) => {
   const subject = 'ACTIVATE YOUR ACCOUNT'
@@ -55,6 +58,7 @@ const sendEmailRegister = async (to, url) => {
  * @param {string} to
  * @param {string} url
  * @param {string} name
+ * @returns {Promise<transporter>}
  */
 const sendEmailResetPassword = async (to, url, name) => {
   const subject = 'RESET YOUR PASSWORD'
@@ -65,7 +69,7 @@ const sendEmailResetPassword = async (to, url, name) => {
   const desc = 'Please click the button below to reset your password.'
   const htmlContent = transEmail.template(title, desc, url, text)
   // template_reset_password(url, text, name)
-  await sendEmail(to, subject, htmlContent)
+  return sendEmail(to, subject, htmlContent)
 }
 
 export default { sendEmail, sendEmailRegister, sendEmailResetPassword }

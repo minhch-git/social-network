@@ -1,13 +1,12 @@
 import passport from 'passport'
 import catchAsync from '../utils/catchAsync'
-import { tranSuccess, transErrors } from '../../lang/vi'
+import { tranSuccess, transErrors, transEmail } from '../../lang/vi'
 import {
   userService,
   authService,
   emailService,
   tokenService,
 } from '../services'
-import { generateToken, verifyToken } from '../helpers/jwt'
 import config from '../config/config'
 /**
  * Register user
@@ -31,21 +30,19 @@ const register = async (req, res) => {
       user.local.verifyToken
     }`
     // Send mail
-    emailService
+    await emailService
       .sendEmailRegister(user.local.email, url)
-      .then(success => {
-        req.flash('success', tranSuccess.userCreated(user.local.email))
-        return res.redirect('/auth/login')
-      })
       .catch(async error => {
+        console.log({ error })
+
         // remove account
         await userService.deleteUserById(user._id)
-        req.flash(
-          'errors',
-          (error.errors && error.errors[0]) || transErrors.account_in_use
-        )
-        return res.redirect('/auth/register')
+        req.flash('errors', transEmail.send_failed)
       })
+
+    // success
+    req.flash('success', tranSuccess.userCreated(user.local.email))
+    return res.redirect('/auth/login')
   } catch (error) {
     req.flash(
       'errors',
@@ -99,10 +96,15 @@ const forgotPassword = async (req, res) => {
     const url = `${req.protocol}://${req.get(
       'host'
     )}/auth/reset_password/${token}`
-    // Send mail
-    emailService.sendEmailResetPassword(user.local.email, url, user.fullName)
 
-    req.flash('success', tranSuccess.send_mail_success)
+    // Send mail
+    await emailService.sendEmailResetPassword(
+      user.local.email,
+      url,
+      user.fullName
+    )
+
+    req.flash('success', transEmail.send_success)
     return res.redirect('/auth/forgot_password')
   } catch (error) {
     console.log({ error })

@@ -15,7 +15,6 @@ const createUserLocal = async userBody => {
     throw createError.BadRequest('Email already exists')
   }
   let item = {
-    username: email.split('@')[0],
     firstName,
     lastName,
     local: {
@@ -65,6 +64,16 @@ const queryUsers = async (filter, options) => {
  */
 const getUserById = async userId => {
   const user = await User.findById(userId)
+  return user
+}
+
+/**
+ * Find user by username
+ * @param {String} username
+ * @returns {Promise<user>}
+ */
+const getUserByUsername = async username => {
+  const user = await User.findOne(username)
   return user
 }
 
@@ -181,6 +190,7 @@ export default {
   createUser,
   queryUsers,
   getUserById,
+  getUserByUsername,
   getUserByEmail,
   updateUserById,
   updateUser,
