@@ -9,6 +9,7 @@ import { tranSuccess } from '../../lang/en'
  */
 const uploadAvatar = catchAsync(async (req, res) => {
   const url = await uploadService.uploadAvatar(req.file.path)
+  await userService.updateUserById(req.user.id, { profilePic: url })
   return res.status(200).json({ message: tranSuccess.upload_success, url })
 })
 

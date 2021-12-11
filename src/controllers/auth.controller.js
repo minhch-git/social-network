@@ -33,8 +33,6 @@ const register = async (req, res) => {
     await emailService
       .sendEmailRegister(user.local.email, url)
       .catch(async error => {
-        console.log({ error })
-
         // remove account
         await userService.deleteUserById(user._id)
         req.flash('errors', transEmail.send_failed)

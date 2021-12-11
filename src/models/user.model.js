@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose'
-import slug from 'mongoose-slug-generator'
 import bcrypt from 'bcryptjs'
 import { roles } from '../config/roles'
 import { transValidations } from '../../lang/en'
@@ -20,7 +19,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    username: { type: String, slug: ['firstName', 'lastName'], unique: true },
+    username: { type: String },
     address: { type: String, default: null },
     profilePic: {
       type: String,
@@ -103,7 +102,6 @@ userSchema.methods = {
 }
 
 // add plugin that converts mongoose to json
-userSchema.plugin(slug)
 userSchema.plugin(toJSON)
 userSchema.plugin(paginate)
 

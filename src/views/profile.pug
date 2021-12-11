@@ -12,7 +12,7 @@ block content
       .user__image-container
         img(src=`${profileUser.profilePic}`, alt="User profile image")
         if userLoggedIn.id === profileUser.id 
-          button.profile__picture-button
+          button.profile__picture-button(data-bs-toggle="modal", data-bs-target="#avatarUploadModal")
             i.fas.fa-camera
 
     .profile__buttons-container 
@@ -23,9 +23,9 @@ block content
       button(class="follow-button") Folllow 
 
     .user__details-container 
-      span.displayName Chìu Cắm Minh
-      span.username @minhchiu
-      span.description Lorem ipsum dolor sit.
+      span.displayName= profileUser.fullName
+      span.username= `@${profileUser.username}`
+      span.description= profileUser.description
 
       .followers-container 
         a(href=`/profile/username/following`) 
@@ -71,6 +71,7 @@ block content
                 span.number-likes 12
   .post__container 
 
+  +createImageUploadModal()
   +createCoverPhotoUploadModal()
 block scripts
   script(src="/js/common.js") 
