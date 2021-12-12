@@ -17,6 +17,17 @@ router
   .patch(auth('admin'), userController.updateUser)
   .delete(auth('admin'), userController.deleteUser)
 
+router.get(
+  '/:userId/followers',
+  requireLoggedIn,
+  userController.getUserFollowers
+)
+
+router.get(
+  '/:userId/following',
+  requireLoggedIn,
+  userController.getUserFollowing
+)
 router.patch('/:userId/follow', requireLoggedIn, userController.follow)
 
 export default router

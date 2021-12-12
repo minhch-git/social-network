@@ -59,10 +59,7 @@ router.get('/', requireLoggedIn, (req, res) => {
     pageTitle: 'Home',
     selectedPage: 'home',
     userLoggedIn: req.user,
-    userLoggedInJs: JSON.stringify({
-      id: req.user.id,
-      fullName: req.user.fullName,
-    }),
+    userLoggedInJs: JSON.stringify(req.user),
   })
 })
 

@@ -4,6 +4,12 @@ import { profileController } from '../controllers'
 const router = new Router()
 
 router.get(
+  '/:username/followers',
+  requireLoggedIn,
+  profileController.getFollowers
+)
+
+router.get(
   '/:username/following',
   requireLoggedIn,
   profileController.getFollowing

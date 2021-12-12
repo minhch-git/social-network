@@ -113,7 +113,24 @@ const follow = catchAsync(async (req, res, next) => {
   )
   res.status(200).json({ user: req.user })
 })
+const getUserFollowing = catchAsync(async (req, res, next) => {
+  const { userId } = req.params
 
+  const filter = { _id: userId }
+  let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
+  options.populate = 'following'
+  const { users } = await userService.queryUsers(filter, options)
+  res.status(200).json({ user: users[0] })
+})
+const getUserFollowers = catchAsync(async (req, res, next) => {
+  const { userId } = req.params
+
+  const filter = { _id: userId }
+  let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
+  options.populate = 'followers'
+  const { users } = await userService.queryUsers(filter, options)
+  res.status(200).json({ user: users[0] })
+})
 export default {
   createUser,
   getUsers,
@@ -123,4 +140,6 @@ export default {
   getMe,
   updateMe,
   follow,
+  getUserFollowing,
+  getUserFollowers,
 }

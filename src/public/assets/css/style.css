@@ -1131,7 +1131,7 @@ body {
   justify-content: center;
   color: #8899a6;
   font-weight: bold;
-  margin-top: 15px;
+  margin: 15px 0;
   transition: 0.2s;
   text-decoration: none;
 }
@@ -1154,4 +1154,32 @@ body {
   ul.menu-list li.menu-item span {
     display: none;
   }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #38444d;
+  margin: 6px 0px;
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+.user .user__details-container {
+  flex: 1;
+}
+.user .user__details-container a {
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(249, 26, 130);
+  transition: 0.3s;
+}
+
+.user .user__details-container a:hover {
+  text-decoration: underline;
+  color: rgba(249, 26, 130, 0.8);
+}
+
+.user .follow__button-container button {
+  font-size: 12px;
 }

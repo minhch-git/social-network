@@ -2,13 +2,17 @@ extends ./layouts/main-layout
 block content 
 
   script.
-      var profileUserId= '!{profileUser._id}';
-      var selectedTab= '!{selectedTab}';
+    var profileUserId= '!{profileUser._id}';
+    var selectedTab= '!{selectedTab}';
   
   .tabs-container 
-      +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab == 'following')
-      +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
+    +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab == 'following')
+    +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
 
-  .results-container 
-        
+  .users_container
+    .users
+
 block scripts
+  script(src="/js/common.js") 
+  script(src="/js/followers_following.js") 
+  

@@ -1,3 +1,35 @@
+/**
+ * Convert a Date into a Human-Readable
+ * @param {data} current date
+ * @param {date} previous date
+ * @returns time + string
+ */
+const timeDifference = (current, previous) => {
+  let msPerMinute = 60 * 1000
+  let msPerHour = msPerMinute * 60
+  let msPerDay = msPerHour * 24
+  let msPerMonth = msPerDay * 30
+  let msPerYear = msPerDay * 365
+  let elapsed = current - previous
+
+  if (elapsed < msPerMinute) {
+    if (elapsed / 1000 < 30) return 'Vừa xong'
+    return Math.round(elapsed / 1000) + ' giây trước'
+  }
+  if (elapsed < msPerHour) {
+    return Math.round(elapsed / msPerMinute) + ' phút trước'
+  }
+  if (elapsed < msPerDay) {
+    return Math.round(elapsed / msPerHour) + ' giờ trước'
+  }
+  if (elapsed < msPerMonth) {
+    return Math.round(elapsed / msPerDay) + ' ngày trước'
+  }
+  if (elapsed < msPerYear) {
+    return Math.round(elapsed / msPerMonth) + ' tháng trước'
+  }
+  return Math.round(elapsed / msPerYear) + ' năm trước'
+}
 const createPostHtml = post => {
   let isRetweet = post.retweetData !== undefined
   let retweetBy = isRetweet ? post.postedBy.fullName : null
@@ -122,58 +154,47 @@ const createPostHtml = post => {
     </div>
   `
 }
+const createUserHtml = user => {
+  const isFollowing =
+    userLoggedIn.following && userLoggedIn.following.includes(user.id)
+  let text = isFollowing ? 'Following' : 'Follow'
+  let buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
+
+  let followButton =
+    user.id !== userLoggedIn.id
+      ? `<button class="${buttonClass}" data-user="${user.id}">${text}</button>`
+      : ''
+
+  return `
+  <div class="user">
+    <div class="user_image-container">
+      <img src="${user.profilePic}" alt="User's profile picture" />
+    </div>
+    <div class="user__details-container">
+      <a href="/profile/${user.username}">${user.fullName}</a>
+      <span class="username">@${user.username}</span>
+    </div>
+    <div class="follow__button-container">
+      ${followButton}  
+    </div>
+  </div>
+  `
+}
+
+const outputUsers = (users, selector = '.users') => {
+  if (users.length == 0)
+    return $(selector).insertAdjacentHTML(
+      'afterbegin',
+      '<span class="d-block text-center mt-3">Nothing to show</span>'
+    )
+
+  users.forEach(user => {
+    const html = createUserHtml(user)
+    $(selector).insertAdjacentHTML('afterbegin', html)
+  })
+}
 
 const outputPost = (post, selector = '.posts') => {
   const html = createPostHtml(post)
   $(selector).insertAdjacentHTML('afterbegin', html)
-}
-
-/**
- * Convert a Date into a Human-Readable
- * @param {data} current date
- * @param {date} previous date
- * @returns time + string
- */
-const timeDifference = (current, previous) => {
-  let msPerMinute = 60 * 1000
-  let msPerHour = msPerMinute * 60
-  let msPerDay = msPerHour * 24
-  let msPerMonth = msPerDay * 30
-  let msPerYear = msPerDay * 365
-  let elapsed = current - previous
-
-  if (elapsed < msPerMinute) {
-    if (elapsed / 1000 < 30) return 'Vừa xong'
-    return Math.round(elapsed / 1000) + ' giây trước'
-  }
-  if (elapsed < msPerHour) {
-    return Math.round(elapsed / msPerMinute) + ' phút trước'
-  }
-  if (elapsed < msPerDay) {
-    return Math.round(elapsed / msPerHour) + ' giờ trước'
-  }
-  if (elapsed < msPerMonth) {
-    return Math.round(elapsed / msPerDay) + ' ngày trước'
-  }
-  if (elapsed < msPerYear) {
-    return Math.round(elapsed / msPerMonth) + ' tháng trước'
-  }
-  return Math.round(elapsed / msPerYear) + ' năm trước'
-}
-
-$('.logout').onclick = e => {
-  e.preventDefault()
-  Swal.fire({
-    title: `Đăng xuất tài khoản?`,
-    html: `Đăng xuất tài khoản <span class="text-primary"> ${userLoggedIn.fullName}</span>.`,
-    icon: 'info',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    cancelButtonText: 'Để sau',
-    confirmButtonText: 'Có 😀',
-    background: '#15202b',
-  }).then(result => {
-    if (result.isConfirmed) return (window.location.href = '/auth/logout')
-  })
 }

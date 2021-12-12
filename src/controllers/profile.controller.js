@@ -13,10 +13,7 @@ const getProfilePayload = async (username, userLoggedIn) => {
       pageTitle: user.username,
       profileUser: user,
       userLoggedIn,
-      userLoggedInJs: JSON.stringify({
-        id: userLoggedIn.id,
-        fullName: userLoggedIn.fullName,
-      }),
+      userLoggedInJs: JSON.stringify(userLoggedIn),
     }
   }
   return {
@@ -24,10 +21,7 @@ const getProfilePayload = async (username, userLoggedIn) => {
     pageTitle: 'Profile',
     profileUser: userLoggedIn,
     userLoggedIn,
-    userLoggedInJs: JSON.stringify({
-      id: userLoggedIn.id,
-      fullName: userLoggedIn.fullName,
-    }),
+    userLoggedInJs: JSON.stringify(userLoggedIn),
   }
 }
 
@@ -67,7 +61,13 @@ const getProfileByUsername = async (req, res) => {
 const getFollowing = async (req, res) => {
   let payload = await getProfilePayload(req.params.username, req.user)
   payload['selectedTab'] = 'following'
+  return res.status(200).render('followers-following', payload)
+}
 
+// [GET] /profile/:username/followers
+const getFollowers = async (req, res) => {
+  let payload = await getProfilePayload(req.params.username, req.user)
+  payload['selectedTab'] = 'followers'
   return res.status(200).render('followers-following', payload)
 }
 
@@ -75,4 +75,5 @@ export default {
   getProfile,
   getProfileByUsername,
   getFollowing,
+  getFollowers,
 }
