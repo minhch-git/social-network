@@ -7,9 +7,7 @@ import User from '../models/user.model'
 
 // Profile page
 const getProfilePayload = async (username, userLoggedIn) => {
-  const user =
-    (await userService.getUserByUsername(username)) ||
-    (await userService.getUserById(username))
+  const user = await userService.getUserByUsername(username)
   if (user) {
     return {
       pageTitle: user.username,
@@ -65,7 +63,16 @@ const getProfileByUsername = async (req, res) => {
   }
 }
 
+// [GET] /profile/:username/following
+const getFollowing = async (req, res) => {
+  let payload = await getProfilePayload(req.params.username, req.user)
+  payload['selectedTab'] = 'following'
+
+  return res.status(200).render('followers-following', payload)
+}
+
 export default {
   getProfile,
   getProfileByUsername,
+  getFollowing,
 }

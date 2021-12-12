@@ -115,3 +115,10 @@ mixin createButtonFollow(user, isFollowing)
   -var text = isFollowing ? "Following" : "Follow"
   -var buttonClass = isFollowing ? "follow-button following" : "follow-button"
   button(class=buttonClass, data-user=user.id)= text
+
+
+mixin createTab(name, href, isSelected)
+  -var className = isSelected ? "tab active" : "tab"
+  a(href= href, class= className) 
+    span= name
+    

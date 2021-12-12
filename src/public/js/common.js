@@ -1,6 +1,3 @@
-const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll.bind(document)
-
 const createPostHtml = post => {
   let isRetweet = post.retweetData !== undefined
   let retweetBy = isRetweet ? post.postedBy.fullName : null

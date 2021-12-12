@@ -35,15 +35,15 @@ block content
       span.description= profileUser.description
 
       .followers-container 
-        a(href=`/profile/username/following`) 
+        a(href=`/profile//${profileUser.username}/following`) 
           span#followingValue.value= profileUser.following && profileUser.following.length
           span Following
-        a(href=`/profile/username/followers`) 
+        a(href=`/profile//${profileUser.username}/followers`) 
           span#followersValue.value= profileUser.followers && profileUser.followers.length
           span Followers
   
   .tabs-container 
-    a(href="/profile/${profileUser.username}", class="tab active") 
+    a(href=`/profile/${profileUser.username}/following`, class="tab active") 
       span Posts
     a(href="/profile/${profileUser.username}", class="tab") 
       span Replies
