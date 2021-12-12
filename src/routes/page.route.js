@@ -52,39 +52,6 @@ router.get('/message', requireLoggedIn, (req, res) => {
   })
 })
 
-// Profile page
-const getProfilePayload = async (username, userLoggedIn) => {
-  const user = await userService.getUserByUsername(username)
-  if (user) {
-    return {
-      pageTitle: user.username,
-      userLoggedIn,
-      profileUser: user,
-      userLoggedInJs: JSON.stringify({
-        id: userLoggedIn.id,
-        fullName: userLoggedIn.fullName,
-      }),
-    }
-  }
-  return {
-    pageTitle: 'User not found',
-    userLoggedIn,
-    userLoggedInJs: JSON.stringify({
-      id: userLoggedIn.id,
-      fullName: userLoggedIn.fullName,
-    }),
-  }
-}
-router.get('/profile', requireLoggedIn, async (req, res) => {
-  const payload = await getProfilePayload(req.params.username, req.user)
-  res.render('profile', {
-    selectedPage: 'profile',
-    ...payload,
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-  })
-})
-
 router.get('/', requireLoggedIn, (req, res) => {
   res.render('home', {
     errors: req.flash('errors'),

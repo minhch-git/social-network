@@ -4,10 +4,15 @@ import userRoutes from './user.route'
 import uploadRoutes from './upload.route'
 import pageRoutes from './page.route'
 import postRoutes from './post.route'
+import profileRoutes from './profile.route'
 
 const router = new Router()
 
 const defaultRoutes = [
+  {
+    path: '/profile',
+    route: profileRoutes,
+  },
   {
     path: '/posts',
     route: postRoutes,

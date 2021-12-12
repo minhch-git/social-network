@@ -21,7 +21,6 @@ const createPostHtml = post => {
   // button delete
   let buttonDelete = ''
   let buttonPinned = ''
-  let pinnedText = ''
   if (postedBy.id === userLoggedIn.id) {
     buttonDelete = `
       <button
@@ -43,13 +42,17 @@ const createPostHtml = post => {
       <i class="remove-pointer-events fas fa-thumbtack"></i>
     </button>
     `
-    if (post.pinned) {
-      pinnedText = `
-        <div class="pinnedText"><i class="fas fa-thumbtack"></i> <span>Pinned by ${postedBy.fullName}</span></div>
-      `
-    }
   }
-
+  let pinnedText = ''
+  if (post.pinned) {
+    pinnedText = `
+      <div class="pinnedText"><i class="fas fa-thumbtack"></i> ${
+        postedBy.id === userLoggedIn.id
+          ? 'Pinned post'
+          : `<span>Pinned by <b>${postedBy.fullName}</b></span>`
+      } </div>
+    `
+  }
   const timestamp = timeDifference(new Date(), new Date(post.createdAt))
 
   return `

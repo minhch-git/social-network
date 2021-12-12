@@ -40,30 +40,6 @@ mixin createImageUploadModal()
           button#submitAvatarPhoto.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
-
-
-//- mixin createImageUploadModal()
-//-   #avatarModal.modal
-//-     .modal-dialog
-//-       .modal-content.bg-grey-dim
-//-         //- Modal Header
-//-         .modal-header
-//-           p.modal-title.text-primary Thay đổi ảnh đại diện?
-//-           button.btn-close(type='button', data-bs-dismiss='modal')
-//-         //- Modal body
-//-         .modal-body
-//-           label(for='')
-//-           input#avatarChange(type='file', name='avatar')
-//-           .container-fluid.mt-3
-//-             .row
-//-               .col-lg-12
-//-                 img(src='https://cdn.pixabay.com/photo/2021/11/10/18/21/woman-6784555_960_720.jpg', alt='Ảnh bìa')
-//-                 button.btn.btn-success.btn-sm.mt-2(type='button', data-bs-dismiss='modal') Cập nhập
-//-         //- Modal footer
-//-         .modal-footer
-//-           button.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
-//-           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
-
 mixin createPinnedPostModal()
   #pinPostModal.modal.fade
     .modal-dialog
@@ -128,10 +104,14 @@ mixin retweetPostModal()
           button#submitReweetPost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
 
-
 mixin createPostModal()
   +createDeletePostModal()
   +createPinnedPostModal()
   +createUnpinPostModal()
   +retweetPostModal()
   
+
+mixin createButtonFollow(user, isFollowing)
+  -var text = isFollowing ? "Following" : "Follow"
+  -var buttonClass = isFollowing ? "follow-button following" : "follow-button"
+  button(class=buttonClass, data-user=user.id)= text

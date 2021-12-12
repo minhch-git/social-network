@@ -74,7 +74,7 @@ const getUserById = async userId => {
  * @returns {Promise<user>}
  */
 const getUserByUsername = async username => {
-  const user = await User.findOne(username)
+  const user = await User.findOne({ username: username })
   return user
 }
 
@@ -131,7 +131,9 @@ const updateUserById = async (userId, body) => {
 }
 
 const updateUser = async (filter, userBody) => {
-  const userUpdated = await User.findOneAndUpdate(filter, userBody)
+  const userUpdated = await User.findOneAndUpdate(filter, userBody, {
+    new: true,
+  })
   if (!userUpdated) throw createError.NotFound()
   return userUpdated
 }

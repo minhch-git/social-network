@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = new Router()
-import { auth, protect } from '../middlewares/auth'
+import { auth, protect, requireLoggedIn } from '../middlewares/auth'
 import { userController } from '../controllers'
 
 router
@@ -16,5 +16,7 @@ router
   .get(userController.getUser)
   .patch(auth('admin'), userController.updateUser)
   .delete(auth('admin'), userController.deleteUser)
+
+router.patch('/:userId/follow', requireLoggedIn, userController.follow)
 
 export default router

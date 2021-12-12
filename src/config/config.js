@@ -101,7 +101,7 @@ const config = {
   },
   app: {
     max_event_listeners: 30,
-    upload_directory: 'src/public/uploads',
+    upload_directory: 'src/public/temp',
     upload_limit_size: 1048576, // 1048576 byte = 1MB
     image_types: ['image/jpg', 'image/png', 'image/jpeg'],
   },

@@ -106,11 +106,13 @@ $('#submitCoverPhoto').onclick = e => {
   submitImage($('#coverPhoto'), 'coppedCoverPhoto', '/uploads/coverPhoto')
 }
 
+// Handle modal when close
 $('#coverPhotoUploadModal').addEventListener('hide.bs.modal', e => {
   $('#coverPhoto').value = ''
   $('.cover-preview__container').innerHTML = ''
 })
 
+// Handle modal when close
 $('#avatarUploadModal').addEventListener('hide.bs.modal', e => {
   $('#avatarPhoto').value = ''
   $('.avatar-preview__container').innerHTML = ''

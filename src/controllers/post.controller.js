@@ -149,6 +149,7 @@ const retweetPost = catchAsync(async (req, res) => {
     'retweetData',
     'retweetData.postedBy',
   ])
+
   // Success
   res.status(200).json({ message: 'Chia sẻ bài viết thành công.', post })
 })

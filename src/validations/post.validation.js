@@ -12,7 +12,9 @@ const createPost = {
 
 const getPosts = {
   content: yup.string(),
-  postedBy: yup.string(),
+  postedBy: yup
+    .string()
+    .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
   replyTo: yup.string(),
   retweetData: yup.string(),
 

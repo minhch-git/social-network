@@ -82,6 +82,37 @@ const updateMe = catchAsync(async (req, res, next) => {
   const userUpdated = await userService.updateUserById(req.user.id, req.body)
   res.status(200).json({ userUpdated })
 })
+/**
+ * Add or remove following
+ * @PATCH users/:userId/follow
+ * @access private
+ */
+const follow = catchAsync(async (req, res, next) => {
+  const { userId } = req.params
+  // check userId
+  const user = await userService.getUserById(userId)
+  if (!user) throw createError.NotFound('Not found user')
+
+  let isFollowing = user.followers && user.followers.includes(req.user.id)
+  let option = isFollowing ? '$pull' : '$addToSet'
+
+  // Add user or remove user to following of current user
+  req.user = await userService.updateUser(
+    { _id: req.user._id },
+    {
+      [option]: { following: userId },
+    }
+  )
+
+  // Add user or remove user to follwers of userId
+  await userService.updateUser(
+    { _id: userId },
+    {
+      [option]: { followers: req.user.id },
+    }
+  )
+  res.status(200).json({ user: req.user })
+})
 
 export default {
   createUser,
@@ -91,4 +122,5 @@ export default {
   deleteUser,
   getMe,
   updateMe,
+  follow,
 }

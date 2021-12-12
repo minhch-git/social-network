@@ -43,6 +43,14 @@ const getPosts = async filter => {
   const posts = await Post.find(filter)
   return posts
 }
+/**
+ * Find post by id
+ * @param {Object} filter
+ * @returns {Promise<post>}
+ */
+const getPost = async filter => {
+  return Post.findOne(filter)
+}
 
 /**
  * Find post by id
@@ -109,6 +117,7 @@ export default {
   createPost,
   queryPosts,
   getPosts,
+  getPost,
   getPostById,
   updatePostById,
   updatePosts,

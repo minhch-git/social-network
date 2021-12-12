@@ -1,5 +1,8 @@
 extends ./layouts/main-layout 
-block content 
+block content
+  script.
+    var profileUserId= '!{profileUser._id}';
+
   .profile__header-container
     .cover-photo__section
       .cover-photo__container
@@ -16,11 +19,15 @@ block content
             i.fas.fa-camera
 
     .profile__buttons-container 
-      a.profile__button(href=`/messages/${profileUser._id}`) 
-        i.fas.fa-envelope
-      
-      //- button(class="follow-button following") Following 
-      button(class="follow-button") Folllow 
+      if profileUser.id !== userLoggedIn.id 
+        a.profile__button(href=`/messages/${profileUser._id}`) 
+          i.fas.fa-envelope
+        
+        if userLoggedIn.following && userLoggedIn.following.includes(profileUser.id)
+          +createButtonFollow(profileUser, true)
+        else 
+          +createButtonFollow(profileUser, false)
+        
 
     .user__details-container 
       span.displayName= profileUser.fullName
@@ -29,10 +36,10 @@ block content
 
       .followers-container 
         a(href=`/profile/username/following`) 
-          span#followingValue.value 10
+          span#followingValue.value= profileUser.following && profileUser.following.length
           span Following
         a(href=`/profile/username/followers`) 
-          span#followersValue.value 10
+          span#followersValue.value= profileUser.followers && profileUser.followers.length
           span Followers
   
   .tabs-container 
@@ -41,38 +48,15 @@ block content
     a(href="/profile/${profileUser.username}", class="tab") 
       span Replies
 
-  .post-pinned__container
-    .post
-      .post_action-container
-      .post_main-content-container
-        .user_image-container
-          img(src="/assets/images/avatar-default.png", alt="User's profile picture")
-        .post_content-container
-          .post_header
-            a.displayName(href='/profile/') minh chìu
-            span.username @minhchiu
-            span.date 12 giờ trước
-          .post_body
-            span Xin chào các bạn
-          .post_footer
-            .post_button-container
-              .post_button-container_content
-                button(type='button', data-bs-toggle='modal', data-bs-target='#replyModal')
-                  i.far.fa-comment
-            .post_button-container.green
-              .post_button-container_content
-                button.retweet-button
-                  i.fas.fa-retweet
-                span.number-retweets 12
-            .post_button-container.pink
-              .post_button-container_content(class="activate")
-                button.like-button
-                  i.far.fa-heart
-                span.number-likes 12
-  .post__container 
+  .posts_container 
 
   +createImageUploadModal()
   +createCoverPhotoUploadModal()
+  +createPostModal()
 block scripts
   script(src="/js/common.js") 
-  script(src="/js/profile/profile.js") 
+  script(src="/js/uploadPhoto.js") 
+  script(src="/js/handlePost.js") 
+  script(src="/js/follow.js") 
+  script(src="/js/loadPostsProfile.js") 
+  

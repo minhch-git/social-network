@@ -187,7 +187,7 @@ body {
   margin-bottom: 12px;
   transition: all 0.3s ease-in;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 18px;
 }
 .menu-item a span {
   margin-left: 8px;
@@ -990,10 +990,6 @@ body {
   color: #686868;
 }
 
-.post-pinned {
-  border-bottom: 4px solid #38444d;
-}
-
 .remove-pointer-events {
   pointer-events: none;
 }
@@ -1150,6 +1146,12 @@ body {
   color: #f91880;
 }
 
-.post-pinned__container {
-  border-bottom: 4px solid #38444d;
+.post-pinned {
+  border-bottom: 5px solid #595f63;
+}
+
+@media (max-width: 992px) {
+  ul.menu-list li.menu-item span {
+    display: none;
+  }
 }
