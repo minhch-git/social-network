@@ -3,7 +3,7 @@
  * @param {Object}          [filter={}]                 Mongo filter
  * @param {Object}          [options={}]                Query options
  * @param {Object|String}   [options.select='']         Select fields. Multiple select criteria should be separated by commas (,)
- * @param {Object|String}   [options.sort='-createAt']  Sorting criteria. Multiple sorting criteria should be separated by commas (,) (default="-createAt")
+ * @param {Object|String}   [options.sort='createAt:desc']  Sorting criteria. Multiple sorting criteria should be separated by commas (,) (default="-createAt")
  * @param {String}          [options.populate='']       Populate data fields. Hierarchy of fields should be separated by (.). Multiple populating criteria should be separated by commas (,)
  * @param {Number}          [options.page=1]            Current page (default = 1)
  * @param {Number}          [options.limit=10]          Maximum number of results perpage (default = 10)
@@ -38,21 +38,13 @@ const paginate = schema => {
       docs: 'results',
       totalDocs: 'totalResults',
     },
-    select: '-createAt',
-    sort: '',
+    select: '',
+    sortBy: 'createdAt:desc',
     page: 1,
     limit: 10,
   }
 
   schema.statics.paginate = async function (filter = {}, options = {}) {
-    // Create filter string
-    const filterStr = JSON.stringify(filter)
-
-    // Create operators ($gt, $gte, etc)
-    filter = JSON.parse(
-      filterStr.replace(/\b(gt|gte|lt|lte|in|eq)\b/g, match => `$${match}`)
-    )
-
     // Merge options
     options = {
       ...defaultOptions,
@@ -60,16 +52,21 @@ const paginate = schema => {
     }
 
     // Get filter options
-    let { select, sort, limit, page } = options
-    limit = parseInt(limit, 10)
-    select = select.split(',').join(' ')
-    sort = sort.split(',').join(' ')
+    let { select, sortBy, limit, page } = options
 
-    // Pagination
+    const sortingCriteria = []
+    sortBy.split(',').forEach(sortOption => {
+      const [key, order] = sortOption.split(':')
+      sortingCriteria.push((order === 'desc' ? '-' : '') + key)
+    })
+    const sort = sortingCriteria.join(' ')
+
+    select = select.split(',').join(' ')
+    limit = parseInt(limit, 10)
     const skip = (page - 1) * limit
 
     // Finding resource
-    let query = this.find(filter)
+    let docsPromise = this.find(filter)
       .select(select)
       .skip(skip)
       .sort(sort)
@@ -78,7 +75,7 @@ const paginate = schema => {
     // Populate data fields.
     if (options.populate) {
       options.populate.split(',').forEach(populateOption => {
-        query = query.populate(
+        docsPromise = docsPromise.populate(
           populateOption
             .split('.')
             .reverse()
@@ -104,7 +101,8 @@ const paginate = schema => {
 
     // Executing query
     const countPromise = this.countDocuments(filter).exec()
-    const docsPromise = query.exec()
+    docsPromise = docsPromise.exec()
+
     const [totalDocs, docs] = await Promise.all([countPromise, docsPromise])
     return {
       [labelDocs]: docs,

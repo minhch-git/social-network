@@ -12,6 +12,7 @@ const createPost = {
 
 const getPosts = {
   content: yup.string(),
+  search: yup.string(),
   postedBy: yup
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
@@ -20,7 +21,7 @@ const getPosts = {
 
   page: yup.number().integer(),
   limit: yup.number().integer(),
-  sort: yup.string(),
+  sortBy: yup.string(),
   select: yup.string(),
 }
 

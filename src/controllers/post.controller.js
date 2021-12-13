@@ -24,10 +24,21 @@ const createPost = catchAsync(async (req, res) => {
  * @access private
  */
 const getPosts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['postedBy'])
+  let searchObj = req.query
+  let filter = pick(searchObj, ['postedBy'])
+
+  const searchContent = { $regex: new RegExp(searchObj.search, 'i') }
+  if (searchObj.search) {
+    filter = {
+      ...filter,
+      content: searchContent,
+    }
+  }
+
   let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
   options.populate = 'postedBy,retweetData,retweetData.postedBy'
   const result = await postService.queryPosts(filter, options)
+
   res.send(result)
 })
 

@@ -10,7 +10,7 @@ const getProfilePayload = async (username, userLoggedIn) => {
   const user = await userService.getUserByUsername(username)
   if (user) {
     return {
-      pageTitle: user.username,
+      pageTitle: user.fullName,
       profileUser: user,
       userLoggedIn,
       userLoggedInJs: JSON.stringify(userLoggedIn),
@@ -38,6 +38,24 @@ const getProfile = async (req, res) => {
     errors: req.flash('errors'),
     success: req.flash('success'),
   })
+}
+/**
+ * Create a post
+ * @POST profile/:username/replies
+ * @access private
+ */
+const getReplies = async (req, res) => {
+  try {
+    const payload = await getProfilePayload(req.params.username, req.user)
+    payload['selectedTab'] = 'replies'
+    res.render('profile', {
+      ...payload,
+      errors: req.flash('errors'),
+      success: req.flash('success'),
+    })
+  } catch (error) {
+    res.redirect('/not-found')
+  }
 }
 /**
  * Create a post
@@ -74,6 +92,7 @@ const getFollowers = async (req, res) => {
 export default {
   getProfile,
   getProfileByUsername,
+  getReplies,
   getFollowing,
   getFollowers,
 }

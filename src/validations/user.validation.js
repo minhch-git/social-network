@@ -15,10 +15,11 @@ const getUsers = {
   firstName: yup.string(),
   lastName: yup.string(),
   email: yup.string().email(),
+  search: yup.string(),
   role: yup.string(),
   page: yup.number().integer(),
   limit: yup.number().integer(),
-  sort: yup.string(),
+  sortBy: yup.string(),
   select: yup.string(),
 }
 

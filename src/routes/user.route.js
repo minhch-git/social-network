@@ -2,11 +2,13 @@ import { Router } from 'express'
 const router = new Router()
 import { auth, protect, requireLoggedIn } from '../middlewares/auth'
 import { userController } from '../controllers'
+import { userValidation } from '../validations'
+import validate from '../middlewares/validate'
 
 router
   .route('/')
   .post(auth('admin'), userController.createUser)
-  .get(userController.getUsers)
+  .get(validate(userValidation.getUsers), userController.getUsers)
 
 router.get('/me', protect, userController.getMe)
 router.patch('/update-me', protect, userController.updateMe)

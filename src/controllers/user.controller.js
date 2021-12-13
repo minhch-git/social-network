@@ -20,10 +20,23 @@ const createUser = catchAsync(async (req, res) => {
  * @access public
  */
 const getUsers = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['firstName', 'lastName', 'role', 'email'])
-  let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
+  let searchObj = req.query
+  let filter = pick(searchObj, ['firstName', 'lastName', 'role'])
+
+  const searchName = { $regex: new RegExp(searchObj.search, 'i') }
+  if (searchObj.search) {
+    filter = {
+      ...filter,
+      $or: [
+        { firstName: searchName },
+        { lastName: searchName },
+        { username: searchName },
+      ],
+    }
+  }
+  let options = pick(req.query, ['select', 'sortBy', 'limit', 'page'])
   const result = await userService.queryUsers(filter, options)
-  res.send(result)
+  res.status(200).json({ ...result })
 })
 
 /**

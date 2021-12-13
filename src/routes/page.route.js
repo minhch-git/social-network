@@ -32,16 +32,6 @@ router.get('/auth/reset_password/:token', requireLoggedOut, (req, res) => {
   })
 })
 
-router.get('/search', requireLoggedIn, (req, res) => {
-  res.render('search', {
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-    pageTitle: 'Search',
-    userLoggedIn: req.user,
-    selectedPage: 'search',
-  })
-})
-
 router.get('/message', requireLoggedIn, (req, res) => {
   res.render('message/message', {
     errors: req.flash('errors'),

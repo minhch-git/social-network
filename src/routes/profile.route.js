@@ -15,6 +15,8 @@ router.get(
   profileController.getFollowing
 )
 
+router.get('/:username/replies', requireLoggedIn, profileController.getReplies)
+
 router.get(
   '/:username',
   requireLoggedIn,

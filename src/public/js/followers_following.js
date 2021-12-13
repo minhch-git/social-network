@@ -1,29 +1,13 @@
-const follow = () => {
-  if ($('.follow-button')) {
-    $('.follow-button').onclick = async e => {
-      const button = e.target
-      const userId = button.dataset.user
-
-      // Update follow
-      const { user } = await httpPatch(`/users/${userId}/follow`, {})
-      console.log({ user })
-
-      if (user.following && user.following.includes(userId)) {
-        button.innerText = 'Following'
-        button.classList.add('following')
-        return
-      }
-      button.innerText = 'Follow'
-      button.classList.remove('following')
-    }
-  }
-}
-
 // Loaf followers
 const loadFollowers = async () => {
   const { user } = await httpGet(`/users/${profileUserId}/followers`)
   const usersFollowers = user.followers
-  outputUsers(usersFollowers)
+  if (usersFollowers.length == 0)
+    return $('.users').insertAdjacentHTML(
+      'afterbegin',
+      '<span class="d-block text-center mt-3">Nothing to show</span>'
+    )
+  usersFollowers.forEach(user => outputUser(user))
   follow()
 }
 
@@ -31,7 +15,12 @@ const loadFollowers = async () => {
 const loadFollowing = async () => {
   const { user } = await httpGet(`/users/${profileUserId}/following`)
   const usersFollowing = user.following
-  outputUsers(usersFollowing)
+  if (usersFollowing.length == 0)
+    return $('.users').insertAdjacentHTML(
+      'afterbegin',
+      '<span class="d-block text-center mt-3">Nothing to show</span>'
+    )
+  usersFollowing.forEach(user => outputUser(user))
   follow()
 }
 

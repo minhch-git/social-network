@@ -11,10 +11,13 @@ function follow() {
       if (user.following && user.following.includes(userId)) {
         button.innerText = 'Following'
         button.classList.add('following')
-        $('#followersValue').innerHTML = +$('#followersValue').innerHTML + 1
+        if ($('#followersValue'))
+          $('#followersValue').innerHTML = +$('#followersValue').innerHTML + 1
         return
       }
-      $('#followersValue').innerHTML = +$('#followersValue').innerHTML - 1
+
+      if ($('#followersValue'))
+        $('#followersValue').innerHTML = +$('#followersValue').innerHTML - 1
       button.innerText = 'Follow'
       button.classList.remove('following')
     }

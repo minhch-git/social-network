@@ -181,17 +181,9 @@ const createUserHtml = user => {
   `
 }
 
-const outputUsers = (users, selector = '.users') => {
-  if (users.length == 0)
-    return $(selector).insertAdjacentHTML(
-      'afterbegin',
-      '<span class="d-block text-center mt-3">Nothing to show</span>'
-    )
-
-  users.forEach(user => {
-    const html = createUserHtml(user)
-    $(selector).insertAdjacentHTML('afterbegin', html)
-  })
+const outputUser = (user, selector = '.users', isInnertHTML = false) => {
+  const html = createUserHtml(user)
+  $(selector).insertAdjacentHTML('afterbegin', html)
 }
 
 const outputPost = (post, selector = '.posts') => {

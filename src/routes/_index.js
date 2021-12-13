@@ -5,10 +5,15 @@ import uploadRoutes from './upload.route'
 import pageRoutes from './page.route'
 import postRoutes from './post.route'
 import profileRoutes from './profile.route'
+import searchRoutes from './search.route'
 
 const router = new Router()
 
 const defaultRoutes = [
+  {
+    path: '/search',
+    route: searchRoutes,
+  },
   {
     path: '/profile',
     route: profileRoutes,
