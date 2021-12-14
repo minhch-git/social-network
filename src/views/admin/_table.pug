@@ -1,9 +1,10 @@
 .col-12.grid-margin
   .card
     .card-body
-      h4.card-title Tài Khoản
+      h4.card-title.d-flex.justify-content-between Tài Khoản
+        button.btn-create-user.btn.btn-sm.btn-primary.mx-1(data-bs-toggle="modal", data-bs-target="#createNewUserModal") Tạo mới
       .table-responsive
-        table.table
+        table.table.users_table
           thead
             tr
               th STT
@@ -19,54 +20,65 @@
               th Ngày Tạo
               th Actions
           tbody
-            each user, index in users.users
+            if users.users.length <= 0
               tr
-                td= index
-                td 
-                  img(src=user.profilePic)
-                td= user.firstName
-                td= user.lastName
-                td= user.local.email || user.facebook.email || user.google.email 
-                td= user.local.email && "Local" || user.facebook.email && "Facebook" || user.google.email && "Google"
-                td= user.local.isActive ? "Active" : "Not Activate"
-                td= user.role
-                td= user.following.length
-                td= user.followers.length
-                td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDay()}`
-                td
-                  button.btn.btn-sm.btn-info.mx-1 Sửa 
-                  button.btn.btn-sm.btn-danger Xóa
+                td(colspan="12").text-center Nothing to show.
+            else 
+              each user, index in users.users
+                tr.user_row(data-user=user)
+                  td= index
+                  td 
+                    img(src=user.profilePic)
+                  td= user.firstName
+                  td= user.lastName
+                  td= user.local.email || user.facebook.email || user.google.email 
+                  td= user.local.email && "Local" || user.facebook.email && "Facebook" || user.google.email && "Google"
+                  td= user.local.isActive ? "Active" : "Not Activate"
+                  td= user.role
+                  td= user.following.length
+                  td= user.followers.length
+                  td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDate()}`
+                  td
+                    button.btn-update-user.btn.btn-sm.btn-info.mx-1(data-bs-toggle="modal", data-bs-target="#updateUserModal") Cấp Quyền 
+                    button.btn-delete-user.btn.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deleteUserModal") Xóa
 
 .col-12.grid-margin
   .card
     .card-body
       h4.card-title Bài Viết
       .table-responsive
-        table.table
+        table.table.posts_table
           thead
             tr
               th STT
               th Posted By
+              th Nội dung
               th Lượt Like 
               th Lượt Share
               th Ngày đăng
               th Actions
           tbody
-            each post, index in posts.posts
-              tr 
-                td= index
-                td= post.postedBy.fullName
-                td= post.likes.length
-                td= post.retweetUsers.length
-                td= `${new Date(post.createdAt).getFullYear()}/${new Date(post.createdAt).getMonth()+1}/${new Date(post.createdAt).getDay()}`
-                td
-                  button.btn.btn-sm.btn-danger Xóa
+            if posts.posts.length <= 0
+              tr
+                td(colspan="6").text-center Nothing to show.
+            else 
+              each post, index in posts.posts
+                tr.post_row(data-post=post)
+                  td= index
+                  td= post.postedBy.fullName
+                  td= post.content.length > 6 ? `${post.content.substr(0, 6)}...` : post.content
+                  td= post.likes.length
+                  td= post.retweetUsers.length
+                  td= `${new Date(post.createdAt).getFullYear()}/${new Date(post.createdAt).getMonth()+1}/${new Date(post.createdAt).getDate()}`
+                  td
+                    button.btn.btn-delete-post.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deletePostModal") Xóa
+
 .col-12.grid-margin
   .card
     .card-body
       h4.card-title Admin
       .table-responsive
-        table.table
+        table.table.managers_table
           thead
             tr
               th STT
@@ -78,16 +90,20 @@
               th Ngày Tạo
               th Actions
           tbody
-            each user, index in managers.users
+            if managers.users.length <= 0
               tr
-                td= index
-                td 
-                  img(src=user.profilePic)
-                td= user.firstName
-                td= user.lastName
-                td= user.local.email
-                td= user.role
-                td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDay()}`
-                td
-                  button.btn.btn-sm.btn-info.mx-1 Sửa 
-                  button.btn.btn-sm.btn-danger Xóa
+                td(colspan="8").text-center Nothing to show.
+            else          
+              each user, index in managers.users
+                tr.user_row(data-user=user)
+                  td= index
+                  td 
+                    img(src=user.profilePic)
+                  td= user.firstName
+                  td= user.lastName
+                  td= user.local.email
+                  td= user.role
+                  td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDate()}`
+                  td
+                    button.btn-update-manager.btn.btn-sm.btn-info.mx-1(data-bs-toggle="modal", data-bs-target="#createManagerModal") Sửa Quyền 
+                    button.btn-delete-manager.btn.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deleteManagerModal") Xóa

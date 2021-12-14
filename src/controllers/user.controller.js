@@ -1,8 +1,8 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { userService } from '../services'
-import { tranSuccess } from '../../lang/en'
+import { postService, userService } from '../services'
+import { tranSuccess } from '../../lang/vi'
 
 /**
  * Create a user
@@ -10,8 +10,12 @@ import { tranSuccess } from '../../lang/en'
  * @access private
  */
 const createUser = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body)
-  res.status(201).json({ user, message: tranSuccess.created_success('user') })
+  const user = await userService.createUserLocal({
+    ...req.body,
+    isActive: true,
+    verifyToken: null,
+  })
+  res.status(201).json({ user, message: tranSuccess.userCreated(user) })
 })
 
 /**
@@ -71,8 +75,9 @@ const updateUser = catchAsync(async (req, res) => {
  * @access private
  */
 const deleteUser = catchAsync(async (req, res) => {
-  await userService.deleteUserById(req.params.userId)
-  res.status(200).json({ message: tranSuccess.deleted_success('user') })
+  const user = await userService.deleteUserById(req.params.userId)
+  await postService.deleteManyPost({ postedBy: user._id })
+  res.status(200).json({ message: tranSuccess.deleted_success('tài khoản') })
 })
 
 /**

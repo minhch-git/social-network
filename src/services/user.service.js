@@ -19,10 +19,12 @@ const createUserLocal = async userBody => {
     firstName,
     lastName,
     local: {
-      verifyToken: uuidv4(),
+      verifyToken: userBody.isActive ? userBody.verifyToken : uuidv4(),
       email,
       password,
+      isActive: userBody?.isActive,
     },
+    role: userBody?.role,
   }
   const newUser = new User(item)
   newUser.save()

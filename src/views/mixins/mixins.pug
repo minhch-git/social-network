@@ -119,4 +119,120 @@ mixin createTab(name, href, isSelected)
   -var className = isSelected ? "tab active" : "tab"
   a(href= href, class= className) 
     span= name
-    
+
+mixin createDeleteUserModal()
+  #deleteUserModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Xóa tài khoản?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bạn có chắc chắn muốn xóa tài khoản này?
+        //- Modal footer
+        .modal-footer
+          button#submitDeleteUser.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createUpdateUserModal()
+  #updateUserModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          h3.modal-title.text-info.card-title Cập nhập người dùng?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          .col-12.grid-margin.stretch-card
+            .card
+              .card-body
+                form.forms-sample
+                  .form-group
+                    label(for='exampleInputName1') Name
+                    input#exampleInputName1.form-control(type='text', placeholder='Name')
+                  .form-group
+                    label(for='exampleInputEmail3') Email address
+                    input#exampleInputEmail3.form-control(type='email', placeholder='Email')
+
+        //- Modal footer
+        .modal-footer
+          button#submitUpdateUser.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createNewUserModal()
+  #createNewUserModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          h3.modal-title.text-info.card-title Cập nhập người dùng?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          .col-12.grid-margin.stretch-card
+            .card
+              .card-body
+                form.forms-sample
+                  .form-group
+                    label(for='exampleInputName1') Name
+                    input#exampleInputName1.form-control(type='text', placeholder='Name')
+                  .form-group
+                    label(for='exampleInputEmail3') Email address
+                    input#exampleInputEmail3.form-control(type='email', placeholder='Email')
+
+        //- Modal footer
+        .modal-footer
+          button#submitCreateNewUser.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Tạo mới
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createDeleteManagerModal()
+  #deleteManagerModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Xóa tài khoản?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Bạn có chắc chắn muốn xóa tài khoản này?
+        //- Modal footer
+        .modal-footer
+          button#submitDeleteManager.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+          
+mixin createUpdateManagerModal()
+  #createManagerModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          h3.modal-title.text-info.card-title Cập nhập người dùng?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          .col-12.grid-margin.stretch-card
+            .card
+              .card-body
+                form.forms-sample
+                  .form-group
+                    label(for='exampleInputName1') Name
+                    input#exampleInputName1.form-control(type='text', placeholder='Name')
+                  .form-group
+                    label(for='exampleInputEmail3') Email address
+                    input#exampleInputEmail3.form-control(type='email', placeholder='Email')
+
+        //- Modal footer
+        .modal-footer
+          button#submitCreateManager.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+mixin createUserModal()
+  +createDeleteUserModal()
+  +createUpdateUserModal()
+  +createDeleteManagerModal()
+  +createUpdateManagerModal()
+  +createNewUserModal()

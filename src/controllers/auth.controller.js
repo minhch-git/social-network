@@ -39,7 +39,7 @@ const register = async (req, res) => {
       })
 
     // success
-    req.flash('success', tranSuccess.userCreated(user.local.email))
+    req.flash('success', tranSuccess.userRegisted(user.local.email))
     return res.redirect('/auth/login')
   } catch (error) {
     req.flash(

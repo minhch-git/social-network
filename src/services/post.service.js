@@ -112,6 +112,15 @@ const deletePost = async filter => {
   const post = await Post.findOneAndDelete(filter)
   return post
 }
+/**
+ * Delte post by id
+ * @param {Object} filter
+ * @returns {Promise<post>}
+ */
+const deleteManyPost = async filter => {
+  const posts = await Post.deleteMany(filter)
+  return posts
+}
 
 export default {
   createPost,
@@ -123,4 +132,5 @@ export default {
   updatePosts,
   deletePostById,
   deletePost,
+  deleteManyPost,
 }

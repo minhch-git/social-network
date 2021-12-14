@@ -1,6 +1,6 @@
 /* width */
 .table-responsive::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
 /* Track */
@@ -23,4 +23,8 @@
 .logo:hover {
   text-decoration: none;
   color: #f26d9f;
+}
+
+.text-primary {
+  color: #f91880 !important;
 }

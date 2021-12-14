@@ -7,7 +7,7 @@ import validate from '../middlewares/validate'
 
 router
   .route('/')
-  .post(auth('admin'), userController.createUser)
+  .post(validate(userValidation.createUser), userController.createUser)
   .get(validate(userValidation.getUsers), userController.getUsers)
 
 router.get('/me', protect, userController.getMe)
@@ -16,8 +16,8 @@ router.patch('/update-me', protect, userController.updateMe)
 router
   .route('/:userId')
   .get(userController.getUser)
-  .patch(auth('admin'), userController.updateUser)
-  .delete(auth('admin'), userController.deleteUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser)
 
 router.get(
   '/:userId/followers',

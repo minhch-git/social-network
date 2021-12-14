@@ -38,12 +38,15 @@ const transErrors = {
 }
 
 const tranSuccess = {
-  userCreated: userEmail =>
+  userRegisted: userEmail =>
     `Tài khoản ${userEmail} đã được tạo, vui lòng kiểm tra email của bạn để active tài khoản trước khi đăng nhập.`,
+  userCreated: (user = {}) => `Tài khoản ${user.local.email} đã được tạo.`,
   account_actived: `Kích hoạt tài khoản thành công, bạn đã có thể đăng nhập vào ứng dụng.`,
   login_success: username =>
     `Xin chào ${username}. Chúc bạn một ngày tốt lành.`,
   logout_success: `Đăng xuất tài khoản thành công. Hẹn gặp lại bạn!`,
+  deleted_success: (name = 'user') => `Xóa ${name} thành công!`,
+  updated_success: `Cập nhập tài khoản thành công.`,
   avatar_update: `Cập nhập ảnh đại diện thành công`,
   user_info_update: `Cập nhập thông tin cá nhân thành công`,
   user_password_update: 'Cập nhập mật khẩu thành công',

@@ -5,6 +5,7 @@ const createUser = {
   firstName: yup.string().required(),
   lastName: yup.string().required(),
   email: yup.string().required().email(),
+  role: yup.mixed().oneOf(['user', 'admin']),
   password: yup
     .string()
     .matches(config.regexPassword, transValidations.password_incorrect)
@@ -16,7 +17,7 @@ const getUsers = {
   lastName: yup.string(),
   email: yup.string().email(),
   search: yup.string(),
-  role: yup.string(),
+  role: yup.mixed().oneOf(['user', 'admin']),
   page: yup.number().integer(),
   limit: yup.number().integer(),
   sortBy: yup.string(),
