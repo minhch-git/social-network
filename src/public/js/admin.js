@@ -96,7 +96,7 @@ const modalBodyUpdateUser = user => {
               <form class="form-update-user">
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control text-primary bg-dark" type="text" disabled value=${userEmail} />
+                    <input class="form-control text-primary bg-dark" autofocus type="text" disabled value=${userEmail} />
                   </div>
                   <div class="form-group">
                     <label>Role</label>
@@ -126,7 +126,7 @@ const modalBodyCreateUser = () => {
               <form class="form-update-user">
                   <div class="form-group">
                     <label for="firstName">First Name</label>
-                    <input class="form-control text-primary required bg-dark" type="text" name="firstName"/>
+                    <input class="form-control text-primary required bg-dark" autofocus type="text" name="firstName"/>
                   </div>
 
                    <div class="form-group">
@@ -319,9 +319,52 @@ const handleNewUser = async () => {
   })
 }
 
+// Search
+const submitSearch = async (keyword, options = {}) => {
+  const page = options?.page || 1
+  const limit = options?.limit || 10
+  const sortBy = options?.sortBy || 'createdAt:desc'
+  const select = options?.select || ''
+
+  const data = await httpGet(
+    `/users?search=${keyword}&&page=${page}&&limit=${limit}&&sortBy=${sortBy}&&select=${select}`
+  )
+  location.href = '/admin/users'
+  if (data.users) return renderUserSearch(data.users)
+}
+// Search
+$('#searchInput').onkeyup = e => {
+  const input = e.target
+  const value = input.value
+  const searchType = input.dataset.search
+  let searchButton = input.parentElement.querySelector('#searchButton')
+
+  // disabled button search
+  if (!value) {
+    searchButton.setAttribute('disabled', true)
+    searchButton.classList.remove('text-primary')
+    return
+  }
+
+  // remove disabled button search
+  searchButton.removeAttribute('disabled')
+  searchButton.classList.add('text-primary')
+
+  // Submit
+  $('#searchButton').onclick = () => {
+    submitSearch(value, searchType)
+    input.value = ''
+  }
+  if (value && e.keyCode === 13) {
+    submitSearch(value, searchType)
+    input.value = ''
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   handlePostTable()
   handleUserTable()
   handleManagersTable()
   handleNewUser()
+  searchMain()
 })

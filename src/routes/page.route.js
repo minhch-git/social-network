@@ -43,7 +43,10 @@ router.get('/message', requireLoggedIn, (req, res) => {
 })
 router.get('/admin', async (req, res) => {
   const users = await userService.queryUsers({})
-  const posts = await postService.queryPosts({}, { populate: 'postedBy' })
+  const posts = await postService.queryPosts(
+    {},
+    { populate: 'postedBy,retweetData' }
+  )
   const managers = await userService.queryUsers({ role: 'admin' }, {})
   res.render('admin/admin-layout', {
     users,
