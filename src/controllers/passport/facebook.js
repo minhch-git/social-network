@@ -25,6 +25,7 @@ function applyPassportFacebook() {
               req.flash('success', tranSuccess.login_success(user.fullName))
             )
           let newUserItem = {
+            username: profile?.emails[0].value.split('@')[0] || `${id}`,
             firstName: profile._json.first_name || profile.name.givenName,
             lastName: profile.name.familyName || profile.name.givenName,
             local: { isActive: true, password: profile.id + uuidV4() },

@@ -11,6 +11,7 @@
               th Avatar
               th Họ Tên
               th Tên
+              th Username
               th Email
               th Loại Email
               th Trạng Thái
@@ -31,6 +32,7 @@
                     img(src=user.profilePic)
                   td= user.firstName
                   td= user.lastName
+                  td= user.username
                   td= user.local.email || user.facebook.email || user.google.email 
                   td= user.local.email && "Local" || user.facebook.email && "Facebook" || user.google.email && "Google"
                   td= user.local.isActive ? "Active" : "Not Activate"

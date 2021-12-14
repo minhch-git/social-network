@@ -7,6 +7,16 @@ import User from '../models/user.model'
 
 // Profile page
 const getProfilePayload = async (username, userLoggedIn) => {
+  if (!username) {
+    return {
+      selectedPage: 'profile',
+      pageTitle: 'Profile',
+      profileUser: userLoggedIn,
+      userLoggedIn,
+      userLoggedInJs: JSON.stringify(userLoggedIn),
+    }
+  }
+
   const user = await userService.getUserByUsername(username)
   if (user) {
     return {
@@ -16,13 +26,7 @@ const getProfilePayload = async (username, userLoggedIn) => {
       userLoggedInJs: JSON.stringify(userLoggedIn),
     }
   }
-  return {
-    selectedPage: 'profile',
-    pageTitle: 'Profile',
-    profileUser: userLoggedIn,
-    userLoggedIn,
-    userLoggedInJs: JSON.stringify(userLoggedIn),
-  }
+  throw new Error('Not Found!')
 }
 
 /**
@@ -31,13 +35,18 @@ const getProfilePayload = async (username, userLoggedIn) => {
  * @access private
  */
 const getProfile = async (req, res) => {
-  const payload = await getProfilePayload(req.params.username, req.user)
-  res.render('profile', {
-    ...payload,
-    selectedPage: 'profile',
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-  })
+  try {
+    let payload = await getProfilePayload(req.params.username, req.user)
+
+    res.render('profile', {
+      ...payload,
+      selectedPage: 'profile',
+      errors: req.flash('errors'),
+      success: req.flash('success'),
+    })
+  } catch (error) {
+    res.redirect('/not-found')
+  }
 }
 /**
  * Create a post
@@ -77,9 +86,13 @@ const getProfileByUsername = async (req, res) => {
 
 // [GET] /profile/:username/following
 const getFollowing = async (req, res) => {
-  let payload = await getProfilePayload(req.params.username, req.user)
-  payload['selectedTab'] = 'following'
-  return res.status(200).render('followers-following', payload)
+  try {
+    let payload = await getProfilePayload(req.params.username, req.user)
+    payload['selectedTab'] = 'following'
+    return res.status(200).render('followers-following', payload)
+  } catch (error) {
+    res.redirect('/not-found')
+  }
 }
 
 // [GET] /profile/:username/followers
