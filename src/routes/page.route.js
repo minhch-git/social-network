@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { requireLoggedIn, requireLoggedOut } from '../middlewares/auth'
-import { userService } from '../services'
+import { postService, userService } from '../services'
 
 const router = new Router()
 
@@ -41,7 +41,16 @@ router.get('/message', requireLoggedIn, (req, res) => {
     selectedPage: 'message',
   })
 })
-
+router.get('/admin', async (req, res) => {
+  const users = await userService.queryUsers({})
+  const posts = await postService.queryPosts({}, { populate: 'postedBy' })
+  const managers = await userService.queryUsers({}, {})
+  res.render('admin/admin-layout', {
+    users,
+    posts,
+    managers,
+  })
+})
 router.get('/', requireLoggedIn, (req, res) => {
   res.render('home', {
     errors: req.flash('errors'),

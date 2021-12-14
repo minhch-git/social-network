@@ -1,0 +1,26 @@
+/* width */
+.table-responsive::-webkit-scrollbar {
+  height: 4px;
+}
+
+/* Track */
+.table-responsive::-webkit-scrollbar-track {
+  background: #15202b;
+  border-radius: 20px;
+}
+
+/* Handle */
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #73899b;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #c5476f;
+}
+
+.logo:hover {
+  text-decoration: none;
+  color: #f26d9f;
+}

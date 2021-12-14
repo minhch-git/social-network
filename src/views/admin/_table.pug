@@ -1,0 +1,93 @@
+.col-12.grid-margin
+  .card
+    .card-body
+      h4.card-title Tài Khoản
+      .table-responsive
+        table.table
+          thead
+            tr
+              th STT
+              th Avatar
+              th Họ Tên
+              th Tên
+              th Email
+              th Loại Email
+              th Trạng Thái
+              th Role
+              th Followers
+              th Following
+              th Ngày Tạo
+              th Actions
+          tbody
+            each user, index in users.users
+              tr
+                td= index
+                td 
+                  img(src=user.profilePic)
+                td= user.firstName
+                td= user.lastName
+                td= user.local.email || user.facebook.email || user.google.email 
+                td= user.local.email && "Local" || user.facebook.email && "Facebook" || user.google.email && "Google"
+                td= user.local.isActive ? "Active" : "Not Activate"
+                td= user.role
+                td= user.following.length
+                td= user.followers.length
+                td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDay()}`
+                td
+                  button.btn.btn-sm.btn-info.mx-1 Sửa 
+                  button.btn.btn-sm.btn-danger Xóa
+
+.col-12.grid-margin
+  .card
+    .card-body
+      h4.card-title Bài Viết
+      .table-responsive
+        table.table
+          thead
+            tr
+              th STT
+              th Posted By
+              th Lượt Like 
+              th Lượt Share
+              th Ngày đăng
+              th Actions
+          tbody
+            each post, index in posts.posts
+              tr 
+                td= index
+                td= post.postedBy.fullName
+                td= post.likes.length
+                td= post.retweetUsers.length
+                td= `${new Date(post.createdAt).getFullYear()}/${new Date(post.createdAt).getMonth()+1}/${new Date(post.createdAt).getDay()}`
+                td
+                  button.btn.btn-sm.btn-danger Xóa
+.col-12.grid-margin
+  .card
+    .card-body
+      h4.card-title Admin
+      .table-responsive
+        table.table
+          thead
+            tr
+              th STT
+              th Avatar
+              th Họ Tên
+              th Tên
+              th Email
+              th Role
+              th Ngày Tạo
+              th Actions
+          tbody
+            each user, index in managers.users
+              tr
+                td= index
+                td 
+                  img(src=user.profilePic)
+                td= user.firstName
+                td= user.lastName
+                td= user.local.email
+                td= user.role
+                td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDay()}`
+                td
+                  button.btn.btn-sm.btn-info.mx-1 Sửa 
+                  button.btn.btn-sm.btn-danger Xóa

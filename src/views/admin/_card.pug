@@ -1,0 +1,36 @@
+.col-sm-4.grid-margin
+  .card
+    .card-body
+      h5 Tài khoản
+      .row
+        .col-8.col-sm-12.col-xl-8.my-auto
+          .d-flex.d-sm-block.d-md-flex.align-items-center
+            h2.mb-0= users.totalUsers
+          h6.text-muted.font-weight-normal 11.38% Since last month
+        .col-4.col-sm-12.col-xl-4.text-center.text-xl-right
+          i.fas.fa-user-alt.display-2
+          
+.col-sm-4.grid-margin
+  .card
+    .card-body
+      h5 Bài Viết
+      .row
+        .col-8.col-sm-12.col-xl-8.my-auto
+          .d-flex.d-sm-block.d-md-flex.align-items-center
+            h2.mb-0= posts.totalPosts
+          h6.text-muted.font-weight-normal 9.61% Since last month
+        .col-4.col-sm-12.col-xl-4.text-center.text-xl-right
+          i.fas.fa-clipboard-check.display-2
+
+.col-sm-4.grid-margin
+  .card
+    .card-body
+      h5 ADMIN
+      .row
+        .col-8.col-sm-12.col-xl-8.my-auto
+          .d-flex.d-sm-block.d-md-flex.align-items-center
+            h2.mb-0= managers.totalUsers
+          h6.text-muted.font-weight-normal 2.27% Since last month
+        .col-4.col-sm-12.col-xl-4.text-center.text-xl-right
+          i.fas.fa-biohazard.display-2
+
