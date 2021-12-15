@@ -43,6 +43,9 @@
                   td
                     button.btn-update-user.btn.btn-sm.btn-info.mx-1(data-bs-toggle="modal", data-bs-target="#updateUserModal") Cấp Quyền 
                     button.btn-delete-user.btn.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deleteUserModal") Xóa
+                    
+                    button.btn-update-user.btn.btn-sm.btn-primary.mx-1(data-bs-toggle="modal", data-bs-target="#deleteUserModal") Reset-Pass
+                    button.btn-update-user.btn.btn-sm.btn-success.mx-1(data-bs-toggle="modal", data-bs-target="#updateUserModal")= user.local.isActive ? "Block" : "Active"
 
 .col-12.grid-margin
   .card

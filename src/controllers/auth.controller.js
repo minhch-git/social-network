@@ -150,6 +150,17 @@ const logout = catchAsync(async (req, res) => {
   req.flash('success', tranSuccess.logout_success)
   res.redirect('/auth/login')
 })
+/**
+ * Logout user
+ * @GET api/logout
+ * @access private
+ */
+const adminLogout = catchAsync(async (req, res) => {
+  req.logout() // remove passport on session
+
+  req.flash('success', tranSuccess.logout_success)
+  res.redirect('/auth/admin/sign_in')
+})
 
 export default {
   register,
@@ -157,4 +168,5 @@ export default {
   forgotPassword,
   resetPassword,
   logout,
+  adminLogout,
 }

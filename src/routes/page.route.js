@@ -1,8 +1,20 @@
 import { Router } from 'express'
-import { requireLoggedIn, requireLoggedOut } from '../middlewares/auth'
+import {
+  requireLoggedIn,
+  requireLoggedOut,
+  requireAdminLoggedOut,
+  requireAdminLoggedIn,
+} from '../middlewares/auth'
 import { postService, userService } from '../services'
 
 const router = new Router()
+
+router.get('/auth/admin/sign_in', requireAdminLoggedOut, (req, res) => {
+  res.render('layouts/auth-layout', {
+    errors: req.flash('errors'),
+    success: req.flash('success'),
+  })
+})
 
 router.get('/auth/login', requireLoggedOut, (req, res) => {
   res.render('auth/login', {
@@ -52,7 +64,7 @@ router.get('/message', requireLoggedIn, (req, res) => {
   })
 })
 
-router.get('/admin', async (req, res) => {
+router.get('/admin', requireAdminLoggedIn, async (req, res) => {
   const users = await userService.queryUsers({})
   const posts = await postService.queryPosts(
     {},

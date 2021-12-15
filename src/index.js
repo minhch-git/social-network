@@ -2,7 +2,10 @@ import app from './app'
 import config from './config/config'
 import logger from './config/logger'
 import 'colors'
-;(() => {
+import https from 'https'
+import pem from 'pem'
+
+const runningApp = () => {
   const server = app.listen(
     config.port,
     logger.info(
@@ -36,21 +39,23 @@ import 'colors'
       server.close()
     }
   })
-})()
+}
 
-// import https from 'https'
-// import pem from 'pem'
-
-// pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
-//   if (err) {
-//     throw err
-//   }
-//   https
-//     .createServer({ key: keys.serviceKey, cert: keys.certificate }, app)
-//     .listen(8888, () =>
-//       console.log(
-//         `Server running in ${config.env} at https://localhost:${config.port}`
-//           .bold.cyan
+// const runningAppWithPem = () => {
+//   pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
+//     if (err) {
+//       throw err
+//     }
+//     https
+//       .createServer({ key: keys.serviceKey, cert: keys.certificate }, app)
+//       .listen(8888, () =>
+//         console.log(
+//           `Server running in ${config.env} at https://localhost:${config.port}`
+//             .bold.cyan
+//         )
 //       )
-//     )
-// })
+//   })
+// }
+
+runningApp()
+// runningAppWithPem()
