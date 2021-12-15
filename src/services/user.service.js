@@ -192,6 +192,58 @@ const deleteUserById = async userId => {
   return result
 }
 
+/**
+ * Get users by sort number followers
+ * @param {Object}  options
+ * @returns {Promise<users>}
+ */
+const getUsersBySortNumberFollowers = async (options = {}) => {
+  let sort = { numberFollowers: -1 }
+  if (options.sortBy === 'followers') {
+    sort.numberFollowers = 1
+  }
+
+  let page = options.page || 1
+  let limit = options.limit || 10
+  limit = parseInt(limit, 10)
+  const skip = (page - 1) * limit
+  const totalUser = await User.countDocuments({})
+  const totalPages = Math.ceil(totalUser / limit)
+
+  let users = await User.aggregate([
+    {
+      $project: {
+        local: '$local',
+        _id: '$_id',
+        id: '$_id',
+        likes: '$likes',
+        username: '$username',
+        firstName: '$firstName',
+        lastName: '$lastName',
+        profilePic: '$profilePic',
+        facebook: '$facebook',
+        google: '$google',
+        following: '$following',
+        followers: '$followers',
+        retweets: '$retweets',
+        numberFollowers: { $size: '$followers' },
+      },
+    },
+    { $sort: sort },
+    { $skip: skip },
+    { $limit: limit },
+  ])
+
+  const result = {
+    users,
+    page,
+    limit,
+    totalUser,
+    totalPages,
+  }
+  return result
+}
+
 export default {
   createUserLocal,
   createUser,
@@ -206,4 +258,5 @@ export default {
   verifyUser,
   getUserByGoogleUid,
   getUserByFacebookUid,
+  getUsersBySortNumberFollowers,
 }

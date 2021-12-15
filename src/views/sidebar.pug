@@ -31,6 +31,11 @@
         a(href='/profile')
           i.fas.fa-user
           span Profile
+      if userLoggedIn.role === 'admin'
+        li.menu-item.menu-item(class=selectedPage == 'admin' && 'active')
+          a(href='/admin')
+            i.fas.fa-biohazard(style="color: #f53e44")
+            span Admin
       //- Logout
       li.menu-item.logout
         a(href='/auth/logout')

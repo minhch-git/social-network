@@ -149,6 +149,12 @@ const getUserFollowers = catchAsync(async (req, res, next) => {
   const { users } = await userService.queryUsers(filter, options)
   res.status(200).json({ user: users[0] })
 })
+
+const getTopFollowers = catchAsync(async (req, res, next) => {
+  const options = pick(req.query, ['sortBy', 'page', 'limit'])
+  let result = await userService.getUsersBySortNumberFollowers(options)
+  res.status(200).json(result)
+})
 export default {
   createUser,
   getUsers,
@@ -160,4 +166,5 @@ export default {
   follow,
   getUserFollowing,
   getUserFollowers,
+  getTopFollowers,
 }

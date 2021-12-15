@@ -32,7 +32,7 @@ const timeDifference = (current, previous) => {
 }
 const createPostHtml = post => {
   let isRetweet = post.retweetData !== undefined
-  let retweetBy = isRetweet ? post.postedBy.fullName : null
+  let retweetBy = isRetweet ? post.postedBy.username : null
   post = isRetweet ? post.retweetData : post
   const { postedBy } = post
 
@@ -84,8 +84,13 @@ const createPostHtml = post => {
   }
   const timestamp = timeDifference(new Date(), new Date(post.createdAt))
 
+  let content =
+    post.content.length > 120
+      ? `${post.content.substr(0, 120)}...`
+      : post.content
+
   return `
-    <div class="post ${isRetweet ? 'post-retweet' : ''}" data-id="${post.id}"" >
+    <div class="post ${isRetweet ? 'post-retweet' : ''}" data-id="${post.id}" >
       ${pinnedText}
       <div class="post_action-container">${retweetText}</div>
       <div class="post_main-content-container">
@@ -104,7 +109,7 @@ const createPostHtml = post => {
             ${buttonDelete}
           </div>
           <div class="post_body">
-            <span>${post.content}</span>
+            <span>${content}</span>
           </div>
 
           <div class="post_footer">
@@ -160,19 +165,21 @@ const createUserHtml = user => {
   let text = isFollowing ? 'Following' : 'Follow'
   let buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
 
-  let followButton =
-    user.id !== userLoggedIn.id
-      ? `<button class="${buttonClass}" data-user="${user.id}">${text}</button>`
-      : ''
-
+  let followButton = `<button class="${buttonClass}" data-user="${user.id}">${text}</button>`
+  if (userLoggedIn.id === user.id) followButton = ''
+  let fullName = user.fullName || `${user.firstName} ${user.lastName}`
+  let numberFollwers = user.numberFollwers || user.followers.length
   return `
   <div class="user">
     <div class="user_image-container">
       <img src="${user.profilePic}" alt="User's profile picture" />
     </div>
     <div class="user__details-container">
-      <a href="/profile/${user.username}">${user.fullName}</a>
+      <a href="/profile/${user.username}">${fullName}</a>
       <span class="username">@${user.username}</span>
+      <span class="numbers-follow ${
+        numberFollwers > 2 ? '' : 'd-none'
+      }">${numberFollwers} followers</span>
     </div>
     <div class="follow__button-container">
       ${followButton}  
@@ -181,12 +188,91 @@ const createUserHtml = user => {
   `
 }
 
-const outputUser = (user, selector = '.users', isInnertHTML = false) => {
-  const html = createUserHtml(user)
-  $(selector).insertAdjacentHTML('afterbegin', html)
+const createPostSidebarRightHtml = post => {
+  const { postedBy } = post
+  const timestamp = timeDifference(new Date(), new Date(post.createdAt))
+  let fullName =
+    postedBy.fullName || `${postedBy.firstName} ${postedBy.lastName}`
+  let content =
+    post.content.length > 10 ? `${post.content.substr(0, 10)}...` : post.content
+  let numberRetweetUsers = post.numberRetweetUsers || post.retweetUsers.length
+  let numberLikes = post.numberLikes || post.likes.length
+  return `
+    <div class="post" data-id="${post.id}">
+      <div class="post_action-container"></div>
+      <div class="post_main-content-container">
+        <div class="user_image-container">
+          <img
+            src="${postedBy.profilePic}"
+            alt="User's profile picture"
+          />
+        </div>
+        <div class="post_content-container">
+          <div class="post_header">
+            <a class="displayName" href="/profile/${postedBy.username}">
+              ${fullName}
+            </a>
+            <span class="date">${timestamp}</span>
+          </div>
+          <div class="post_body">
+            <span>${content}</span>
+          </div>
+          <div class="post_footer">
+            <div class="post_button-container">
+              <div class="post_button-container_content">
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#replyModal"
+                >
+                  <i class="far fa-comment"></i>
+                </button>
+              </div>
+            </div>
+            <div class="post_button-container green remove-pointer-events">
+              <div class="post_button-container_content">
+                <button class="retweet-button">
+                  <i class="fas fa-retweet"></i>
+                </button>
+                <span class="number-retweets">${
+                  numberRetweetUsers > 0 ? numberRetweetUsers : ''
+                }</span>
+              </div>
+            </div>
+            <div class="post_button-container pink">
+              <div class="post_button-container_content ${
+                post.likes.includes(userLoggedIn.id) ? 'active' : ''
+              }">
+                <button class="like-button">
+                  <i class="far fa-heart"></i>
+                </button>
+                <span class="number-likes">${
+                  numberLikes > 0 ? numberLikes : ''
+                }</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
 }
 
-const outputPost = (post, selector = '.posts') => {
+const outputUser = (user, selector = '.users', position = 'afterbegin') => {
+  const html = createUserHtml(user)
+  $(selector).insertAdjacentHTML(position, html)
+}
+
+const outputPost = (post, selector = '.posts', position = 'afterbegin') => {
   const html = createPostHtml(post)
-  $(selector).insertAdjacentHTML('afterbegin', html)
+  $(selector).insertAdjacentHTML(position, html)
+}
+
+const outputPostSidebarRight = (
+  post,
+  selector = '.sidebarRight_container .topPostLikes',
+  position = 'afterbegin'
+) => {
+  const html = createPostSidebarRightHtml(post)
+  $(selector).insertAdjacentHTML(position, html)
 }

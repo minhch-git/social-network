@@ -1,4 +1,5 @@
 const likePost = async (postId, likeButton) => {
+  console.log({ postId })
   await httpPatch(`/posts/${postId}/like`, {})
   const isLiked = likeButton.parentElement.classList.toggle('active')
   const numberLikesBtn =
@@ -124,6 +125,16 @@ const handlePost = async () => {
         return deletePost(postId, postContainer)
     }
   })
+
+  // Like in sidebarRight
+  $('.topPostLikes .posts_container').onclick = async e => {
+    postContainer = e.target.closest('.post')
+    if (postContainer) {
+      postId = postContainer.dataset.id
+    }
+    // Like post
+    if (e.target.closest('.like-button')) likePost(postId, e.target)
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

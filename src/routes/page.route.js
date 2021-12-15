@@ -61,6 +61,7 @@ router.get('/message', requireLoggedIn, (req, res) => {
     pageTitle: 'Message',
     userLoggedIn: req.user,
     selectedPage: 'message',
+    sidebarChat: true,
   })
 })
 

@@ -5,6 +5,8 @@ import { userController } from '../controllers'
 import { userValidation } from '../validations'
 import validate from '../middlewares/validate'
 
+router.get('/sort', requireLoggedIn, userController.getTopFollowers)
+
 router
   .route('/')
   .post(validate(userValidation.createUser), userController.createUser)
@@ -30,6 +32,7 @@ router.get(
   requireLoggedIn,
   userController.getUserFollowing
 )
+
 router.patch('/:userId/follow', requireLoggedIn, userController.follow)
 
 export default router

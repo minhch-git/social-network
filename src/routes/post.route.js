@@ -18,6 +18,8 @@ router
     postController.createPost
   )
 
+router.get('/sort', requireLoggedIn, postController.getTopPosts)
+
 router
   .route('/:postId')
   .delete(

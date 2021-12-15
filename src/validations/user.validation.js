@@ -18,6 +18,7 @@ const getUsers = {
   email: yup.string().email(),
   search: yup.string(),
   role: yup.mixed().oneOf(['user', 'admin']),
+  skip: yup.number(),
   page: yup.number().integer(),
   limit: yup.number().integer(),
   sortBy: yup.string(),
