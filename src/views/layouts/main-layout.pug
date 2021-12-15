@@ -31,20 +31,24 @@ html(lang="en")
       var userLoggedIn = !{userLoggedInJs};
 
 
-    .container
-      .row
+    .container-fluid
+      .row.g-0
         //- Sidebar
         .col-2
           include ../sidebar.pug
 
         //- Main
-        main.col-8.boder
-          div.title_container 
-            span #{pageTitle}
-          block content
+        main.col-7
+          .main_container.boder
+            div.title_container 
+              span #{pageTitle}
+            block content
         //- News
-        .col-2.d-none
-          block sidebarChat
+        .col-3.sidebarRight
+          if sidebarChat
+            block sidebarChat
+          else 
+            include ../sidebarRight.pug 
     //- script alertify
     script(src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js")
     //- Copper js
@@ -56,5 +60,6 @@ html(lang="en")
     //- script
     script(src="/js/utils/errorResponse.js")
     script(src="/js/mainConfig.js")
+    script(src="/js/selectTop.js")
     script(src="/js/http.js") 
     block scripts

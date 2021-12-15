@@ -9,8 +9,9 @@ block content
     +createTab('Following', `/profile/${profileUser.username}/following`, selectedTab == 'following')
     +createTab('Followers', `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
 
-  .users_container
-    .users
+  .followers-following__container
+    .users_container
+      .users
 
 block scripts
   script(src="/js/common.js") 

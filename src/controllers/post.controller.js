@@ -35,6 +35,27 @@ const getPosts = catchAsync(async (req, res) => {
     }
   }
 
+  if (searchObj.followingOnly !== undefined) {
+    let followingOnly = searchObj.followingOnly == 'true'
+
+    if (followingOnly) {
+      let objectIds = []
+
+      if (!req.user.following) {
+        req.user.following = []
+      }
+      req.user.following.forEach(user => objectIds.push(user))
+      objectIds.push(req.user._id)
+
+      filter = {
+        ...filter,
+        postedBy: { $in: objectIds },
+      }
+    }
+
+    delete searchObj.followingOnly
+  }
+
   let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
   options.populate = 'postedBy,retweetData,retweetData.postedBy'
   const result = await postService.queryPosts(filter, options)
@@ -165,6 +186,12 @@ const retweetPost = catchAsync(async (req, res) => {
   res.status(200).json({ message: 'Chia sẻ bài viết thành công.', post })
 })
 
+const getTopPosts = catchAsync(async (req, res, next) => {
+  const options = pick(req.query, ['sortBy', 'page', 'limit'])
+  let result = await postService.getPostsBySortNumberLikes(options)
+  res.status(200).json(result)
+})
+
 export default {
   createPost,
   getPosts,
@@ -173,4 +200,5 @@ export default {
   deletePost,
   likePost,
   retweetPost,
+  getTopPosts,
 }

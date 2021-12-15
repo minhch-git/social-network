@@ -7,7 +7,7 @@ const loadFollowers = async () => {
       'afterbegin',
       '<span class="d-block text-center mt-3">Nothing to show</span>'
     )
-  usersFollowers.forEach(user => outputUser(user))
+  usersFollowers.forEach(user => outputUser(user, '.users_container .users'))
   follow()
 }
 
@@ -20,7 +20,7 @@ const loadFollowing = async () => {
       'afterbegin',
       '<span class="d-block text-center mt-3">Nothing to show</span>'
     )
-  usersFollowing.forEach(user => outputUser(user))
+  usersFollowing.forEach(user => outputUser(user, '.users_container .users'))
   follow()
 }
 

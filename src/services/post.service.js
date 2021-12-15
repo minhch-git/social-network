@@ -1,5 +1,5 @@
 import createError from 'http-errors'
-import { Post } from '../models'
+import { Post, User } from '../models'
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
 
@@ -122,6 +122,65 @@ const deleteManyPost = async filter => {
   return posts
 }
 
+/**
+ * Get top posts by number likes
+ * @param {Object} options
+ * @returns {Promise<posts>}
+ */
+const getPostsBySortNumberLikes = async options => {
+  let sort = { numberLikes: -1, numberRetweetUsers: -1 }
+  if (options.sortBy === 'numberLikes') {
+    sort.numberLikes = 1
+  }
+
+  let page = options.page || 1
+  let limit = options.limit || 10
+  limit = parseInt(limit, 10)
+  const skip = (page - 1) * limit
+  const totalPost = await Post.countDocuments({})
+  const totalPages = Math.ceil(totalPost / limit)
+
+  const posts = await Post.aggregate([
+    {
+      $lookup: {
+        from: User.collection.name,
+        localField: 'postedBy',
+        foreignField: '_id',
+        as: 'postedBy',
+      },
+    },
+    {
+      $unwind: {
+        path: '$postedBy',
+      },
+    },
+    {
+      $project: {
+        numberLikes: { $size: '$likes' },
+        numberRetweetUsers: { $size: '$retweetUsers' },
+        _id: '$_id',
+        id: '$_id',
+        postedBy: '$postedBy',
+        content: '$content',
+        likes: '$likes',
+        retweetUsers: '$retweetUsers',
+        createdAt: '$createdAt',
+      },
+    },
+    { $match: { content: { $ne: null } } },
+    { $sort: sort },
+    { $skip: skip },
+    { $limit: limit },
+  ])
+  const result = {
+    posts,
+    page,
+    limit,
+    totalPost,
+    totalPages,
+  }
+  return result
+}
 export default {
   createPost,
   queryPosts,
@@ -133,4 +192,5 @@ export default {
   deletePostById,
   deletePost,
   deleteManyPost,
+  getPostsBySortNumberLikes,
 }

@@ -18,7 +18,8 @@ const getPosts = {
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
   replyTo: yup.string(),
   retweetData: yup.string(),
-
+  followingOnly: yup.string(),
+  skip: yup.number(),
   page: yup.number().integer(),
   limit: yup.number().integer(),
   sortBy: yup.string(),

@@ -70,6 +70,7 @@ button .green {
 }
 
 .username,
+.numbers-follow,
 .date {
   color: #999ea3;
   font-size: 13px;
@@ -140,7 +141,7 @@ body {
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   height: 100vh;
   padding-right: 15px;
 }
@@ -1033,6 +1034,9 @@ body {
   display: none;
   transition: all 0.3s;
 }
+.user {
+  margin-top: 15px !important;
+}
 
 .user__image-container {
   height: 128px;
@@ -1066,7 +1070,7 @@ body {
   display: flex;
   flex-direction: column;
   padding-left: 15px;
-  margin-top: 15px;
+  margin-top: 12px;
 }
 .user__details-container .displayName {
   font-size: 20px;
@@ -1182,4 +1186,79 @@ body {
 
 .user .follow__button-container button {
   font-size: 12px;
+}
+
+.sidebarRight {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.sidebarRight_content {
+  margin-top: 38px;
+  padding: 12px 18px;
+  background-color: #192734;
+  border-radius: 20px;
+}
+
+.sidebarRight_content .title {
+  font-size: 18px;
+}
+.sidebarRight_content .user_image-container {
+  height: 40px;
+  width: 40px;
+}
+.sidebarRight_content .displayName,
+.sidebarRight_content .user__details-container a {
+  font-size: 14px;
+}
+
+.sidebarRight_content .post {
+  padding: 0;
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+.sidebarRight_content .post_content-container .post_body {
+  font-size: 14px;
+}
+
+.sidebarRight_content .post_content-container .post_footer {
+  font-size: 12px;
+}
+
+.show-more__container span {
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 8px 16px;
+  color: #0dcaf0;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+.show-more__container span:hover {
+  color: #0590ff;
+  background-color: rgba(74, 74, 74, 0.8);
+}
+
+main.col-7 {
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+.main_container {
+  height: 100vh;
+  overflow-y: auto;
+  border-left: 16px solid #38444d;
+}
+
+.container-fluid {
+  padding: 0;
+}
+.tabs-container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.search_results,
+.followers-following__container,
+.container.message_content {
+  padding-left: 15px;
+  padding-right: 15px;
 }
