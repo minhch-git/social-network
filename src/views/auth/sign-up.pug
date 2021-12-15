@@ -1,7 +1,7 @@
 .col.align-center.flex-col.sign-up
-  if errorsSignUp.length > 0
+  if errors.length > 0
     .alert.alert-danger.alert-dismissible.fade.show(role='alert')
-      span=errorsSignUp
+      span=errors
       button.btn-sm.btn-close.button-delete-alert(type='button', data-bs-dismiss='alert', aria-label='Close')
 
   .form-wrapper.align-center

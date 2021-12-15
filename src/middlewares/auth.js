@@ -44,5 +44,35 @@ const requireLoggedOut = (req, res, next) => {
   return res.redirect('/')
 }
 
-export { auth, protect, requireLoggedIn, requireLoggedOut }
+const requireAdminLoggedOut = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return next()
+  }
+  // if (req.user.role !== 'admin') {
+  //   res.redirect('/admin/')
+  // }
+  console.log(req.user)
+  return res.redirect('/auth/admin/sign_in')
+}
+
+// req.isAuthenticated: will return true if user is logged in
+const requireAdminLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/auth/admin/sign_in')
+  }
+  if (req.user.role !== 'admin') {
+    req.flash('errors', 'Tài khoản admin không chính xác.')
+    req.logout()
+    return res.redirect('/auth/admin/sign_in')
+  }
+  return next()
+}
+export {
+  auth,
+  protect,
+  requireLoggedIn,
+  requireLoggedOut,
+  requireAdminLoggedOut,
+  requireAdminLoggedIn,
+}
 export default protect

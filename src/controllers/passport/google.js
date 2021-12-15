@@ -16,7 +16,11 @@ function applyPassportGoogle() {
       },
       async (req, accessToken, refreshToken, profile, done) => {
         try {
-          const user = await userService.getUserByGoogleUid(profile.id)
+          const user =
+            (await userService.getUserByUsername(
+              profile?.emails[0].value.split('@')[0]
+            )) || (await userService.getUserByGoogleUid(profile.id))
+
           if (user)
             return done(
               null,

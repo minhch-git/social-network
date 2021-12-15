@@ -10,7 +10,9 @@ import bcrypt from 'bcryptjs'
  */
 const createUserLocal = async userBody => {
   const { firstName, lastName, email, password } = userBody
-  const user = await getUserByEmail(email)
+  const user =
+    (await getUserByEmail(email)) ||
+    (await getUserByUsername(email.split('@').username))
   if (user) {
     throw createError.BadRequest('Email already exists')
   }
@@ -36,8 +38,8 @@ const createUserLocal = async userBody => {
  * @returns {Promise<user>}
  */
 const createUser = async userBody => {
-  const newUser = new User(userBody)
-  await newUser.save()
+  let newUser = new User(userBody)
+  newUser = await newUser.save()
   return newUser
 }
 

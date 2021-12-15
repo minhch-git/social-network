@@ -17,7 +17,11 @@ function applyPassportFacebook() {
       },
       async (req, accessToken, refreshToken, profile, done) => {
         try {
-          const user = await userService.getUserByFacebookUid(profile.id)
+          const user =
+            (await userService.getUserByFacebookUid(profile.id)) ||
+            (await userService.getUserByUsername(
+              profile?.emails[0].value.split('@')[0]
+            ))
           if (user)
             return done(
               null,

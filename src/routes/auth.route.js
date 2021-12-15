@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
-import { requireLoggedIn } from '../middlewares/auth'
+import { requireLoggedIn, requireAdminLoggedIn } from '../middlewares/auth'
 import { validateBody } from '../middlewares/validate'
 import { authValidation } from '../validations'
 import {
@@ -24,6 +24,37 @@ router.post(
 )
 router.get('/activate/:token', authController.activate)
 
+// Login with google
+
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+)
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  function (req, res) {
+    res.redirect('/')
+  }
+)
+
+// Login with facebook
+
+router.get(
+  '/facebook',
+  passport.authenticate('facebook', {
+    scope: ['email'],
+    successFlash: true,
+    failureFlash: true,
+  })
+)
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/',
+    failureRedirect: '/auth/login',
+  })
+)
 // Login with local
 router.post(
   '/login',
@@ -49,33 +80,28 @@ router.post(
   })
 )
 
-// Login with google
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-)
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/auth/login' }),
-  function (req, res) {
-    res.redirect('/')
-  }
-)
-
-// Login with facebook
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', {
-    scope: ['email'],
+// Lgin admin
+router.post(
+  '/admin/sign_in',
+  validateBody(authValidation.login),
+  async (req, res, next) => {
+    try {
+      // Get cred
+      await req.body.valueChecked
+      next()
+    } catch (error) {
+      req.flash(
+        'errors',
+        (error.errors && error.errors[0]) || transErrors.account_in_use
+      )
+      return res.redirect('/auth/admin/sign_in')
+    }
+  },
+  passport.authenticate('local', {
+    successRedirect: '/admin',
+    failureRedirect: '/auth/admin/sign_in',
     successFlash: true,
     failureFlash: true,
-  })
-)
-router.get(
-  '/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: '/',
-    failureRedirect: '/auth/login',
   })
 )
 
@@ -91,6 +117,7 @@ router.post(
   authController.resetPassword
 )
 
+router.get('/admin/sign_out', requireAdminLoggedIn, authController.adminLogout)
 router.get('/logout', requireLoggedIn, authController.logout)
 
 export default router
