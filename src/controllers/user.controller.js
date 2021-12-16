@@ -62,6 +62,7 @@ const getUser = catchAsync(async (req, res) => {
  * @access private
  */
 const updateUser = catchAsync(async (req, res) => {
+  console.log({ body: req.body })
   const userUpdated = await userService.updateUserById(
     req.params.userId,
     req.body
@@ -155,6 +156,15 @@ const getTopFollowers = catchAsync(async (req, res, next) => {
   let result = await userService.getUsersBySortNumberFollowers(options)
   res.status(200).json(result)
 })
+
+const updateUserPassword = catchAsync(async (req, res, next) => {
+  await userService.updateUserPasswordById(req.params.userId, req.body.password)
+  res.status(200).json({ message: tranSuccess.password_updated })
+})
+const verifyAccount = catchAsync(async (req, res, next) => {
+  await userService.verifyUserByUserId(req.params.userId)
+  res.status(200).json({ message: tranSuccess.account_actived })
+})
 export default {
   createUser,
   getUsers,
@@ -167,4 +177,6 @@ export default {
   getUserFollowing,
   getUserFollowers,
   getTopFollowers,
+  updateUserPassword,
+  verifyAccount,
 }

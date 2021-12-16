@@ -1,7 +1,7 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { postService, userService } from '../services'
+import { postService, uploadService, userService } from '../services'
 import { tranSuccess } from '../../lang/en'
 import User from '../models/user.model'
 
@@ -11,6 +11,12 @@ import User from '../models/user.model'
  * @access private
  */
 const createPost = catchAsync(async (req, res) => {
+  // // upload image to cloudinary
+
+  if (req.file) {
+    const url = await uploadService.uploadPostImage(req.file.path)
+    req.body = { ...req.body, image: url }
+  }
   const post = await postService.createPost({
     ...req.body,
     postedBy: req.user.id,

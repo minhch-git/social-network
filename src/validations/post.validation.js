@@ -3,6 +3,7 @@ import { transValidations } from '../../lang/en'
 import config from './config.validation'
 const createPost = {
   content: yup.string(),
+  postImage: yup.string(),
   retweetData: yup.string(),
   checkbox_selection: yup.string().when(['content', 'retweetData'], {
     is: (content, retweetData) => !content && !retweetData,

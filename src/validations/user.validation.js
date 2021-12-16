@@ -39,11 +39,15 @@ const updateUser = {
     .required(),
   firstName: yup.string(),
   lastName: yup.string(),
+  password: yup.string(),
   email: yup.string().email(),
-  checkbox_selection: yup.string().when(['firstName', 'lastName', 'email'], {
-    is: (firstName, lastName, email) => !firstName && !lastName && !email,
-    then: yup.string().required(),
-  }),
+  checkbox_selection: yup
+    .string()
+    .when(['firstName', 'lastName', 'email', 'password'], {
+      is: (firstName, lastName, email, password) =>
+        !firstName && !lastName && !email && !password,
+      then: yup.string().required(),
+    }),
 }
 
 const deleteUser = {

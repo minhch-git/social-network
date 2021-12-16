@@ -6,10 +6,15 @@ import pageRoutes from './page.route'
 import postRoutes from './post.route'
 import profileRoutes from './profile.route'
 import searchRoutes from './search.route'
+import messageRoutes from './message.route'
 
 const router = new Router()
 
 const defaultRoutes = [
+  {
+    path: '/message',
+    route: messageRoutes,
+  },
   {
     path: '/search',
     route: searchRoutes,

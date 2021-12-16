@@ -47,6 +47,7 @@ const tranSuccess = {
   logout_success: `Đăng xuất tài khoản thành công. Hẹn gặp lại bạn!`,
   deleted_success: (name = 'user') => `Xóa ${name} thành công!`,
   updated_success: `Cập nhập tài khoản thành công.`,
+  password_updated: `Reset-Pass thành công.`,
   avatar_update: `Cập nhập ảnh đại diện thành công`,
   user_info_update: `Cập nhập thông tin cá nhân thành công`,
   user_password_update: 'Cập nhập mật khẩu thành công',

@@ -44,27 +44,6 @@ router.get('/auth/reset_password/:token', requireLoggedOut, (req, res) => {
   })
 })
 
-router.get('/message/:username', requireLoggedIn, (req, res) => {
-  res.render('message/message', {
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-    pageTitle: 'Message',
-    userLoggedIn: req.user,
-    selectedPage: 'message',
-  })
-})
-
-router.get('/message', requireLoggedIn, (req, res) => {
-  res.render('message/message', {
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-    pageTitle: 'Message',
-    userLoggedIn: req.user,
-    selectedPage: 'message',
-    sidebarChat: true,
-  })
-})
-
 router.get('/admin', requireAdminLoggedIn, async (req, res) => {
   const users = await userService.queryUsers({})
   const posts = await postService.queryPosts(
@@ -76,6 +55,7 @@ router.get('/admin', requireAdminLoggedIn, async (req, res) => {
     users,
     posts,
     managers,
+    userLoggedIn: req.user,
   })
 })
 router.get('/', requireLoggedIn, (req, res) => {

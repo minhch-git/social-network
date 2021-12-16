@@ -179,6 +179,21 @@ const verifyUser = async token => {
 }
 
 /**
+ * Update user by id
+ * @param {ObjectId} userId
+ * @param {Object} body
+ * @returns {Promise<user>}
+ */
+const verifyUserByUserId = async userId => {
+  const user = await User.findByIdAndUpdate(userId, {
+    'local.verifyToken': null,
+    'local.isActive': true,
+  })
+
+  return user
+}
+
+/**
  * Delte user by id
  * @param {ObjectId} userId
  * @returns {Promise<user>}
@@ -256,6 +271,7 @@ export default {
   deleteUserById,
   updateUserPasswordById,
   verifyUser,
+  verifyUserByUserId,
   getUserByGoogleUid,
   getUserByFacebookUid,
   getUsersBySortNumberFollowers,
