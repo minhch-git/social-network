@@ -8,11 +8,11 @@ nav#sidebar.sidebar.sidebar-offcanvas
       .profile-desc
         .profile-pic
           .count-indicator
-            img.img-xs.rounded-circle(src='/assets/images/avatar-default.png', alt='')
+            img.img-xs.rounded-circle(src=userLoggedIn.profilePic, alt='')
             span.count.bg-success
           .profile-name
-            h5.mb-0.font-weight-normal Henry Klein
-            span Gold Member
+            h5.mb-0.font-weight-normal=userLoggedIn.fullName
+            span=userLoggedIn.role
     li.nav-item.nav-category
       span.nav-link NAVIGATION
     li.nav-item.menu-items

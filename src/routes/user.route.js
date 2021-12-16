@@ -15,6 +15,13 @@ router
 router.get('/me', protect, userController.getMe)
 router.patch('/update-me', protect, userController.updateMe)
 
+router.patch(
+  '/reset_password/:userId',
+  validate(userValidation.updateUser),
+  userController.updateUserPassword
+)
+
+router.patch('/active_account/:userId', userController.verifyAccount)
 router
   .route('/:userId')
   .get(userController.getUser)

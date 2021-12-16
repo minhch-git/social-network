@@ -89,6 +89,16 @@ const createPostHtml = post => {
       ? `${post.content.substr(0, 120)}...`
       : post.content
 
+  let fullName = postedBy.fullName
+    ? postedBy.fullName
+    : `${firstName} ${lastName}`
+
+  let postImage = post.image
+    ? `<div class="post-image__container">
+      <img data-bs-toggle="modal" data-bs-target="#createPostImageShowModal" src="${post.image}" alt="" />
+    </div>`
+    : ''
+
   return `
     <div class="post ${isRetweet ? 'post-retweet' : ''}" data-id="${post.id}" >
       ${pinnedText}
@@ -99,17 +109,17 @@ const createPostHtml = post => {
         </div>
         <div class="post_content-container">
           <div class="post_header">
-            <a class="displayName" href="/profile/${postedBy.username}">${
-    postedBy.fullName
-  }</a>
+            <a class="displayName" href="/profile/${
+              postedBy.username
+            }">${fullName}</a>
             <span class="username">@${postedBy.username}</span>
             <span class="date">${timestamp}</span>
-
             ${buttonPinned}          
             ${buttonDelete}
           </div>
           <div class="post_body">
             <span>${content}</span>
+            ${postImage}
           </div>
 
           <div class="post_footer">

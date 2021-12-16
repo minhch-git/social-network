@@ -20,7 +20,7 @@ block content
 
     .profile__buttons-container 
       if profileUser.id !== userLoggedIn.id 
-        a.profile__button(href=`/message/${profileUser._id}`) 
+        a.profile__button(href=`/message/${profileUser.username}`) 
           i.fas.fa-envelope
         
         if userLoggedIn.following && userLoggedIn.following.includes(profileUser.id)

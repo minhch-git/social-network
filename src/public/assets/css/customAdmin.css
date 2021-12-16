@@ -28,3 +28,12 @@
 .text-primary {
   color: #f91880 !important;
 }
+.modal-content {
+  background-color: #1a1c22 !important;
+}
+.modal-content .button-close {
+  background: transparent;
+  outline: none;
+  border: 0;
+  color: white;
+}

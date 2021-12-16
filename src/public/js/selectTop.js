@@ -1,6 +1,6 @@
 const getTopFollowers = async (options = {}) => {
   const page = options?.page || 1
-  const limit = options?.limit || 5
+  const limit = options?.limit || 3
   const sortBy = options?.sortBy || 'followers:desc'
 
   const data = await httpGet(
@@ -40,7 +40,7 @@ const getTopFollowers = async (options = {}) => {
 
 const getTopPosts = async (options = {}) => {
   const page = options?.page || 1
-  const limit = options?.limit || 5
+  const limit = options?.limit || 3
   const sortBy = options?.sortBy || 'likes:desc'
 
   const data = await httpGet(

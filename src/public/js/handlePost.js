@@ -101,6 +101,14 @@ const handlePost = async () => {
 
     // retweet post
     if (e.target.closest('.retweet-button')) retweetPost(postId, e.target)
+
+    // Show modal img
+    if (e.target.closest('.post-image__container img')) {
+      let srcImageShow = e.target.getAttribute('src')
+      $('#createPostImageShowModal')
+        .querySelector('.postImage-preview__container  img')
+        .setAttribute('src', srcImageShow)
+    }
   }
 
   $('#pinPostModal').addEventListener('shown.bs.modal', e => {
@@ -136,7 +144,9 @@ const handlePost = async () => {
     if (e.target.closest('.like-button')) likePost(postId, e.target)
   }
 }
-
+$('#createPostImageShowModal').addEventListener('focus', e => {
+  console.log(e)
+})
 document.addEventListener('DOMContentLoaded', () => {
   handlePost()
 })

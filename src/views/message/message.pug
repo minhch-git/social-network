@@ -4,7 +4,7 @@ block content
     //- Name of user
     .row.message_chat_name
       .col-lg-9
-        h3 Tonny
+        h3= userChat && userChat.fullName || userLoggedIn.fullName
       .col-lg-3.message_chat_icon
         a(href='')
           i.fas.fa-phone-alt
@@ -18,71 +18,75 @@ block content
         //- Render time when start texting!
         p Friday, November 19th at 15:41 P.M
       .message_chat_box
-        //- User other
-        .message_received
-          .message_received_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg
-            .message_received_text
-              p Hello! Long time no see.
-              span.message_received_time 11:02 P.M
-            //-
-              <div class="message_received_text">
-              <p>Hello! Long time no see. </p>
-              <span class="message_received_time">11:02 P.M</span>
-              </div>
-        //- User owner account
-        .message_received.message_owner
-          .message_received_img.message_owner_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg.message_owner_msg
-            .message_received_text.message_owner_text
-              p Hello! Long time no see.
-              span.message_received_time.message_owner_time 11:02 P.M
-            .message_received_text.message_owner_text
-              p Hello! Long time no see.
-              span.message_received_time.message_owner_time 11:02 P.M
-        //- User other
-        .message_received
-          .message_received_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg
-            .message_received_text
-              p Hello! Long time no see.
-              span.message_received_time 11:02 P.M
-        //- User other
-        .message_received
-          .message_received_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg
-            .message_received_text
-              p Hello! Long time no see.
-              span.message_received_time 11:02 P.M
-        //- User owner account
-        .message_received.message_owner
-          .message_received_img.message_owner_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg.message_owner_msg
-            .message_received_text.message_owner_text
-              p Hello! Long time no see.
-              span.message_received_time.message_owner_time 11:02 P.M
-            .message_received_text.message_owner_text
-              p Hello! Long time no see.
-              span.message_received_time.message_owner_time 11:02 P.M
-        //- User other
-        .message_received
-          .message_received_img
-            img(src='/assets/images/avatar-default.png', alt='avatar')
-          //- Texting
-          .message_received_msg
-            .message_received_text
-              p Hello! Long time no see.
-              span.message_received_time 11:02 P.M
+        if message
+          //- User other
+          .message_received
+            .message_received_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg
+              .message_received_text
+                p Hello! Long time no see.
+                span.message_received_time 11:02 P.M
+              //-
+                <div class="message_received_text">
+                <p>Hello! Long time no see. </p>
+                <span class="message_received_time">11:02 P.M</span>
+                </div>
+          //- User owner account
+          .message_received.message_owner
+            .message_received_img.message_owner_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg.message_owner_msg
+              .message_received_text.message_owner_text
+                p Hello! Long time no see.
+                span.message_received_time.message_owner_time 11:02 P.M
+              .message_received_text.message_owner_text
+                p Hello! Long time no see.
+                span.message_received_time.message_owner_time 11:02 P.M
+          //- User other
+          .message_received
+            .message_received_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg
+              .message_received_text
+                p Hello! Long time no see.
+                span.message_received_time 11:02 P.M
+          //- User other
+          .message_received
+            .message_received_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg
+              .message_received_text
+                p Hello! Long time no see.
+                span.message_received_time 11:02 P.M
+          //- User owner account
+          .message_received.message_owner
+            .message_received_img.message_owner_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg.message_owner_msg
+              .message_received_text.message_owner_text
+                p Hello! Long time no see.
+                span.message_received_time.message_owner_time 11:02 P.M
+              .message_received_text.message_owner_text
+                p Hello! Long time no see.
+                span.message_received_time.message_owner_time 11:02 P.M
+          //- User other
+          .message_received
+            .message_received_img
+              img(src='/assets/images/avatar-default.png', alt='avatar')
+            //- Texting
+            .message_received_msg
+              .message_received_text
+                p Hello! Long time no see.
+                span.message_received_time 11:02 P.M
+        else 
+          p Gửi lời chào tới
+            b= userChat && userChat.fullName || userLoggedIn.fullName
     //- Write, send content
     .container.row.message_chat_send
       .col-lg-1.message_send_file

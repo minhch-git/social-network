@@ -6,6 +6,7 @@ import createHttpError from 'http-errors'
 const postSchema = new Schema(
   {
     content: { type: String, trim: true },
+    image: { type: String, trim: true },
     postedBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     pinned: Boolean,
     likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
