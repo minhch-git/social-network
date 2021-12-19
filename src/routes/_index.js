@@ -12,7 +12,7 @@ const router = new Router()
 
 const defaultRoutes = [
   {
-    path: '/message',
+    path: '/messages',
     route: messageRoutes,
   },
   {

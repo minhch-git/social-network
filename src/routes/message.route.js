@@ -3,20 +3,24 @@ import { messageController } from '../controllers'
 import { requireLoggedIn } from '../middlewares/auth'
 
 const router = new Router()
-router.get(
-  '/:username',
-  requireLoggedIn,
-  messageController.getMessagesInPersonal
-)
 
-router.get('/', requireLoggedIn, (req, res) => {
-  res.render('message/message', {
+router.get('/new', requireLoggedIn, (req, res) => {
+  res.render('message/new-message', {
     errors: req.flash('errors'),
     success: req.flash('success'),
-    pageTitle: 'Message',
+    pageTitle: 'New Message',
     userLoggedIn: req.user,
-    selectedPage: 'message',
-    sidebarChat: true,
+    selectedPage: 'messages',
+  })
+})
+
+router.get('/', requireLoggedIn, (req, res) => {
+  res.render('message/inbox', {
+    errors: req.flash('errors'),
+    success: req.flash('success'),
+    pageTitle: 'Inbox',
+    userLoggedIn: req.user,
+    selectedPage: 'messages',
   })
 })
 

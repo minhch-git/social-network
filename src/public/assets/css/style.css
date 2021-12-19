@@ -1323,3 +1323,48 @@ main.col-7 {
   height: 100%;
   object-fit: cover;
 }
+
+.title_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-title {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  border-bottom: 1px solid #38444d;
+  padding: 10px 15px;
+}
+.chat-title label {
+  margin-right: 10px;
+}
+#userSearchTextBox {
+  flex: 1;
+  border: 0;
+  font-size: 14px;
+  font-weight: 200;
+  background-color: #15202b;
+  outline: none;
+  color: rgb(249, 26, 130);
+  min-width: 350px;
+}
+
+#createChatButton {
+  display: block;
+  background: #e9387f;
+  border-radius: 50px;
+  padding: 6px 12px;
+  margin: 10px auto;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+}
+#createChatButton:hover {
+  background-color: rgb(249, 26, 130, 0.8);
+}
+#createChatButton:disabled {
+  background: #b5496b;
+  cursor: default;
+}
