@@ -30,6 +30,7 @@ const timeDifference = (current, previous) => {
   }
   return Math.round(elapsed / msPerYear) + ' năm trước'
 }
+
 const createPostHtml = post => {
   let isRetweet = post.retweetData !== undefined
   let retweetBy = isRetweet ? post.postedBy.username : null
@@ -180,7 +181,7 @@ const createUserHtml = user => {
   let fullName = user.fullName || `${user.firstName} ${user.lastName}`
   let numberFollwers = user.numberFollwers || user.followers.length
   return `
-  <div class="user">
+  <div class="user" data-id="${user.id}">
     <div class="user_image-container">
       <img src="${user.profilePic}" alt="User's profile picture" />
     </div>
@@ -195,6 +196,58 @@ const createUserHtml = user => {
       ${followButton}  
     </div>
   </div>
+  `
+}
+
+const getOrtherChatUsers = users => {
+  if (users.length === 1) return users
+  return users.filter(user => user.id !== userLoggedIn.id)
+}
+
+const getChatName = chatData => {
+  let chatName = chatData.chatName
+  if (!chatName) {
+    const otherChatUsers = getOrtherChatUsers(chatData.users)
+    const namesArray = otherChatUsers.map(user => user.fullName)
+    chatName = namesArray.join(', ')
+  }
+
+  return chatName
+}
+
+const getUserChatImageElement = user => {
+  if (!user || !user.profilePic) {
+    return alertify.notify('User passed info function is invalid', 'error', 6)
+  }
+
+  return `<img src="${user.profilePic}" alt="User's profile pic" />`
+}
+
+const getChatImageElements = chatData => {
+  let otherChatUsers = getOrtherChatUsers(chatData.users)
+  let groupChatClass = ' '
+  let chatImage = getUserChatImageElement(otherChatUsers[0])
+
+  if (otherChatUsers.length > 1) {
+    groupChatClass = 'group-chat__image'
+    chatImage += getUserChatImageElement(otherChatUsers[1])
+  }
+  return `<div class="chat-image__container ${groupChatClass}">${chatImage}</div>`
+}
+
+const createChatHtml = chatData => {
+  let chatName = getChatName(chatData)
+  let image = getChatImageElements(chatData)
+  let lastestMessage = 'This is lastest message'
+
+  return `
+      <a href="/messages/${chatData.id}" class="chat-list__item">
+      ${image}
+        <div class="chat-list__item-details ellipsis">
+          <span class="heading ellipsis">${chatName}</span>
+          <span class="subText ellipsis">${lastestMessage}</span>
+        </div>
+      </a>
   `
 }
 
@@ -275,6 +328,15 @@ const outputUser = (user, selector = '.users', position = 'afterbegin') => {
 
 const outputPost = (post, selector = '.posts', position = 'afterbegin') => {
   const html = createPostHtml(post)
+  $(selector).insertAdjacentHTML(position, html)
+}
+
+const outputChatListItem = (
+  chat,
+  selector = '.chat-list',
+  position = 'afterbegin'
+) => {
+  const html = createChatHtml(chat)
   $(selector).insertAdjacentHTML(position, html)
 }
 

@@ -1,27 +1,20 @@
 import { Router } from 'express'
-import { messageController } from '../controllers'
+import { chatController, messageController } from '../controllers'
 import { requireLoggedIn } from '../middlewares/auth'
+import validate from '../middlewares/validate'
+import pick from '../utils/pick'
+import { chatValidation } from '../validations'
 
 const router = new Router()
 
-router.get('/new', requireLoggedIn, (req, res) => {
-  res.render('message/new-message', {
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-    pageTitle: 'New Message',
-    userLoggedIn: req.user,
-    selectedPage: 'messages',
-  })
-})
+router.get('/new', requireLoggedIn, messageController.getCreateNewChatPage)
+router.get(
+  '/:chatId',
+  requireLoggedIn,
+  validate(chatValidation.getChat),
+  messageController.getMessagePage
+)
 
-router.get('/', requireLoggedIn, (req, res) => {
-  res.render('message/inbox', {
-    errors: req.flash('errors'),
-    success: req.flash('success'),
-    pageTitle: 'Inbox',
-    userLoggedIn: req.user,
-    selectedPage: 'messages',
-  })
-})
+router.get('/', requireLoggedIn, messageController.getInboxPage)
 
 export default router
