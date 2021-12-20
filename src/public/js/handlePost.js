@@ -1,5 +1,4 @@
 const likePost = async (postId, likeButton) => {
-  console.log({ postId })
   await httpPatch(`/posts/${postId}/like`, {})
   const isLiked = likeButton.parentElement.classList.toggle('active')
   const numberLikesBtn =

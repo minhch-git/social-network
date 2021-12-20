@@ -7,10 +7,15 @@ import postRoutes from './post.route'
 import profileRoutes from './profile.route'
 import searchRoutes from './search.route'
 import messageRoutes from './message.route'
+import chatRoutes from './chat.route'
 
 const router = new Router()
 
 const defaultRoutes = [
+  {
+    path: '/chats',
+    route: chatRoutes,
+  },
   {
     path: '/messages',
     route: messageRoutes,

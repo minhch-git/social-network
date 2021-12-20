@@ -20,7 +20,7 @@ block content
 
     .profile__buttons-container 
       if profileUser.id !== userLoggedIn.id 
-        a.profile__button(href=`/message/${profileUser.username}`) 
+        a.profile__button(href=`/messages/${profileUser.id}`) 
           i.fas.fa-envelope
         
         if userLoggedIn.following && userLoggedIn.following.includes(profileUser.id)
@@ -57,4 +57,5 @@ block scripts
   script(src="/js/handlePost.js") 
   script(src="/js/follow.js") 
   script(src="/js/loadPostsProfile.js") 
+  script(src="/js/selectTop.js")
   

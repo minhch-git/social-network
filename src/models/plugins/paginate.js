@@ -3,7 +3,7 @@
  * @param {Object}          [filter={}]                 Mongo filter
  * @param {Object}          [options={}]                Query options
  * @param {Object|String}   [options.select='']         Select fields. Multiple select criteria should be separated by commas (,)
- * @param {Object|String}   [options.sort='createAt:desc']  Sorting criteria. Multiple sorting criteria should be separated by commas (,) (default="-createAt")
+ * @param {Object|String}   [options.sortBy='createAt:desc']  Sorting criteria. Multiple sorting criteria should be separated by commas (,) (default="-createAt")
  * @param {String}          [options.populate='']       Populate data fields. Hierarchy of fields should be separated by (.). Multiple populating criteria should be separated by commas (,)
  * @param {Number}          [options.page=1]            Current page (default = 1)
  * @param {Number}          [options.limit=10]          Maximum number of results perpage (default = 10)

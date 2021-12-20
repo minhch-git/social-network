@@ -1,6 +1,5 @@
 const handleFollow = async (userId, button) => {
   const { user } = await httpPatch(`/users/${userId}/follow`, {})
-
   if (user.following && user.following.includes(userId)) {
     button.innerText = 'Following'
     button.classList.add('following')
@@ -15,8 +14,11 @@ const handleFollow = async (userId, button) => {
   button.classList.remove('following')
 }
 
-const handleFollowButton = (container, followButton = '.follow-button') => {
-  container.onclick = async e => {
+const handleFollowButton = (
+  containerFollowButton,
+  followButton = '.follow-button'
+) => {
+  containerFollowButton.onclick = async e => {
     if (e.target.closest(followButton)) {
       const button = e.target
       const userId = button.dataset.user
@@ -31,8 +33,10 @@ function follow() {
   const followerFollowingContainer = $('.followers-following__container .users')
   const profileButtonContainer = $('.profile__buttons-container')
   const topUserFollowersContainer = $('.topUserFollowers .users_container')
+  const createChatUserContainer = $('.resultSearchChat .users_container')
 
   if (searchUserContainer) handleFollowButton(searchUserContainer)
+  if (createChatUserContainer) handleFollowButton(createChatUserContainer)
   if (followerFollowingContainer) handleFollowButton(followerFollowingContainer)
   if (profileButtonContainer) handleFollowButton(profileButtonContainer)
   if (profileButtonContainer) handleFollowButton(profileButtonContainer)

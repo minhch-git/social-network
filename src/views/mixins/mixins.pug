@@ -315,3 +315,40 @@ mixin createPostModal()
   +retweetPostModal()
   +createPostFormModal()
   +createPostImageShowModal()
+
+mixin createChatImage(chatData, userLoggedIn)
+  if !chatData 
+    return 
+  - let i = 0
+  - let maxImagesToShow = 3
+  - let remainingUsers = chatData.users.length - maxImagesToShow 
+  - remainingUsers--
+  .chat-images__container 
+    if remainingUsers > 0 
+      .userCount 
+        span +#{remainingUsers}
+
+    each user in chatData.users 
+      if chatData.users.length > 1 && user.id === userLoggedIn.id 
+        - continue
+      else if i >= maxImagesToShow 
+        - break
+
+      img(src=user.profilePic, alt="User's profile picture", title=user.firstName)
+      - i++
+
+mixin createChatNameModal(chat)
+  #createChatNameModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          h3.modal-title.text-info.card-title Thay đổi tên trò chuyện?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          input#chatNameInput(type="text", value=chat.chatName, name="chatName")
+        //- Modal footer
+        .modal-footer
+          button#submitChatNameButton.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
