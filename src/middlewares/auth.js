@@ -51,7 +51,6 @@ const requireAdminLoggedOut = (req, res, next) => {
   // if (req.user.role !== 'admin') {
   //   res.redirect('/admin/')
   // }
-  console.log(req.user)
   return res.redirect('/auth/admin/sign_in')
 }
 

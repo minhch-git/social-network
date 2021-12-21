@@ -62,7 +62,6 @@ const getUser = catchAsync(async (req, res) => {
  * @access private
  */
 const updateUser = catchAsync(async (req, res) => {
-  console.log({ body: req.body })
   const userUpdated = await userService.updateUserById(
     req.params.userId,
     req.body

@@ -2,9 +2,9 @@
 const loadPostsHome = async () => {
   let limit = 8
   const data = await httpGet(
-    `/posts/?followingOnly=true&&sortBy=createdAt&&page=1&limit=${limit}`
+    `/posts/?followingOnly=true&sortBy=createdAt:desc&page=1&limit=${limit}`
   )
-  let { posts, totalPages, page, totalPosts } = data
+  let { posts, totalPages, page } = data
 
   // ================================
   // READMORE
@@ -20,7 +20,7 @@ const loadPostsHome = async () => {
     buttonShowMore.onclick = async e => {
       let nextPage = Math.ceil($$('.posts .post').length / limit + 1)
       const data = await httpGet(
-        `/posts/?followingOnly=true&&sortBy=createdAt&&page=${nextPage}&limit=${limit}`
+        `/posts/?followingOnly=true&sortBy=createdAt:desc&page=${nextPage}&limit=${limit}`
       )
       if (+data.page >= data.totalPages) {
         buttonShowMore.remove()
@@ -35,7 +35,10 @@ const loadPostsHome = async () => {
   // END READMORE
   // ================================
 
-  if (posts.length > 0) return posts.forEach(post => outputPost(post))
+  if (posts.length > 0)
+    return posts.forEach(post =>
+      outputPost(post, '.posts_container .posts', 'beforeend')
+    )
 
   Swal.fire({
     title: `Xin chào bạn <span class="text-primary"> ${userLoggedIn.fullName}</span>`,

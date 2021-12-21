@@ -11,7 +11,7 @@ import bcrypt from 'bcryptjs'
 const createMessage = async messageBody => {
   const newMessage = new Message(messageBody)
   await newMessage.save()
-  await Message.populate(newMessage, ['messageedBy', 'retweetData'])
+  await Message.populate(newMessage, ['sender', 'chat'])
   return newMessage
 }
 
@@ -118,30 +118,6 @@ const deleteMessage = async filter => {
   return message
 }
 
-const getMessagesInPersonal = async (senderId, receiverId, limit = 10) => {
-  const message = await Message.findOne({
-    $or: [
-      {
-        $and: [{ sender: senderId }, { receiver: receiverId }],
-      },
-      {
-        $and: [{ sender: receiverId }, { receiver: senderId }],
-      },
-    ],
-  })
-    .populate({
-      path: 'User',
-      select: 'id username firstName lastName fullName profilePic',
-    })
-    .populate({
-      path: 'User',
-      select: 'id username firstName lastName fullName profilePic',
-    })
-    .sort({ createdAt: -1 })
-    .limit(limit)
-  return message
-}
-
 export default {
   createMessage,
   queryMessages,
@@ -152,5 +128,4 @@ export default {
   updateMessages,
   deleteMessageById,
   deleteMessage,
-  getMessagesInPersonal,
 }

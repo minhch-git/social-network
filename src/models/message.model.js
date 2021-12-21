@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import paginate from './plugins/paginate'
 import toJSON from './plugins/toJson'
 
 const messageSchema = new Schema(
@@ -6,25 +7,28 @@ const messageSchema = new Schema(
     sender: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
-    receiver: {
+    readBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    chat: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      ref: 'Chat',
     },
-    messageType: {
+    content: {
       type: String,
-      enum: ['file', 'text', 'image'],
+      trim: true,
     },
-    text: String,
-    file: String,
   },
   { timestamps: true }
 )
 
 // add plugin that converts mongoose to json
 messageSchema.plugin(toJSON)
+messageSchema.plugin(paginate)
 
 /**
  * @typedef Message

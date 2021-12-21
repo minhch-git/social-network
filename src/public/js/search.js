@@ -34,7 +34,7 @@ const submitSearch = async (keyword, searchType = 'users', options = {}) => {
 
   const url = searchType === 'users' ? '/users' : '/posts'
   const data = await httpGet(
-    `${url}?search=${keyword}&&page=${page}&&limit=${limit}&&sortBy=${sortBy}&&select=${select}`
+    `${url}?search=${keyword}&page=${page}&limit=${limit}&sortBy=${sortBy}&select=${select}`
   )
 
   // Result: Search type = users

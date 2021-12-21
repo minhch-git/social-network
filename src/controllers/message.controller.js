@@ -1,15 +1,9 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import {
-  chatService,
-  postService,
-  uploadService,
-  userService,
-} from '../services'
+import { chatService, messageService, userService } from '../services'
 import { tranSuccess } from '../../lang/en'
 import User from '../models/user.model'
-import messageService from '../services/message.service'
 
 /**
  * Get a post by post id
@@ -51,7 +45,7 @@ const getChatByUserId = (userLoggedInId, otherUserId) => {
   return chatService.updateChat(filter, body, options)
 }
 
-const getMessagePage = async (req, res) => {
+const getChatPage = async (req, res) => {
   const userId = req.user._id
   const chatId = req.params.chatId
   let filter = pick(req.query, ['chatName'])
@@ -63,16 +57,16 @@ const getMessagePage = async (req, res) => {
 
   let options = pick(req.query, ['sortBy', 'page', 'limit', 'select'])
   options.populate = 'users'
-  const chat = await chatService.queryChats(filter, options)
-  if (chat.chats.length === 0) {
+  const result = await chatService.queryChats(filter, options)
+  if (result.chats.length === 0) {
     const user = await userService.getUserById(chatId)
     if (user) {
       const userChat = await getChatByUserId(req.user._id, user._id)
-      chat.chats.push(userChat)
+      result.chats.push(userChat)
     }
   }
 
-  if (chat.chats.length === 0) {
+  if (result.chats.length === 0) {
     req.flash(
       'errors',
       'Chat does not exits or you do not have permission to view it.'
@@ -85,7 +79,7 @@ const getMessagePage = async (req, res) => {
     pageTitle: 'Message',
     userLoggedIn: req.user,
     selectedPage: 'messages',
-    chat: chat.chats[0],
+    chat: result.chats[0],
     userLoggedInJs: JSON.stringify(req.user),
   })
 }
@@ -100,8 +94,37 @@ const getInboxPage = (req, res) => {
     userLoggedInJs: JSON.stringify(req.user),
   })
 }
+
+/**
+ * Create a new message
+ * @POST messages/:
+ * @access private
+ */
+const createMessage = catchAsync(async (req, res) => {
+  const message = await messageService.createMessage({
+    ...req.body,
+    sender: req.user.id,
+  })
+  res.status(200).json({ message })
+})
+
+/**
+ * Get message by chatId
+ * @GET messages/:chatId
+ * @access public
+ */
+const getMessage = catchAsync(async (req, res) => {
+  let filter = pick(req.query, ['content', 'sender', 'chat', 'readBy'])
+  const options = pick(req.query, ['sortBy', 'page', 'limit', 'select', 'skip'])
+  options.populate = 'sender,readBy,chat'
+  const data = await messageService.queryMessages(filter, options)
+  res.status(200).json({ ...data })
+})
+
 export default {
   getCreateNewChatPage,
-  getMessagePage,
+  getChatPage,
   getInboxPage,
+  createMessage,
+  getMessage,
 }

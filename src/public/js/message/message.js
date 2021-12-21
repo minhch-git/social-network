@@ -22,7 +22,7 @@ const submitSearch = async (keyword, searchType = 'users', options = {}) => {
   const select = options?.select || ''
 
   const data = await httpGet(
-    `/users?search=${keyword}&&page=${page}&&limit=${limit}&&sortBy=${sortBy}&&select=${select}`
+    `/users?search=${keyword}&page=${page}&limit=${limit}&sortBy=${sortBy}&select=${select}`
   )
   renderUserSearch(data.users)
 }
