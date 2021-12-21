@@ -51,6 +51,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
+    "socket.io": "^4.4.0",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",
     "xss-clean": "^0.1.1",
