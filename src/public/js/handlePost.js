@@ -143,9 +143,6 @@ const handlePost = async () => {
     if (e.target.closest('.like-button')) likePost(postId, e.target)
   }
 }
-$('#createPostImageShowModal').addEventListener('focus', e => {
-  console.log(e)
-})
 document.addEventListener('DOMContentLoaded', () => {
   handlePost()
 })

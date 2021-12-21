@@ -30,7 +30,7 @@ const getChats = catchAsync(async (req, res) => {
   let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
   filter = {
     ...filter,
-    users: { $elemMatch: { $eq: req.user.id } },
+    users: { $elemMatch: { $eq: req.user._id } },
   }
   options.populate = 'users'
   const result = await chatService.queryChats(filter, options)
@@ -46,7 +46,7 @@ const getChats = catchAsync(async (req, res) => {
 const getChat = catchAsync(async (req, res) => {
   const chat = await chatService.getChat({
     _id: req.params.chatId,
-    users: { $elemMatch: { $eq: req.user.id } },
+    users: { $elemMatch: { $eq: req.user._id } },
   })
   if (!chat) {
     throw createError.NotFound()

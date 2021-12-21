@@ -348,3 +348,54 @@ const outputPostSidebarRight = (
   const html = createPostSidebarRightHtml(post)
   $(selector).insertAdjacentHTML(position, html)
 }
+
+//--------------------------- Message ---------------------------
+// Scroll
+const scrollToBottom = animated => {
+  let container = $('.messages')
+  let scrollHeight = container.scrollHeight
+
+  if (animated) {
+    container.scrollTop = scrollHeight + $('.message_received').scrollHeight
+  } else container.scrollTop = scrollHeight
+}
+
+const createMessageHtml = message => {
+  let isMine = message.sender.id === userLoggedIn.id
+  let classMessage = isMine
+    ? 'message_received message_owner'
+    : 'message_received'
+  let profilePic = message.sender.profilePic || message.readBy.profilePic
+  let timestamp = ` ${new Date(message.createdAt).getDate()}/${
+    new Date(message.createdAt).getMonth() + 1
+  }/${new Date(message.createdAt).getFullYear()} ${new Date(
+    message.createdAt
+  ).getHours()}:${new Date(message.createdAt).getMinutes()}`
+  return `
+  <div class="${classMessage}">
+    <div class="message_received_img message_owner_img">
+      <img src="${profilePic}" alt="avatar" />
+    </div>
+    <div class="message_received_msg message_owner_msg">
+        <div class="message_received_text message_owner_text">
+            <p>${message.content}</p>
+            <span class="message_received_time message_owner_time">${timestamp}</span>
+        </div>
+    </div>
+  </div>
+  `
+}
+// add message
+const addChatMessage = (
+  message,
+  selector = '.messages',
+  position = 'beforeend'
+) => {
+  if (!message || !message.id) {
+    return alertify.notify('Message is not invalid', 'error', 6)
+  }
+
+  const html = createMessageHtml(message)
+  $(selector).insertAdjacentHTML(position, html)
+  scrollToBottom(true, '.messages')
+}

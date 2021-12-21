@@ -68,8 +68,8 @@ const paginate = schema => {
     // Finding resource
     let docsPromise = this.find(filter)
       .select(select)
-      .skip(skip)
       .sort(sort)
+      .skip(skip)
       .limit(limit)
 
     // Populate data fields.

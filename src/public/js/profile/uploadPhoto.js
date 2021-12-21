@@ -74,7 +74,6 @@ const submitImage = (input, keyImage, api) => {
       // remove cropper
       cropper.destroy()
     }
-    console.log({ data })
 
     // clear element
     return location.reload()

@@ -36,7 +36,6 @@ const previewPostImage = (input, selector) => {
 }
 // Upload post to server
 const uploadPost = async formData => {
-  console.log({ formData })
   try {
     const response = await fetch('/posts', {
       method: 'POST',

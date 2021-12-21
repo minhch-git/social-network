@@ -23,7 +23,7 @@ router
 router
   .route('/:chatId')
   .get(
-    requireAdminLoggedIn,
+    requireLoggedIn,
     validate(chatValidation.getChat),
     chatController.getChat
   )
