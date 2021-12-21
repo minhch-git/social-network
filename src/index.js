@@ -2,10 +2,13 @@ import app from './app'
 import config from './config/config'
 import logger from './config/logger'
 import 'colors'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import https from 'https'
 import pem from 'pem'
 
 const runningApp = () => {
+  // Init server
   const server = app.listen(
     config.port,
     logger.info(
@@ -14,6 +17,34 @@ const runningApp = () => {
         .underline
     )
   )
+
+  // Socket
+  const io = new Server(server, {})
+  io.on('connection', socket => {
+    logger.info('Connected to socket io.')
+
+    // Setup
+    socket.on('setup', user => {
+      socket.join(user.id)
+      socket.emit('connected')
+    })
+
+    // Join room chat
+    socket.on('join-room', room => socket.join(room))
+    // Typing
+    socket.on('typing', room => socket.to(room).emit('typing'))
+    socket.on('stop-typing', room => socket.to(room).emit('stop-typing'))
+
+    // Message
+    socket.on('new-message', message => {
+      let chat = message.chat
+      if (!chat.users) return console.log('Chat.users not defined')
+      chat.users.forEach(user => {
+        if (user === message.sender.id) return
+        socket.to(user).emit('message-received', message)
+      })
+    })
+  })
 
   // Handle unhandled promise rejections
   const exitHandler = () => {

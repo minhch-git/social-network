@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  // Realtime
+  socket.emit('join-room', chatId)
+  socket.on('typing', () =>
+    $('.dot-typing__container').classList.remove('hidden')
+  )
+  socket.on('stop-typing', () =>
+    $('.dot-typing__container').classList.add('hidden')
+  )
+
+  // Get chat name by chatId
   const { chat } = await httpGet(`/chats/${chatId}`)
   $('#chatName').innerHTML = getChatName(chat)
   scrollToBottom(false)
@@ -42,8 +52,8 @@ $('#createChatNameModal').addEventListener('hide.bs.modal', e => {
 // ------------------- Get all messages ---------------------
 ;(async () => {
   const page = 1
-  const limit = 10
-  const sortBy = 'createdAt'
+  const limit = 5
+  const sortBy = 'createdAt:desc'
   const select = ''
 
   const data = await httpGet(
@@ -58,7 +68,9 @@ $('#createChatNameModal').addEventListener('hide.bs.modal', e => {
       </div>`
     return
   }
-  data.messages.forEach(message => addChatMessage(message))
+  data.messages.forEach(message =>
+    addChatMessage(message, '.messages', 'afterbegin')
+  )
   $('.lds-message').remove()
   $('.messages.hidden').classList.remove('hidden')
 })()
@@ -70,18 +82,54 @@ const sendMessage = async content => {
     chat: chatId,
   })
   addChatMessage(message)
+
+  // Socket message
+  if (connected) {
+    socket.emit('new-message', message)
+  }
 }
 
 const messageSubmitted = () => {
   let content = $('textarea#inputTextBox').value.trim()
+
   sendMessage(content)
+
   $('textarea#inputTextBox').value = ''
+  // Stop typing
+  socket.emit('stop-typing', chatId)
+  isTyping = false
+}
+let isTyping = false
+let lastTypingTime
+// Update typing with socket
+const updateTyping = () => {
+  if (!connected) return
+  // add typing
+  if (!isTyping) {
+    isTyping = true
+    socket.emit('typing', chatId)
+  }
+
+  // stop typing
+  lastTypingTime = new Date().getTime()
+  let timerLength = 3000
+  setTimeout(() => {
+    let timeNow = new Date().getTime()
+    let timeDiff = timeNow - lastTypingTime
+    if (timeDiff >= timeNow - lastTypingTime && isTyping) {
+      socket.emit('stop-typing', chatId)
+      isTyping = false
+    }
+  }, timerLength)
 }
 
 $('button.send-message__button').onclick = () => {
   messageSubmitted()
 }
 $('textarea#inputTextBox').onkeyup = e => {
+  // Realtime typing
+  updateTyping()
+
   let content = e.target.value.trim()
 
   if (!content) {
