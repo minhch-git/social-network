@@ -1,10 +1,41 @@
 // Load posts
 const loadPostsProfile = async () => {
-  const { posts } = await httpGet(`/posts?postedBy=${profileUserId}`)
-
-  // SPinners
+  let limit = 5
+  const data = await httpGet(
+    `/posts?postedBy=${profileUserId}&sortBy=createdAt&page=1&limit=${limit}`
+  )
+  const { posts, totalPages, page } = data
   $('.lds-profile').remove()
   $('.profile-wrapper.hidden').classList.remove('hidden')
+
+  // ================================
+  // READMORE
+  // ================================
+  if (+page < totalPages) {
+    let buttonShowMore =
+      '<div class="show-more__container text-center my-3"><span>xem thêm</span></div>'
+    $('.posts_container').insertAdjacentHTML('afterend', buttonShowMore)
+  }
+  let buttonShowMore = $('.profile-wrapper .show-more__container')
+  if (buttonShowMore)
+    buttonShowMore.onclick = async e => {
+      let nextPage = Math.ceil($$('.posts_container .post').length / limit + 1)
+      console.log({ nextPage })
+      const data = await httpGet(
+        `/posts?postedBy=${profileUserId}&sortBy=createdAt:desc&page=${nextPage}&limit=${limit}`
+      )
+      if (+data.page >= data.totalPages) {
+        buttonShowMore.remove()
+      }
+
+      if (data.posts.length > 0)
+        return data.posts.forEach(post =>
+          outputPost(post, '.posts_container', 'beforeend')
+        )
+    }
+  // ================================
+  // END READMORE
+  // ================================
 
   if (posts.length == 0)
     return $('.posts_container').insertAdjacentHTML(
