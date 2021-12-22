@@ -1,9 +1,10 @@
 let cropper
-
+let uploadTypes = ['image/ipg', 'image/png', 'image/jpeg']
+let uploadLimit = 3145728 //byte = 3B
 // Check file when upload
 let checkFileUpload = fileData => {
-  let types = ['image/ipg', 'image/png', 'image/jpeg']
-  let limit = 1048576 //byte = 1MB
+  let types = uploadTypes
+  let limit = uploadLimit
 
   if (!types.includes(fileData.type)) {
     alertifyError('Kiểu file không hợp lệ, chỉ chấp nhận ảnh png, jpg và jpeg')
@@ -11,7 +12,7 @@ let checkFileUpload = fileData => {
   }
 
   if (fileData.size > limit) {
-    alertifyError(`Ảnh upload tối đa cho phép là ${limit}`)
+    alertifyError(`Ảnh upload tối đa cho phép là ${limit / 1048576}`)
     return false
   }
 

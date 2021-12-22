@@ -238,17 +238,20 @@ const getChatImageElements = chatData => {
 const createChatListHtml = chatData => {
   let chatName = getChatName(chatData)
   let image = getChatImageElements(chatData)
-  let lastestMessage = chatData.lastestMessage.content
+  console.log({ chatData })
+  let lastestMessage = chatData.lastestMessage?.content
   let timestamps = timeDifference(
     new Date(),
-    new Date(chatData.lastestMessage.createdAt)
+    new Date(chatData.lastestMessage?.createdAt || chatData.updatedAt)
   )
   return `
       <a href="/messages/${chatData.id}" class="chat-list__item-link">
       ${image}
         <div class="chat-list__item-link-details ellipsis">
           <span class="heading ellipsis">${chatName}</span>
-          <span class="subText ellipsis">${lastestMessage}</span>
+          <span class="subText ellipsis">${
+            lastestMessage ? lastestMessage : ''
+          }</span>
           <span class="text-xs">${timestamps}</span>
         </div>
       </a>

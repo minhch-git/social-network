@@ -18,7 +18,7 @@ const transErrors = {
 
   upload_issue: 'Issue with uploading this image.',
   upload_not_supported: 'This file is not supported.',
-  upload_limit_size: 'This file is too large (Max: 1MB ).',
+  upload_limit_size: 'This file is too large (Max: 2MB ).',
 
   server_error: `There is an error on the server side, please contact our department to report this error. Thank you!`,
 }

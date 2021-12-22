@@ -1162,8 +1162,26 @@ body {
 }
 
 @media (max-width: 992px) {
+  .main_container {
+    border-left: 4px solid #38444d !important;
+  }
+  .sidebar {
+    padding: 0 4px;
+  }
+  .sidebar .logo {
+    display: none;
+  }
   ul.menu-list li.menu-item span {
     display: none;
+  }
+  .sidebar .avatar {
+    width: 20px;
+    height: 20px;
+    border: 0;
+  }
+  .user_image-container {
+    width: 34px;
+    height: 34px;
   }
 }
 

@@ -66,6 +66,8 @@ $('#createChatNameModal').addEventListener('hide.bs.modal', e => {
         <img src="https://media1.giphy.com/media/LPehs7j0jKj48I0HeM/giphy.gif?cid=ecf05e478vdwqyop055dycxko107r6kdcj71vr5lh48wbt1j&rid=giphy.gif&ct=g" alt="" />                        
         <p >Vẫy tay chào</p>
       </div>`
+    $('.lds-message').remove()
+    $('.messages.hidden').classList.remove('hidden')
     return
   }
   data.messages.forEach(message =>
