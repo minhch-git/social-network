@@ -113,7 +113,7 @@ const createMessage = catchAsync(async (req, res) => {
  * @GET messages/:chatId
  * @access public
  */
-const getMessage = catchAsync(async (req, res) => {
+const getMessages = catchAsync(async (req, res) => {
   let filter = pick(req.query, ['content', 'sender', 'chat', 'readBy'])
   const options = pick(req.query, ['sortBy', 'page', 'limit', 'select', 'skip'])
   options.populate = 'sender,readBy,chat'
@@ -126,5 +126,5 @@ export default {
   getChatPage,
   getInboxPage,
   createMessage,
-  getMessage,
+  getMessages,
 }

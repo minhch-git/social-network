@@ -235,17 +235,21 @@ const getChatImageElements = chatData => {
   return `<div class="chat-image__container ${groupChatClass}">${chatImage}</div>`
 }
 
-const createChatHtml = chatData => {
+const createChatListHtml = chatData => {
   let chatName = getChatName(chatData)
   let image = getChatImageElements(chatData)
-  let lastestMessage = 'This is lastest message'
-
+  let lastestMessage = chatData.lastestMessage.content
+  let timestamps = timeDifference(
+    new Date(),
+    new Date(chatData.lastestMessage.createdAt)
+  )
   return `
-      <a href="/messages/${chatData.id}" class="chat-list__item">
+      <a href="/messages/${chatData.id}" class="chat-list__item-link">
       ${image}
-        <div class="chat-list__item-details ellipsis">
+        <div class="chat-list__item-link-details ellipsis">
           <span class="heading ellipsis">${chatName}</span>
           <span class="subText ellipsis">${lastestMessage}</span>
+          <span class="text-xs">${timestamps}</span>
         </div>
       </a>
   `
@@ -336,7 +340,7 @@ const outputChatListItem = (
   selector = '.chat-list',
   position = 'afterbegin'
 ) => {
-  const html = createChatHtml(chat)
+  const html = createChatListHtml(chat)
   $(selector).insertAdjacentHTML(position, html)
 }
 

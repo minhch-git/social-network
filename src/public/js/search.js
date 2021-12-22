@@ -36,12 +36,79 @@ const submitSearch = async (keyword, searchType = 'users', options = {}) => {
   const data = await httpGet(
     `${url}?search=${keyword}&page=${page}&limit=${limit}&sortBy=${sortBy}&select=${select}`
   )
+  // Hide spinner
+  $('.lds-search').classList.add('hidden')
 
   // Result: Search type = users
-  if (data.users) return renderUserSearch(data.users)
+  if (data.users) {
+    // ================================
+    // READMORE
+    // ================================
+    const { totalPages } = data
+    if (+page < totalPages) {
+      let buttonShowMore =
+        '<div class="show-more__container text-center my-3"><span>xem thêm</span></div>'
+      $('.users').insertAdjacentHTML('afterend', buttonShowMore)
+    }
+
+    let buttonShowMore = $('.users_container .show-more__container')
+    if (buttonShowMore)
+      buttonShowMore.onclick = async e => {
+        let nextPage = Math.ceil($$('.users .user').length / limit + 1)
+        const data = await httpGet(
+          `${url}?search=${keyword}&page=${nextPage}&limit=${limit}&sortBy=${sortBy}&select=${select}`
+        )
+        if (+data.page >= data.totalPages) {
+          buttonShowMore.remove()
+        }
+
+        if (data.users.length > 0) {
+          return data.users.forEach(user => {
+            if (user.id !== userLoggedIn.id)
+              outputUser(user, '.users', 'beforeend')
+          })
+        }
+      }
+    // ================================
+    // END READMORE
+    // ================================
+    return renderUserSearch(data.users)
+  }
 
   // Result: Search type = posts
-  if (data.posts) return renderPostsSearch(data.posts)
+  if (data.posts) {
+    // ================================
+    // READMORE
+    // ================================
+    const { totalPages } = data
+    if (+page < totalPages) {
+      let buttonShowMore =
+        '<div class="show-more__container text-center my-3"><span>xem thêm</span></div>'
+      $('.posts').insertAdjacentHTML('afterend', buttonShowMore)
+    }
+
+    let buttonShowMore = $('.posts_container .show-more__container')
+    if (buttonShowMore)
+      buttonShowMore.onclick = async e => {
+        let nextPage = Math.ceil($$('.posts .post').length / limit + 1)
+        const data = await httpGet(
+          `${url}?search=${keyword}&page=${nextPage}&limit=${limit}&sortBy=${sortBy}&select=${select}`
+        )
+        if (+data.page >= data.totalPages) {
+          buttonShowMore.remove()
+        }
+
+        if (data.posts.length > 0)
+          return data.posts.forEach(post =>
+            outputPost(post, '.posts_container .posts', 'beforeend')
+          )
+      }
+    // ================================
+    // END READMORE
+    // ================================
+
+    return renderPostsSearch(data.posts)
+  }
 }
 // Search
 $('#searchInput').onkeyup = e => {
@@ -63,10 +130,26 @@ $('#searchInput').onkeyup = e => {
 
   // Submit
   $('#searchButton').onclick = () => {
+    // Remove button show more when submit
+    let buttonShowMore = $('.users_container .show-more__container')
+    if (buttonShowMore) {
+      buttonShowMore.classList.remove()
+    }
+
+    // add spinner
+    $('.lds-search').classList.remove('hidden')
+
     submitSearch(value, searchType)
     input.value = ''
   }
   if (value && e.keyCode === 13) {
+    // Remove button show more when submit
+    let buttonShowMore = $('.users_container .show-more__container')
+    if (buttonShowMore) {
+      buttonShowMore.classList.remove()
+    }
+    // add spinner
+    $('.lds-search').classList.remove('hidden')
     submitSearch(value, searchType)
     input.value = ''
   }
@@ -75,7 +158,7 @@ $('#searchInput').onkeyup = e => {
 document.addEventListener('DOMContentLoaded', () => {
   let options = {
     page: 1,
-    limit: 8,
+    limit: 3,
   }
   if (selectedTab === 'users') return submitSearch({}, 'users', options)
 

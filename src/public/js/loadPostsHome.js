@@ -5,7 +5,8 @@ const loadPostsHome = async () => {
     `/posts/?followingOnly=true&sortBy=createdAt:desc&page=1&limit=${limit}`
   )
   let { posts, totalPages, page } = data
-
+  $('.lds__post-home').remove()
+  $('.posts').classList.remove('hidden')
   // ================================
   // READMORE
   // ================================

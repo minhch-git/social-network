@@ -6,7 +6,10 @@ block content
   .posts_container
     +createPostForm(userLoggedIn)
 
-    .posts
+    .lds__post-home
+      .dot-spin
+    .posts.hidden
+
     +createPostModal()
       //- loadPosts
 block scripts
