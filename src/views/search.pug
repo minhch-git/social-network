@@ -12,8 +12,13 @@ block content
   .tabs-container 
     +createTab('Users', `/search/users`, selectedTab == 'users')
     +createTab('Posts', `/search/posts`, selectedTab != 'users')
+    
+  .lds-search
+    .dot-spin
 
   .search_results 
+    .lds-search.hidden
+      .dot-spin
     .users_container
       .users
     

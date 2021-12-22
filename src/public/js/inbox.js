@@ -2,7 +2,7 @@
 const getChatList = async (options = {}) => {
   const page = options?.page || 1
   const limit = options?.limit || 8
-  const sortBy = options?.sortBy || 'createAt:desc'
+  const sortBy = options?.sortBy || 'updatedAt'
 
   const data = await httpGet(
     `/chats?sortBy=${sortBy}&page=${page}&limit=${limit}`

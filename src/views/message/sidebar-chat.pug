@@ -9,7 +9,7 @@
         .head_icon
           a(href='')
             i.fas.fa-search
-          a(href='')
+          a(href='/messages/new')
             i.fas.fa-plus
       //- Chat list options
       .chat_list_options
@@ -19,29 +19,8 @@
           button.open_button.unread_button(disabled='') Unread
       //- Chat list friend
       .chat_list_friends.scroll
-        //- Members
-        .row.chat_list_member.active
-          .col-lg-3.member_avatar
-            img(src='/assets/images/avatar-default.png', alt='')
-          .col-lg-9.member_body
-            .member_name
-              h5 Tonny
-            .member_text
-              p You: Have n...
-          .col-2.member_time
-            span.time_active 25m
-        //- Members
-        .row.chat_list_member
-          .col-lg-3.member_avatar
-            img(src='/assets/images/avatar-default.png', alt='')
-          .col-lg-9.member_body
-            .member_name
-              h5 Tonny
-            .member_text
-              p You: Have ...
-          .col-2.member_time
-            span.time_active 25m
-        //- Members
+        .chat-list
+
       .chat_list_help
         a(href='') Help!
         i.fas.fa-info

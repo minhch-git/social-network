@@ -12,7 +12,7 @@ router.get(
   '/content',
   requireLoggedIn,
   validate(messageValidation.getMessages),
-  messageController.getMessage
+  messageController.getMessages
 )
 
 router.get(

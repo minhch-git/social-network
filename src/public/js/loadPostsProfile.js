@@ -2,6 +2,10 @@
 const loadPostsProfile = async () => {
   const { posts } = await httpGet(`/posts?postedBy=${profileUserId}`)
 
+  // SPinners
+  $('.lds-profile').remove()
+  $('.profile-wrapper.hidden').classList.remove('hidden')
+
   if (posts.length == 0)
     return $('.posts_container').insertAdjacentHTML(
       'afterbegin',

@@ -32,7 +32,7 @@ const getChats = catchAsync(async (req, res) => {
     ...filter,
     users: { $elemMatch: { $eq: req.user._id } },
   }
-  options.populate = 'users'
+  options.populate = 'users,lastestMessage'
   const result = await chatService.queryChats(filter, options)
 
   res.send(result)
