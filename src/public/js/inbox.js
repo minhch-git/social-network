@@ -8,7 +8,7 @@ const getChatList = async (options = {}) => {
     `/chats?sortBy=${sortBy}&page=${page}&limit=${limit}`
   )
   if (data.chats.length === 0)
-    return $('.resultsContainer').insertAdjacentHTML(
+    return $('.chat-list').insertAdjacentHTML(
       'afterbegin',
       '<span class="d-block text-center mt-3">Nothing to show</span>'
     )

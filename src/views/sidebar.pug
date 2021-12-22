@@ -33,7 +33,7 @@
           span Profile
       if userLoggedIn.role === 'admin'
         li.menu-item.menu-item(class=selectedPage == 'admin' && 'active')
-          a(href='/admin')
+          a(href='/admin', target="_blank")
             i.fas.fa-biohazard(style="color: #f53e44")
             span Admin
       //- Logout
