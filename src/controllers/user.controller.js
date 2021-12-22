@@ -1,7 +1,7 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { postService, userService } from '../services'
+import { notificationService, postService, userService } from '../services'
 import { tranSuccess } from '../../lang/vi'
 
 /**
@@ -100,6 +100,7 @@ const updateMe = catchAsync(async (req, res, next) => {
   const userUpdated = await userService.updateUserById(req.user.id, req.body)
   res.status(200).json({ userUpdated })
 })
+
 /**
  * Add or remove following
  * @PATCH users/:userId/follow
@@ -121,7 +122,6 @@ const follow = catchAsync(async (req, res, next) => {
       [option]: { following: userId },
     }
   )
-
   // Add user or remove user to follwers of userId
   await userService.updateUser(
     { _id: userId },
@@ -129,8 +129,24 @@ const follow = catchAsync(async (req, res, next) => {
       [option]: { followers: req.user.id },
     }
   )
+
+  // Send notify
+  if (!isFollowing) {
+    await notificationService.createNotificationFollow(
+      userId,
+      req.user._id,
+      req.user._id
+    )
+  }
+
   res.status(200).json({ user: req.user })
 })
+
+/**
+ * Get all users following
+ * @PATCH users//:userId/following
+ * @access private
+ */
 const getUserFollowing = catchAsync(async (req, res, next) => {
   const { userId } = req.params
 
@@ -140,6 +156,12 @@ const getUserFollowing = catchAsync(async (req, res, next) => {
   const { users } = await userService.queryUsers(filter, options)
   res.status(200).json({ user: users[0] })
 })
+
+/**
+ * Get all users followers
+ * @PATCH users//:userId/following
+ * @access private
+ */
 const getUserFollowers = catchAsync(async (req, res, next) => {
   const { userId } = req.params
 
@@ -150,16 +172,32 @@ const getUserFollowers = catchAsync(async (req, res, next) => {
   res.status(200).json({ user: users[0] })
 })
 
+/**
+ * Get users by number of likes
+ * @GET users/sort
+ * @access private
+ */
 const getTopFollowers = catchAsync(async (req, res, next) => {
   const options = pick(req.query, ['sortBy', 'page', 'limit'])
   let result = await userService.getUsersBySortNumberFollowers(options)
   res.status(200).json(result)
 })
 
+/**
+ * Update password user
+ * @GET users/reset_password/:userId
+ * @access private
+ */
 const updateUserPassword = catchAsync(async (req, res, next) => {
   await userService.updateUserPasswordById(req.params.userId, req.body.password)
   res.status(200).json({ message: tranSuccess.password_updated })
 })
+
+/**
+ * Acivation account
+ * @GET users/active_account/:userId
+ * @access private
+ */
 const verifyAccount = catchAsync(async (req, res, next) => {
   await userService.verifyUserByUserId(req.params.userId)
   res.status(200).json({ message: tranSuccess.account_actived })

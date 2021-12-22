@@ -232,29 +232,73 @@ const getChatImageElements = chatData => {
     groupChatClass = 'group-chat__image'
     chatImage += getUserChatImageElement(otherChatUsers[1])
   }
-  return `<div class="chat-image__container ${groupChatClass}">${chatImage}</div>`
+  return `<div class="list__image-container ${groupChatClass}">${chatImage}</div>`
 }
 
 const createChatListHtml = chatData => {
   let chatName = getChatName(chatData)
   let image = getChatImageElements(chatData)
-  console.log({ chatData })
-  let lastestMessage = chatData.lastestMessage?.content
+  let lastestMessage = chatData.lastestMessage
+  let newMessage = ''
+  let senderName = ''
+  if (lastestMessage) {
+    newMessage = lastestMessage.content
+    senderName = lastestMessage.sender.fullName
+  }
   let timestamps = timeDifference(
     new Date(),
     new Date(chatData.lastestMessage?.createdAt || chatData.updatedAt)
   )
   return `
-      <a href="/messages/${chatData.id}" class="chat-list__item-link">
+      <a href="/messages/${chatData.id}" class="list__item-link">
       ${image}
-        <div class="chat-list__item-link-details ellipsis">
+        <div class="list__item-link-details ellipsis">
           <span class="heading ellipsis">${chatName}</span>
-          <span class="subText ellipsis">${
-            lastestMessage ? lastestMessage : ''
-          }</span>
+          <span class="subText ellipsis"><b>${
+            senderName ? senderName : ''
+          }</b>: ${newMessage ? newMessage : ''}</span>
           <span class="text-xs">${timestamps}</span>
         </div>
       </a>
+  `
+}
+
+const createTextNotification = notificationType => {
+  const types = {
+    postLike: 'postLike',
+    postRetweet: 'postRetweet',
+    newMessage: 'newMessage',
+    follow: 'follow',
+    newMessage: 'newMessage',
+  }
+  let text
+  if (notificationType === types.postLike) {
+    text = 'liked one of your posts'
+  }
+  if (notificationType === types.postRetweet) {
+    text = 'retweeted one of your posts'
+  }
+  if (notificationType === types.follow) {
+    text = 'followed you'
+  }
+  return text
+}
+
+const createNotificationListHtml = notification => {
+  const { userFrom } = notification
+  let timestamps = timeDifference(new Date(), new Date(notification.createdAt))
+  let text = createTextNotification(notification.notificationType)
+  return `
+  <a href="/messages/61c2bd09b5b7510bbe821872" class="list__item-link">
+    <div class="list__image-container">
+      <img src="${userFrom.profilePic}" alt="User's profile pic">
+    </div>
+    <div class="list__item-link-details ellipsis">
+      <span class="heading ellipsis">${userFrom.fullName}</span>
+      <span class="subText ellipsis">${text}</span>
+      <span class="text-xs">${timestamps}</span>
+    </div>
+  </a>
   `
 }
 
@@ -344,6 +388,14 @@ const outputChatListItem = (
   position = 'afterbegin'
 ) => {
   const html = createChatListHtml(chat)
+  $(selector).insertAdjacentHTML(position, html)
+}
+const outputNotificationItem = (
+  notification,
+  selector = '.notifcations-list',
+  position = 'afterbegin'
+) => {
+  const html = createNotificationListHtml(notification)
   $(selector).insertAdjacentHTML(position, html)
 }
 

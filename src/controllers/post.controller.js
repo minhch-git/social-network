@@ -1,7 +1,12 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { postService, uploadService, userService } from '../services'
+import {
+  postService,
+  uploadService,
+  userService,
+  notificationService,
+} from '../services'
 import { tranSuccess } from '../../lang/en'
 import User from '../models/user.model'
 
@@ -138,6 +143,16 @@ const likePost = catchAsync(async (req, res) => {
   const postUpdated = await postService.updatePostById(postId, {
     [options]: { likes: user.id },
   })
+
+  // Send notifications
+  if (!isLiked && postUpdated.postedBy._id != user._id) {
+    await notificationService.createNotificationPostLiked(
+      postUpdated.postedBy._id,
+      user._id,
+      postUpdated._id
+    )
+  }
+
   res.status(200).json({ post: postUpdated })
 })
 
@@ -188,6 +203,14 @@ const retweetPost = catchAsync(async (req, res) => {
     'retweetData.postedBy',
   ])
 
+  // Send notifications
+  if (!deletedPost && post.postedBy._id != userId) {
+    await notificationService.createNotificationPostRetweet(
+      post.postedBy._id,
+      userId,
+      post._id
+    )
+  }
   // Success
   res.status(200).json({ message: 'Chia sẻ bài viết thành công.', post })
 })
