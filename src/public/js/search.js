@@ -44,7 +44,7 @@ const submitSearch = async (keyword, searchType = 'users', options = {}) => {
     // ================================
     // READMORE
     // ================================
-    const { totalPages } = data
+    const { totalPages, page } = data
     if (+page < totalPages) {
       let buttonShowMore =
         '<div class="show-more__container text-center my-3"><span>xem thêm</span></div>'
@@ -158,9 +158,9 @@ $('#searchInput').onkeyup = e => {
 document.addEventListener('DOMContentLoaded', () => {
   let options = {
     page: 1,
-    limit: 3,
+    limit: 4,
   }
-  if (selectedTab === 'users') return submitSearch({}, 'users', options)
+  if (selectedTab === 'users') return submitSearch('', 'users', options)
 
   submitSearch({}, 'posts', options)
 })
