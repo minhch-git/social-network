@@ -8,10 +8,15 @@ import profileRoutes from './profile.route'
 import searchRoutes from './search.route'
 import messageRoutes from './message.route'
 import chatRoutes from './chat.route'
+import notificationRoutes from './notification.route'
 
 const router = new Router()
 
 const defaultRoutes = [
+  {
+    path: '/notifications',
+    route: notificationRoutes,
+  },
   {
     path: '/chats',
     route: chatRoutes,

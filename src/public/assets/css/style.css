@@ -1414,37 +1414,38 @@ main.col-7 {
   margin-right: 4px;
   font-size: 12px;
 }
-.chat-list__item-link {
+.list__item-link {
   text-decoration: none;
   display: flex;
+  align-items: center;
   padding: 12px 15px;
   transition: 0.3s ease-out;
   border-bottom: 1px solid #343d42;
 }
-.chat-list__item-link:hover {
+.list__item-link:hover {
   background-color: #192734;
 }
-.chat-list__item-link-details {
+.list__item-link-details {
   display: flex;
   flex-direction: column;
 }
-.chat-list__item-link-details .heading {
+.list__item-link-details .heading {
   font-size: 16px;
   color: #f9187b;
   font-weight: 500;
 }
 
-.chat-list__item-link-details .subText {
-  font-size: 14px;
+.list__item-link-details .subText {
+  font-size: 12px;
   color: #dbdbdb;
 }
 
-.chat-list__item-link img {
+.list__item-link img {
   height: 100%;
   width: 100%;
   border-radius: 50%;
 }
-.chat-image__container {
+.list__image-container {
   min-height: 40px;
   min-width: 40px;
   height: 40px;
@@ -1860,7 +1861,10 @@ button.send-message__button:disabled {
       10014px 0 0 0 #9880ff;
   }
 }
-
+.list__item-link-details b {
+  font-size: 12px;
+  font-weight: 500;
+}
 .text-xs {
   font-size: 10px;
   color: #848a8f;
@@ -2064,4 +2068,20 @@ button.send-message__button:disabled {
   left: 50%;
   top: 60%;
   transform: translate(-50%, -50%);
+}
+
+/* ---------------- Notifications -------------------- */
+.notifcations-list .list__item-link-details {
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+.notifcations-list .list__item-link-details .heading {
+  color: #dbdbdb;
+  margin-right: 4px;
+}
+.notifcations-list .list__item-link-details .subText {
+  flex: 1;
+  font-size: 14px;
 }

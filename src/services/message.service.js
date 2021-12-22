@@ -2,7 +2,7 @@ import createError from 'http-errors'
 import { Message, User } from '../models'
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
-import { chatService } from '.'
+import { chatService, notificationService } from '.'
 
 /**
  * Create message
@@ -15,9 +15,12 @@ const createMessage = async messageBody => {
   await Message.populate(newMessage, ['sender', 'chat'])
 
   // Update chat
-  await chatService.updateChatById(newMessage.chat._id, {
+  const chat = await chatService.updateChatById(newMessage.chat._id, {
     lastestMessage: newMessage._id,
   })
+
+  // Send notifications
+  await notificationService.createNotificationNewMessage(chat, newMessage)
 
   // success
   return newMessage

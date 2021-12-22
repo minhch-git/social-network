@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = new Router()
-import { auth, protect, requireLoggedIn } from '../middlewares/auth'
+import { protect, requireLoggedIn } from '../middlewares/auth'
 import { userController } from '../controllers'
 import { userValidation } from '../validations'
 import validate from '../middlewares/validate'
