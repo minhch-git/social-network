@@ -7,7 +7,8 @@
         table.table.users_table
           thead
             tr
-              th STT
+              th 
+                input(type="checkbox")
               th Avatar
               th Họ Tên
               th Tên
@@ -20,32 +21,10 @@
               th Following
               th Ngày Tạo
               th Actions
-          tbody
-            if users.users.length <= 0
-              tr
-                td(colspan="12").text-center Nothing to show.
-            else 
-              each user, index in users.users
-                tr.user_row(data-user=user)
-                  td= index
-                  td 
-                    img(src=user.profilePic)
-                  td= user.firstName
-                  td= user.lastName
-                  td= user.username
-                  td= user.local.email || user.facebook.email || user.google.email 
-                  td= user.local.email && "Local" || user.facebook.email && "Facebook" || user.google.email && "Google"
-                  td= user.local.isActive ? "Active" : "Not Activate"
-                  td= user.role
-                  td= user.following.length
-                  td= user.followers.length
-                  td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDate()}`
-                  td
-                    button.btn-update-user.btn.btn-sm.btn-info.mx-1(data-bs-toggle="modal", data-bs-target="#updateUserModal") Cấp Quyền 
-                    button.btn-delete-user.btn.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deleteUserModal") Xóa
-                    
-                    button.btn-reset-password.btn.btn-sm.btn-primary.mx-1(data-bs-toggle="modal", data-bs-target="#resetPasswordModal") Reset-Pass
-                    button.btn-verify-email.btn.btn-sm.btn-success.mx-1(data-bs-toggle="modal", data-bs-target="#verifyEmailModal", data-type=user.local.isActive ? "block" : "active" )= user.local.isActive ? "Block" : "Active"
+          tbody.users-tbody
+          tfoot
+            tr 
+              td(colspan="13")
 
 .col-12.grid-margin
   .card
@@ -55,61 +34,38 @@
         table.table.posts_table
           thead
             tr
-              th STT
+              th 
+                input(type="checkbox")
               th Posted By
               th Nội dung
               th Lượt Like 
               th Lượt Share
               th Ngày đăng
               th Actions
-          tbody
-            if posts.posts.length <= 0
-              tr
-                td(colspan="6").text-center Nothing to show.
-            else 
-              each post, index in posts.posts
-                -var content = post.retweetData ? post.retweetData.content : post.content
-                tr.post_row(data-post=post)
-                  td= index
-                  td= post.postedBy.fullName
-                  td= content.length > 6 ? `${content.substr(0, 6)}...` : content
-                  td= post.likes.length
-                  td= post.retweetUsers.length
-                  td= `${new Date(post.createdAt).getFullYear()}/${new Date(post.createdAt).getMonth()+1}/${new Date(post.createdAt).getDate()}`
-                  td
-                    button.btn.btn-delete-post.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deletePostModal") Xóa
+          tbody.posts-tbody
+          tfoot
+            tr 
+              td(colspan="13")
 
 .col-12.grid-margin
   .card
     .card-body
-      h4.card-title Admin
+      h4.card-title.d-flex.justify-content-between Admin
       .table-responsive
         table.table.managers_table
           thead
             tr
-              th STT
+              th 
+                input(type="checkbox")
               th Avatar
               th Họ Tên
               th Tên
+              th Username
               th Email
               th Role
               th Ngày Tạo
               th Actions
-          tbody
-            if managers.users.length <= 0
-              tr
-                td(colspan="8").text-center Nothing to show.
-            else          
-              each user, index in managers.users
-                tr.user_row(data-user=user)
-                  td= index
-                  td 
-                    img(src=user.profilePic)
-                  td= user.firstName
-                  td= user.lastName
-                  td= user.local.email
-                  td= user.role
-                  td= `${new Date(user.createdAt).getFullYear()}/${new Date(user.createdAt).getMonth()+1}/${new Date(user.createdAt).getDate()}`
-                  td
-                    button.btn-update-manager.btn.btn-sm.btn-info.mx-1(data-bs-toggle="modal", data-bs-target="#createManagerModal") Sửa Quyền 
-                    button.btn-delete-manager.btn.btn-sm.btn-danger(data-bs-toggle="modal", data-bs-target="#deleteManagerModal") Xóa
+          tbody.managers-tbody
+          tfoot
+            tr 
+              td(colspan="13")

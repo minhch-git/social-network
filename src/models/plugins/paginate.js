@@ -41,7 +41,7 @@ const paginate = schema => {
     select: '',
     sortBy: 'createdAt:desc',
     page: 1,
-    limit: 30,
+    limit: 10,
   }
 
   schema.statics.paginate = async function (filter = {}, options = {}) {

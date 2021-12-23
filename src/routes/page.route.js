@@ -5,7 +5,13 @@ import {
   requireAdminLoggedOut,
   requireAdminLoggedIn,
 } from '../middlewares/auth'
-import { postService, userService } from '../services'
+import {
+  chatService,
+  messageService,
+  notificationService,
+  postService,
+  userService,
+} from '../services'
 
 const router = new Router()
 
@@ -45,16 +51,19 @@ router.get('/auth/reset_password/:token', requireLoggedOut, (req, res) => {
 })
 
 router.get('/admin', requireAdminLoggedIn, async (req, res) => {
-  const users = await userService.queryUsers({})
-  const posts = await postService.queryPosts(
-    {},
-    { populate: 'postedBy,retweetData' }
-  )
-  const managers = await userService.queryUsers({ role: 'admin' }, {})
+  const totalUsers = await userService.getTotalUsers()
+  const totalPosts = await postService.getTotalPosts()
+  const totalManagers = await userService.getTotalUsers({ role: 'admin' })
+  const totalNotifications = await notificationService.getTotalNotifications()
+  const totalMessages = await messageService.getTotalMessages()
+  const totalChats = await chatService.getTotalChats()
   res.render('admin/admin-layout', {
-    users,
-    posts,
-    managers,
+    totalUsers,
+    totalPosts,
+    totalManagers,
+    totalMessages,
+    totalNotifications,
+    totalChats,
     userLoggedIn: req.user,
   })
 })

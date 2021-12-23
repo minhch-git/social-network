@@ -51,6 +51,16 @@ const getChat = async filter => {
 }
 
 /**
+ * Find user by username
+ * @param {Object} filter
+ * @returns {Promise<Number>}
+ */
+const getTotalChats = async (filter = {}) => {
+  const totalChats = await Chat.countDocuments(filter)
+  return totalChats
+}
+
+/**
  * Find chat by id
  * @param {ObjectId} chatId
  * @returns {Promise<chat>}
@@ -149,6 +159,7 @@ export default {
   queryChats,
   getChats,
   getChat,
+  getTotalChats,
   getChatById,
   updateChatById,
   updateChat,

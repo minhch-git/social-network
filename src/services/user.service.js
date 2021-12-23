@@ -83,6 +83,16 @@ const getUserByUsername = async username => {
 }
 
 /**
+ * Find user by username
+ * @param {Object} filter
+ * @returns {Promise<Number>}
+ */
+const getTotalUsers = async (filter = {}) => {
+  const totalUsers = await User.countDocuments(filter)
+  return totalUsers
+}
+
+/**
  * Find user by email
  * @param {string} email
  * @returns {Promise<user>}
@@ -265,6 +275,7 @@ export default {
   queryUsers,
   getUserById,
   getUserByUsername,
+  getTotalUsers,
   getUserByEmail,
   updateUserById,
   updateUser,

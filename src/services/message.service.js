@@ -77,6 +77,15 @@ const getMessageById = async messageId => {
 }
 
 /**
+ * Find user by username
+ * @param {Object} filter
+ * @returns {Promise<Number>}
+ */
+const getTotalMessages = async (filter = {}) => {
+  const totalMessages = await Message.countDocuments(filter)
+  return totalMessages
+}
+/**
  * Update message by id
  * @param {ObjectId} messageId
  * @param {Object} body
@@ -158,6 +167,7 @@ export default {
   queryMessages,
   getMessages,
   getMessage,
+  getTotalMessages,
   getMessageById,
   updateMessageById,
   updateMessage,

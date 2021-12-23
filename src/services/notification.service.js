@@ -158,6 +158,15 @@ const getNotificationById = async notificationId => {
 }
 
 /**
+ * Find user by username
+ * @param {Object} filter
+ * @returns {Promise<Number>}
+ */
+const getTotalNotifications = async (filter = {}) => {
+  const totalNotifications = await Notification.countDocuments(filter)
+  return totalNotifications
+}
+/**
  * Update notification by id
  * @param {ObjectId} notificationId
  * @param {Object} body
@@ -222,6 +231,7 @@ export default {
   getNotifications,
   getNotification,
   getNotificationById,
+  getTotalNotifications,
   updateNotificationById,
   updateNotifications,
   deleteNotificationById,

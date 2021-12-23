@@ -53,6 +53,16 @@ const getPost = async filter => {
 }
 
 /**
+ * Find user by username
+ * @param {Object} filter
+ * @returns {Promise<Number>}
+ */
+const getTotalPosts = async (filter = {}) => {
+  const totalPosts = await Post.countDocuments(filter)
+  return totalPosts
+}
+
+/**
  * Find post by id
  * @param {ObjectId} postId
  * @returns {Promise<post>}
@@ -137,8 +147,8 @@ const getPostsBySortNumberLikes = async options => {
   let limit = options.limit || 10
   limit = parseInt(limit, 10)
   const skip = (page - 1) * limit
-  const totalPost = await Post.countDocuments({})
-  const totalPages = Math.ceil(totalPost / limit)
+  const totalPosts = await Post.countDocuments({})
+  const totalPages = Math.ceil(totalPosts / limit)
 
   const posts = await Post.aggregate([
     {
@@ -176,7 +186,7 @@ const getPostsBySortNumberLikes = async options => {
     posts,
     page,
     limit,
-    totalPost,
+    totalPosts,
     totalPages,
   }
   return result
@@ -187,6 +197,7 @@ export default {
   getPosts,
   getPost,
   getPostById,
+  getTotalPosts,
   updatePostById,
   updatePosts,
   deletePostById,
