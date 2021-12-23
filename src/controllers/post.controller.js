@@ -150,7 +150,10 @@ const likePost = catchAsync(async (req, res) => {
   })
 
   // Send notifications
-  if (!isLiked && postUpdated.postedBy._id != user._id) {
+  if (
+    !isLiked &&
+    JSON.stringify(postUpdated.postedBy._id) !== JSON.stringify(user._id)
+  ) {
     await notificationService.createNotificationPostLiked(
       postUpdated.postedBy._id,
       user._id,

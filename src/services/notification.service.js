@@ -142,6 +142,9 @@ const getNotifications = async filter => {
  */
 const getNotification = async filter => {
   return Notification.findOne(filter)
+    .sort('createdAt')
+    .populate('userTo')
+    .populate('userFrom')
 }
 
 /**

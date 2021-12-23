@@ -5,6 +5,9 @@ const handleFollow = async (userId, button) => {
     button.classList.add('following')
     if ($('#followersValue'))
       $('#followersValue').innerHTML = +$('#followersValue').innerHTML + 1
+
+    // Emit notification
+    emitNotification(userId)
     return
   }
 

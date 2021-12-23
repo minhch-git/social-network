@@ -1,7 +1,12 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { chatService, uploadService, userService } from '../services'
+import {
+  chatService,
+  messageService,
+  uploadService,
+  userService,
+} from '../services'
 import { tranSuccess } from '../../lang/en'
 import User from '../models/user.model'
 
@@ -37,7 +42,7 @@ const getChats = catchAsync(async (req, res) => {
 
   if (req.query.unreadOnly !== undefined && req.query.unreadOnly === 'true') {
     result = result.chats.filter(
-      c => !c.lastestMessage.readBy.includes(req.user.id)
+      c => !c.lastestMessage?.readBy.includes(req.user.id)
     )
   }
   res.send(result)
@@ -73,6 +78,20 @@ const updateChat = catchAsync(async (req, res) => {
 })
 
 /**
+ * Update a chat by chatId
+ * @PATCH chats/:chatId/markAsRead
+ * @access private
+ */
+const markAdReadMessage = catchAsync(async (req, res) => {
+  const messageUpdated = await messageService.updateMessage(
+    { chat: req.params.chatId },
+    {
+      $addToSet: { readBy: req.user.id },
+    }
+  )
+  res.status(200).json({ messageUpdated, message: tranSuccess.updated_success })
+})
+/**
  * Delete chat by chatId
  * @DELETE chats/:chatId
  * @access private
@@ -90,5 +109,6 @@ export default {
   getChats,
   getChat,
   updateChat,
+  markAdReadMessage,
   deleteChat,
 }

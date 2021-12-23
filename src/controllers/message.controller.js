@@ -58,6 +58,8 @@ const getChatPage = async (req, res) => {
   let options = pick(req.query, ['sortBy', 'page', 'limit', 'select'])
   options.populate = 'users'
   const result = await chatService.queryChats(filter, options)
+
+  // check chat in personal
   if (result.chats.length === 0) {
     const user = await userService.getUserById(chatId)
     if (user) {
@@ -72,6 +74,7 @@ const getChatPage = async (req, res) => {
       'Chat does not exits or you do not have permission to view it.'
     )
   }
+
   res.render('message/message', {
     errors: req.flash('errors'),
     success: req.flash('success'),
