@@ -35,6 +35,18 @@ const getNotifications = catchAsync(async (req, res) => {
 })
 
 /**
+ * Get notification latest
+ * @GET notifications/latest
+ * @access public
+ */
+const getNotificationLatest = catchAsync(async (req, res) => {
+  const notification = await notificationService.getNotification({
+    userTo: req.user.id,
+  })
+  res.status(200).json({ notification })
+})
+
+/**
  * Get a notification by notification id
  * @GET notifications/:notificationId
  * @access public
@@ -94,6 +106,7 @@ export default {
   createNotification,
   getNotifications,
   getNotification,
+  getNotificationLatest,
   updateNotification,
   updateNotifications,
   deleteNotification,

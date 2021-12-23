@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // Realtime
   socket.emit('join-room', chatId)
+
   socket.on('typing', () =>
     $('.dot-typing__container').classList.remove('hidden')
   )

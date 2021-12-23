@@ -35,6 +35,11 @@ const runningApp = () => {
     socket.on('typing', room => socket.to(room).emit('typing'))
     socket.on('stop-typing', room => socket.to(room).emit('stop-typing'))
 
+    // Notification
+    socket.on('notification-received', room =>
+      socket.to(room).emit('notification-received', room)
+    )
+
     // Message
     socket.on('new-message', message => {
       let chat = message.chat

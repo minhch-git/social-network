@@ -3,19 +3,21 @@ import { Message, User } from '../models'
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
 import { chatService, notificationService } from '.'
-
+import mongoose from 'mongoose'
 /**
  * Create message
  * @param {Object} body
  * @returns {Promise<message>}
  */
 const createMessage = async messageBody => {
-  const newMessage = new Message(messageBody)
+  const newMessage = new Message({
+    ...messageBody,
+    readBy: [messageBody.sender],
+  })
   await newMessage.save()
   await Message.populate(newMessage, ['sender', 'chat'])
-
   // Update chat
-  const chat = await chatService.updateChatById(newMessage.chat._id, {
+  const chat = await chatService.updateChatById(newMessage.chat.id, {
     lastestMessage: newMessage._id,
   })
 
@@ -87,7 +89,29 @@ const updateMessageById = async (messageId, messageBody) => {
     {
       new: true,
     }
-  ).populate('messageedBy')
+  ).populate('readBy')
+  if (!messageUpdated) {
+    throw createError.NotFound()
+  }
+  return messageUpdated
+}
+
+/**
+ * Update message by id
+ * @param {Object} filter
+ * @param {Object} messageBody
+ * @returns {Promise<message>}
+ */
+const updateMessage = async (filter, messageBody) => {
+  const messageUpdated = await Message.findOneAndUpdate(
+    {
+      chat: mongoose.Types.ObjectId(filter.chat),
+    },
+    messageBody,
+    {
+      new: true,
+    }
+  ).sort('-createdAt')
   if (!messageUpdated) {
     throw createError.NotFound()
   }
@@ -136,6 +160,7 @@ export default {
   getMessage,
   getMessageById,
   updateMessageById,
+  updateMessage,
   updateMessages,
   deleteMessageById,
   deleteMessage,

@@ -2089,7 +2089,10 @@ button.send-message__button:disabled {
 .list__item-link.active .text-xs {
   color: #ea187d;
 }
-
+.chat-list .list__item-link.active .subText,
+.chat-list .list__item-link.active .text-xs {
+  color: #87c733;
+}
 #markNotificationsAsRead {
   pointer-events: none;
   font-size: 16px;
@@ -2125,4 +2128,30 @@ button.send-message__button:disabled {
     width: 34px;
     height: 34px;
   }
+}
+
+/*  Toast notification */
+
+.toast-notify a {
+  border: none;
+  padding: 0;
+}
+
+.toast-notify .list__item-link-details {
+  flex-direction: row;
+  align-items: center;
+}
+
+.toast-notify .list__item-link-details .heading {
+  font-size: 16px;
+  margin-right: 6px;
+  color: white;
+}
+.toast-notify .list__item-link-details .subText {
+  font-size: 14px;
+  color: white;
+}
+.toast-notify .list__item-link-details .text-xs {
+  margin-left: 5px;
+  line-height: 12px;
 }

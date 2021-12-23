@@ -16,6 +16,12 @@ const getChatList = async (options = {}) => {
   data.chats.forEach(chat => outputChatListItem(chat))
 }
 
+// Mark as read message
+$('.chat-list').onclick = async e => {
+  let chatId = e.target.closest('.list__item-link.active').dataset.id
+  await httpPatch(`/chats/${chatId}/markAsRead`, {})
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   getChatList()
 })

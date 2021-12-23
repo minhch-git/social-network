@@ -38,7 +38,7 @@ const updateChat = {
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect)
     .required(),
   chatName: yup.string(),
-  isGroupChat: yup.boolean().default(true),
+  isGroupChat: yup.boolean(),
 }
 
 const deleteChat = {

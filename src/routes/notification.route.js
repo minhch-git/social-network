@@ -5,6 +5,14 @@ import validate from '../middlewares/validate'
 import { notificationValidation } from '../validations'
 
 const router = new Router()
+
+router.get(
+  '/latest',
+  requireLoggedIn,
+  validate(notificationValidation.getNotifications),
+  notificationController.getNotificationLatest
+)
+
 router.get(
   '/content',
   requireLoggedIn,

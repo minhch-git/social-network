@@ -55,7 +55,7 @@ const httpPatch = async (url, data) => {
     if (!response.ok) throw new Error(result.message)
     return result
   } catch (error) {
-    console.error({ httpDelete: error })
+    console.error({ httpPatch: error })
     alertify.notify(error.message, 'error', 6)
   }
 }

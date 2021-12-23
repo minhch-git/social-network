@@ -20,6 +20,12 @@ router
     chatController.createChat
   )
 
+router.patch(
+  '/:chatId/markAsRead',
+  requireLoggedIn,
+  validate(chatValidation.updateChat),
+  chatController.markAdReadMessage
+)
 router
   .route('/:chatId')
   .get(

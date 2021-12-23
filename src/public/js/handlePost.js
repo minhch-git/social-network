@@ -1,6 +1,7 @@
 const likePost = async (postId, likeButton) => {
-  await httpPatch(`/posts/${postId}/like`, {})
+  const { post } = await httpPatch(`/posts/${postId}/like`, {})
   const isLiked = likeButton.parentElement.classList.toggle('active')
+
   const numberLikesBtn =
     likeButton.parentElement.querySelector('span.number-likes')
   // displike
@@ -11,6 +12,7 @@ const likePost = async (postId, likeButton) => {
 
   // like
   numberLikesBtn.innerHTML = +numberLikesBtn.innerHTML + 1
+  emitNotification(post.postedBy.id)
 }
 // Delete post
 const deletePost = async (postId, postContainer) => {
@@ -65,7 +67,6 @@ const unpinPost = async (postId, postContainer) => {
 // retweet-button
 const retweetPost = async (postId, retweetButton) => {
   const { post } = await httpPost(`/posts/${postId}/retweet`, {})
-
   const isReweet = retweetButton.parentElement.classList.toggle('active')
   const numberRetweetsBtn = retweetButton.parentElement.querySelector(
     'span.number-retweets'
@@ -80,8 +81,10 @@ const retweetPost = async (postId, retweetButton) => {
     return
   }
 
+  console.log({ post })
   // retweet
   numberRetweetsBtn.innerHTML = +numberRetweetsBtn.innerHTML + 1
+  emitNotification(post.retweetData.postedBy.id)
   // render post retweet
   outputPost(post)
 }

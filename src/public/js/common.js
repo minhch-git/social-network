@@ -255,16 +255,21 @@ const createChatListHtml = chatData => {
   let lastestMessage = chatData.lastestMessage
   let newMessage = ''
   let senderName = ''
+  let markAsRead = false
   if (lastestMessage) {
     newMessage = lastestMessage.content
     senderName = lastestMessage.sender.fullName
+    markAsRead = lastestMessage.readBy.includes(userLoggedIn.id)
   }
+
   let timestamps = timeDifference(
     new Date(),
     new Date(chatData.lastestMessage?.createdAt || chatData.updatedAt)
   )
   return `
-      <a href="/messages/${chatData.id}" class="list__item-link">
+      <a href="/messages/${chatData.id}" class="list__item-link ${
+    markAsRead ? '' : 'active'
+  }" data-id="${chatData.id}">
       ${image}
         <div class="list__item-link-details ellipsis">
           <span class="heading ellipsis">${chatName}</span>
@@ -449,17 +454,20 @@ const createTextNotification = notificationType => {
   }
   let text
   if (notificationType === types.postLike) {
-    text = 'liked one of your posts'
+    // text = 'liked one of your posts'
+    text = 'đã thích một trong những bài đăng của bạn'
   }
   if (notificationType === types.postRetweet) {
-    text = 'retweeted one of your posts'
+    // text = 'retweeted one of your posts'
+    text = 'đã chia sẻ lại một trong những bài đăng của bạn'
   }
   if (notificationType === types.follow) {
-    text = 'followed you'
+    // text = 'followed you'
+    text = 'đã theo đõi bạn'
   }
   return text
 }
-const createNotificationListHtml = notification => {
+const createNotificationItemHtml = notification => {
   const { userFrom } = notification
   let timestamps = timeDifference(new Date(), new Date(notification.createdAt))
   let text = createTextNotification(notification.notificationType)
@@ -484,6 +492,6 @@ const outputNotificationItem = (
   selector = '.notifcations-list',
   position = 'afterbegin'
 ) => {
-  const html = createNotificationListHtml(notification)
+  const html = createNotificationItemHtml(notification)
   $(selector).insertAdjacentHTML(position, html)
 }
