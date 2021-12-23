@@ -17,7 +17,9 @@ const getProfilePayload = async (username, userLoggedIn) => {
     }
   }
 
-  const user = await userService.getUserByUsername(username)
+  const user =
+    (await userService.getUserByUsername(username)) ||
+    (await userService.getUserById(username))
   if (user) {
     return {
       pageTitle: user.fullName,

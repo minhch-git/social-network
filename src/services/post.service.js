@@ -58,7 +58,7 @@ const getPost = async filter => {
  * @returns {Promise<post>}
  */
 const getPostById = async postId => {
-  const post = await Post.findById(postId)
+  const post = await Post.findById(postId).populate('postedBy')
   return post
 }
 

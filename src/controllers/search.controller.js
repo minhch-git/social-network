@@ -12,13 +12,13 @@ import User from '../models/user.model'
  */
 const getSearchPage = (req, res) => {
   res.render('search', {
+    pageTitle: 'Search',
+    selectedTab: 'users',
     errors: req.flash('errors'),
     success: req.flash('success'),
-    pageTitle: 'Search',
     userLoggedIn: req.user,
     userLoggedInJs: JSON.stringify(req.user),
     selectedPage: 'search',
-    selectedTab: 'users',
   })
 }
 

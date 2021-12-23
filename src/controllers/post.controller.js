@@ -76,15 +76,20 @@ const getPosts = catchAsync(async (req, res) => {
 
 /**
  * Get a post by post id
- * @GET posts/:postId
+ * @GET /posts/:postId
  * @access public
  */
 const getPost = catchAsync(async (req, res) => {
   const post = await postService.getPostById(req.params.postId)
-  if (!post) {
-    throw createError.NotFound()
-  }
-  res.status(200).json({ post })
+  if (!post) res.redirect('/not-found')
+  res.render('view-post', {
+    post: JSON.stringify(post),
+    errors: req.flash('errors'),
+    success: req.flash('success'),
+    pageTitle: 'View post',
+    userLoggedIn: req.user,
+    userLoggedInJs: JSON.stringify(req.user),
+  })
 })
 
 /**
@@ -197,11 +202,6 @@ const retweetPost = catchAsync(async (req, res) => {
   let post = await postService.updatePostById(postId, {
     [option]: { retweetUsers: userId },
   })
-  post = await User.populate(repost, [
-    'postedBy',
-    'retweetData',
-    'retweetData.postedBy',
-  ])
 
   // Send notifications
   if (!deletedPost && post.postedBy._id != userId) {
@@ -211,6 +211,13 @@ const retweetPost = catchAsync(async (req, res) => {
       post._id
     )
   }
+
+  post = await User.populate(repost, [
+    'postedBy',
+    'retweetData',
+    'retweetData.postedBy',
+  ])
+
   // Success
   res.status(200).json({ message: 'Chia sẻ bài viết thành công.', post })
 })

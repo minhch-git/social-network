@@ -21,12 +21,13 @@ const createNotification = catchAsync(async (req, res) => {
  */
 const getNotifications = catchAsync(async (req, res) => {
   let filter = pick(req.query, [
-    'userTo',
     'userFrom',
     'notificationType',
     'opened',
     'entityId',
   ])
+  filter.userTo = req.user.id
+  filter.notificationType = { $ne: 'newMessage' }
   const options = pick(req.query, ['sortBy', 'page', 'limit', 'select', 'skip'])
   options.populate = 'userTo,userFrom'
   const data = await notificationService.queryNotifications(filter, options)
@@ -50,14 +51,28 @@ const getNotification = catchAsync(async (req, res) => {
  * @PATCH notifications/:notificationId
  * @access private
  */
+const updateNotifications = catchAsync(async (req, res) => {
+  let filter = {
+    userTo: req.user._id,
+    opened: false,
+  }
+  const notificationUpdated = await notificationService.updateNotifications(
+    filter,
+    req.body
+  )
+  res.status(200).json({ notificationUpdated })
+})
+/**
+ * Update a notification by notificationId
+ * @PATCH notifications/:notificationId
+ * @access private
+ */
 const updateNotification = catchAsync(async (req, res) => {
   const notificationUpdated = await notificationService.updateNotificationById(
     req.params.notificationId,
     req.body
   )
-  res
-    .status(200)
-    .json({ notificationUpdated, message: tranSuccess.updated_success })
+  res.status(200).json({ notificationUpdated })
 })
 
 /**
@@ -80,5 +95,6 @@ export default {
   getNotifications,
   getNotification,
   updateNotification,
+  updateNotifications,
   deleteNotification,
 }

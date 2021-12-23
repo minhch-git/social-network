@@ -33,7 +33,13 @@ const getChats = catchAsync(async (req, res) => {
     users: { $elemMatch: { $eq: req.user._id } },
   }
   options.populate = 'users,lastestMessage,lastestMessage.sender'
-  const result = await chatService.queryChats(filter, options)
+  let result = await chatService.queryChats(filter, options)
+
+  if (req.query.unreadOnly !== undefined && req.query.unreadOnly === 'true') {
+    result = result.chats.filter(
+      c => !c.lastestMessage.readBy.includes(req.user.id)
+    )
+  }
   res.send(result)
 })
 

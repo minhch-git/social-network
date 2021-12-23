@@ -17,6 +17,7 @@ const createChat = {
 const getChats = {
   chatName: yup.string(),
   isGroupChat: yup.boolean().default(true),
+  unreadOnly: yup.boolean().default(true),
   skip: yup.number(),
   page: yup.number().integer(),
   limit: yup.number().integer(),

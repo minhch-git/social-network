@@ -11,6 +11,20 @@ router.get(
   validate(notificationValidation.getNotifications),
   notificationController.getNotifications
 )
+
+router.patch(
+  '/markAsOpened',
+  requireLoggedIn,
+  notificationController.updateNotifications
+)
+
+router.patch(
+  '/:notificationId',
+  requireLoggedIn,
+  validate(notificationValidation.updateNotification),
+  notificationController.updateNotification
+)
+
 router.get('/', requireLoggedIn, async (req, res) => {
   res.render('notifications', {
     errors: req.flash('errors'),
