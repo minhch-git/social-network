@@ -1,0 +1,18 @@
+extends ./layouts/main-layout 
+block content
+  script.
+    var post= !{post};
+
+  if success.length 
+    +alertifySuccess(success)
+    
+  .posts_container
+    .posts
+
+    +createPostModal()
+block scripts
+  script(src="/js/common.js") 
+  script(src="/js/follow.js")
+  script(src="/js/handlePost.js")
+  script(src="/js/selectTop.js")
+  script(src="/js/viewPost.js")

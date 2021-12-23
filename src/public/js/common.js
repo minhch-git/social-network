@@ -31,6 +31,49 @@ const timeDifference = (current, previous) => {
   return Math.round(elapsed / msPerYear) + ' năm trước'
 }
 
+//---------------------------------------------------------------------
+//--------------------------- User ---------------------------
+//---------------------------------------------------------------------
+const createUserHtml = user => {
+  const isFollowing =
+    userLoggedIn.following && userLoggedIn.following.includes(user.id)
+  let text = isFollowing ? 'Following' : 'Follow'
+  let buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
+
+  let followButton = `<button class="${buttonClass}" data-user="${user.id}">${text}</button>`
+  if (userLoggedIn.id === user.id) followButton = ''
+  let fullName = user.fullName || `${user.firstName} ${user.lastName}`
+  let numberFollwers = user.numberFollwers || user.followers.length
+  return `
+  <div class="user" data-id="${user.id}">
+    <div class="user_image-container">
+      <img src="${user.profilePic}" alt="User's profile picture" />
+    </div>
+    <div class="user__details-container">
+      <a href="/profile/${user.username}">${fullName}</a>
+      <span class="username">@${user.username}</span>
+      <span class="numbers-follow ${
+        numberFollwers > 2 ? '' : 'd-none'
+      }">${numberFollwers} followers</span>
+    </div>
+    <div class="follow__button-container">
+      ${followButton}  
+    </div>
+  </div>
+  `
+}
+const getOrtherChatUsers = users => {
+  if (users.length === 1) return users
+  return users.filter(user => user.id !== userLoggedIn.id)
+}
+const outputUser = (user, selector = '.users', position = 'afterbegin') => {
+  const html = createUserHtml(user)
+  $(selector).insertAdjacentHTML(position, html)
+}
+
+//---------------------------------------------------------------------
+//--------------------------- Post ---------------------------
+//---------------------------------------------------------------------
 const createPostHtml = post => {
   let isRetweet = post.retweetData !== undefined
   let retweetBy = isRetweet ? post.postedBy.username : null
@@ -170,40 +213,14 @@ const createPostHtml = post => {
     </div>
   `
 }
-const createUserHtml = user => {
-  const isFollowing =
-    userLoggedIn.following && userLoggedIn.following.includes(user.id)
-  let text = isFollowing ? 'Following' : 'Follow'
-  let buttonClass = isFollowing ? 'follow-button following' : 'follow-button'
-
-  let followButton = `<button class="${buttonClass}" data-user="${user.id}">${text}</button>`
-  if (userLoggedIn.id === user.id) followButton = ''
-  let fullName = user.fullName || `${user.firstName} ${user.lastName}`
-  let numberFollwers = user.numberFollwers || user.followers.length
-  return `
-  <div class="user" data-id="${user.id}">
-    <div class="user_image-container">
-      <img src="${user.profilePic}" alt="User's profile picture" />
-    </div>
-    <div class="user__details-container">
-      <a href="/profile/${user.username}">${fullName}</a>
-      <span class="username">@${user.username}</span>
-      <span class="numbers-follow ${
-        numberFollwers > 2 ? '' : 'd-none'
-      }">${numberFollwers} followers</span>
-    </div>
-    <div class="follow__button-container">
-      ${followButton}  
-    </div>
-  </div>
-  `
+const outputPost = (post, selector = '.posts', position = 'afterbegin') => {
+  const html = createPostHtml(post)
+  $(selector).insertAdjacentHTML(position, html)
 }
 
-const getOrtherChatUsers = users => {
-  if (users.length === 1) return users
-  return users.filter(user => user.id !== userLoggedIn.id)
-}
-
+//---------------------------------------------------------------------
+//--------------------------- Chat list ---------------------------
+//---------------------------------------------------------------------
 const getChatName = chatData => {
   let chatName = chatData.chatName
   if (!chatName) {
@@ -214,7 +231,6 @@ const getChatName = chatData => {
 
   return chatName
 }
-
 const getUserChatImageElement = user => {
   if (!user || !user.profilePic) {
     return alertify.notify('User passed info function is invalid', 'error', 6)
@@ -222,7 +238,6 @@ const getUserChatImageElement = user => {
 
   return `<img src="${user.profilePic}" alt="User's profile pic" />`
 }
-
 const getChatImageElements = chatData => {
   let otherChatUsers = getOrtherChatUsers(chatData.users)
   let groupChatClass = ' '
@@ -234,7 +249,6 @@ const getChatImageElements = chatData => {
   }
   return `<div class="list__image-container ${groupChatClass}">${chatImage}</div>`
 }
-
 const createChatListHtml = chatData => {
   let chatName = getChatName(chatData)
   let image = getChatImageElements(chatData)
@@ -262,46 +276,18 @@ const createChatListHtml = chatData => {
       </a>
   `
 }
-
-const createTextNotification = notificationType => {
-  const types = {
-    postLike: 'postLike',
-    postRetweet: 'postRetweet',
-    newMessage: 'newMessage',
-    follow: 'follow',
-    newMessage: 'newMessage',
-  }
-  let text
-  if (notificationType === types.postLike) {
-    text = 'liked one of your posts'
-  }
-  if (notificationType === types.postRetweet) {
-    text = 'retweeted one of your posts'
-  }
-  if (notificationType === types.follow) {
-    text = 'followed you'
-  }
-  return text
+const outputChatListItem = (
+  chat,
+  selector = '.chat-list',
+  position = 'afterbegin'
+) => {
+  const html = createChatListHtml(chat)
+  $(selector).insertAdjacentHTML(position, html)
 }
 
-const createNotificationListHtml = notification => {
-  const { userFrom } = notification
-  let timestamps = timeDifference(new Date(), new Date(notification.createdAt))
-  let text = createTextNotification(notification.notificationType)
-  return `
-  <a href="/messages/61c2bd09b5b7510bbe821872" class="list__item-link">
-    <div class="list__image-container">
-      <img src="${userFrom.profilePic}" alt="User's profile pic">
-    </div>
-    <div class="list__item-link-details ellipsis">
-      <span class="heading ellipsis">${userFrom.fullName}</span>
-      <span class="subText ellipsis">${text}</span>
-      <span class="text-xs">${timestamps}</span>
-    </div>
-  </a>
-  `
-}
-
+//---------------------------------------------------------------------
+//--------------------------- Sidebar right ---------------------------
+//---------------------------------------------------------------------
 const createPostSidebarRightHtml = post => {
   const { postedBy } = post
   const timestamp = timeDifference(new Date(), new Date(post.createdAt))
@@ -371,34 +357,6 @@ const createPostSidebarRightHtml = post => {
     </div>
   `
 }
-
-const outputUser = (user, selector = '.users', position = 'afterbegin') => {
-  const html = createUserHtml(user)
-  $(selector).insertAdjacentHTML(position, html)
-}
-
-const outputPost = (post, selector = '.posts', position = 'afterbegin') => {
-  const html = createPostHtml(post)
-  $(selector).insertAdjacentHTML(position, html)
-}
-
-const outputChatListItem = (
-  chat,
-  selector = '.chat-list',
-  position = 'afterbegin'
-) => {
-  const html = createChatListHtml(chat)
-  $(selector).insertAdjacentHTML(position, html)
-}
-const outputNotificationItem = (
-  notification,
-  selector = '.notifcations-list',
-  position = 'afterbegin'
-) => {
-  const html = createNotificationListHtml(notification)
-  $(selector).insertAdjacentHTML(position, html)
-}
-
 const outputPostSidebarRight = (
   post,
   selector = '.sidebarRight_container .topPostLikes',
@@ -408,7 +366,9 @@ const outputPostSidebarRight = (
   $(selector).insertAdjacentHTML(position, html)
 }
 
+//---------------------------------------------------------------------
 //--------------------------- Message ---------------------------
+//---------------------------------------------------------------------
 // Scroll
 const scrollToBottom = animated => {
   let container = $('.messages')
@@ -418,18 +378,17 @@ const scrollToBottom = animated => {
     container.scrollTop = scrollHeight + $('.message_received').scrollHeight
   } else container.scrollTop = scrollHeight
 }
-
 const createMessageHtml = message => {
   let isMine = message.sender.id === userLoggedIn.id
   let classMessage = isMine
     ? 'message_received message_owner'
     : 'message_received'
   let profilePic = message.sender.profilePic || message.readBy.profilePic
-  let timestamp = ` ${new Date(message.createdAt).getDate()}/${
-    new Date(message.createdAt).getMonth() + 1
-  }/${new Date(message.createdAt).getFullYear()} ${new Date(
-    message.createdAt
-  ).getHours()}:${new Date(message.createdAt).getMinutes()}`
+  let timestamp = new Date(message.createdAt).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
   return `
   <div class="${classMessage}">
     <div class="message_received_img message_owner_img">
@@ -457,4 +416,74 @@ const addChatMessage = (
   const html = createMessageHtml(message)
   $(selector).insertAdjacentHTML(position, html)
   scrollToBottom(true, '.messages')
+}
+
+//---------------------------------------------------------------------
+// ------------------------- Notification ------------------------
+//---------------------------------------------------------------------
+const getNotificationUrl = notification => {
+  const types = {
+    postLike: 'postLike',
+    postRetweet: 'postRetweet',
+    newMessage: 'newMessage',
+    follow: 'follow',
+    newMessage: 'newMessage',
+  }
+  let url = '#'
+  let typeNotify = notification.notificationType
+  if (typeNotify === types.postLike || typeNotify === types.postRetweet) {
+    url = `/posts/${notification.entityId}`
+  }
+  if (typeNotify === types.follow) {
+    url = `/profile/${notification.entityId}`
+  }
+  return url
+}
+const createTextNotification = notificationType => {
+  const types = {
+    postLike: 'postLike',
+    postRetweet: 'postRetweet',
+    newMessage: 'newMessage',
+    follow: 'follow',
+    newMessage: 'newMessage',
+  }
+  let text
+  if (notificationType === types.postLike) {
+    text = 'liked one of your posts'
+  }
+  if (notificationType === types.postRetweet) {
+    text = 'retweeted one of your posts'
+  }
+  if (notificationType === types.follow) {
+    text = 'followed you'
+  }
+  return text
+}
+const createNotificationListHtml = notification => {
+  const { userFrom } = notification
+  let timestamps = timeDifference(new Date(), new Date(notification.createdAt))
+  let text = createTextNotification(notification.notificationType)
+  let href = getNotificationUrl(notification)
+  return `
+  <a href="${href}" class="list__item-link ${
+    notification.opened ? '' : 'active'
+  }"  data-id="${notification.id}"  >
+    <div class="list__image-container">
+      <img src="${userFrom.profilePic}" alt="User's profile pic">
+    </div>
+    <div class="list__item-link-details ellipsis">
+      <span class="heading ellipsis">${userFrom.fullName}</span>
+      <span class="subText ellipsis">${text}</span>
+      <span class="text-xs">${timestamps}</span>
+    </div>
+  </a>
+  `
+}
+const outputNotificationItem = (
+  notification,
+  selector = '.notifcations-list',
+  position = 'afterbegin'
+) => {
+  const html = createNotificationListHtml(notification)
+  $(selector).insertAdjacentHTML(position, html)
 }

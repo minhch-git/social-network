@@ -26,6 +26,7 @@ const getNotifications = {
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
   opened: yup.boolean().default(false),
+  unreadOnly: yup.boolean().default(true),
   entityId: yup
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
@@ -49,6 +50,7 @@ const updateNotification = {
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect)
     .required(),
+  opened: yup.boolean().required(),
 }
 
 const deleteNotification = {

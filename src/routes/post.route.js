@@ -26,6 +26,11 @@ router.get('/sort', requireLoggedIn, postController.getTopPosts)
 
 router
   .route('/:postId')
+  .get(
+    requireLoggedIn,
+    validate(postValidation.getPost),
+    postController.getPost
+  )
   .delete(
     requireLoggedIn,
     validate(postValidation.deletePost),
