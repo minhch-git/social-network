@@ -80,9 +80,27 @@
 
 
 # Todo
-- Design login page: login, register, forgot-password ==> done
-- Design notfound page: ==> done
+- Design login page: 
+- Design notfound page:
 - Reset Password: 
 - Show more: 
 - Get top Followers:
 - Update content Image: 
+
+
+
+
+
+
+
+
+
+
+# Todo 2:
+- Admin: Paging, Sorting, Searching, Notification Counting, Message Counting
+- Messages: Read more old messages, Send pictures, Send files, Real-time chat list, Show more chat list
+- Home page: Reply to post
+- Notifications: Show more
+- Deployment: Heroku
+
+
