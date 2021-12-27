@@ -4,6 +4,7 @@ const notificationType = {
   postLike: 'postLike',
   postRetweet: 'postRetweet',
   follow: 'follow',
+  postReply: 'reply',
   newMessage: 'newMessage',
 }
 
@@ -82,6 +83,22 @@ const createNotificationPostLiked = async (postedById, userFrom, postId) => {
  * @param {ObjectId} postId
  * @returns {Promise<notification>}
  */
+const createNotificationPostReply = async (postedById, userFrom, postId) => {
+  return await sendNotification(
+    postedById,
+    userFrom,
+    notificationType.postReply,
+    postId
+  )
+}
+
+/**
+ * Create notification
+ * @param {ObjectId} postedById
+ * @param {ObjectId} userFrom
+ * @param {ObjectId} postId
+ * @returns {Promise<notification>}
+ */
 const createNotificationPostRetweet = async (postedById, userFrom, postId) => {
   return await sendNotification(
     postedById,
@@ -141,8 +158,8 @@ const getNotifications = async filter => {
  * @returns {Promise<notification>}
  */
 const getNotification = async filter => {
-  return Notification.findOne(filter)
-    .sort('createdAt')
+  return await Notification.findOne(filter)
+    .sort('-createdAt')
     .populate('userTo')
     .populate('userFrom')
 }
@@ -240,4 +257,5 @@ export default {
   createNotificationPostLiked,
   createNotificationPostRetweet,
   createNotificationFollow,
+  createNotificationPostReply,
 }

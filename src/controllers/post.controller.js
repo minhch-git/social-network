@@ -16,11 +16,26 @@ import User from '../models/user.model'
  * @access private
  */
 const createPost = catchAsync(async (req, res) => {
-  // // upload image to cloudinary
-
   if (req.file) {
     const url = await uploadService.uploadPostImage(req.file.path)
     req.body = { ...req.body, image: url }
+  }
+
+  if (req.body.replyTo) {
+    const replyPost = await postService.updatePostById(req.body.replyTo, {
+      $push: { replyUsers: req.user.id },
+    })
+
+    // Send notifications
+    if (
+      JSON.stringify(replyPost.postedBy._id) !== JSON.stringify(req.user._id)
+    ) {
+      await notificationService.createNotificationPostReply(
+        replyPost.postedBy._id,
+        req.user._id,
+        replyPost._id
+      )
+    }
   }
   const post = await postService.createPost({
     ...req.body,
@@ -67,8 +82,16 @@ const getPosts = catchAsync(async (req, res) => {
     delete searchObj.followingOnly
   }
 
+  if (searchObj.isReply !== undefined) {
+    filter = {
+      ...filter,
+      replyTo: { $exists: searchObj.isReply },
+    }
+  }
+
   let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
-  options.populate = 'postedBy,retweetData,retweetData.postedBy'
+  options.populate =
+    'postedBy,retweetData,retweetData.postedBy,replyTo,replyTo.postedBy'
   const result = await postService.queryPosts(filter, options)
 
   res.send(result)
@@ -80,10 +103,25 @@ const getPosts = catchAsync(async (req, res) => {
  * @access public
  */
 const getPost = catchAsync(async (req, res) => {
-  const post = await postService.getPostById(req.params.postId)
+  let post = await postService.getPostById(req.params.postId)
+  // let replies = []
+  const isReplyPost = !!post.replyTo
+
+  if (isReplyPost) {
+    post = await postService.getPostById(post.replyTo._id)
+  }
+
+  // Get all replies
+  let filter = { replyTo: post.id }
+  let options = pick(req.query, ['sort', 'select', 'sortBy', 'limit', 'page'])
+  options.populate =
+    'postedBy,retweetData,retweetData.postedBy,replyTo,replyTo.postedBy'
+  const replies = await postService.queryPosts(filter, options)
+
   if (!post) res.redirect('/not-found')
   res.render('view-post', {
     post: JSON.stringify(post),
+    replies: JSON.stringify(replies.posts),
     errors: req.flash('errors'),
     success: req.flash('success'),
     pageTitle: 'View post',

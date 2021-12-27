@@ -11,7 +11,7 @@ import bcrypt from 'bcryptjs'
 const createPost = async postBody => {
   const newPost = new Post(postBody)
   await newPost.save()
-  await Post.populate(newPost, ['postedBy', 'retweetData'])
+  await Post.populate(newPost, ['postedBy', 'retweetData', 'replyTo'])
   return newPost
 }
 
@@ -41,6 +41,13 @@ const queryPosts = async (filter, options) => {
  */
 const getPosts = async filter => {
   const posts = await Post.find(filter)
+    .populate('postedBy')
+    .populate({
+      path: 'replyTo',
+      populate: {
+        path: 'postedBy',
+      },
+    })
   return posts
 }
 /**
@@ -49,7 +56,15 @@ const getPosts = async filter => {
  * @returns {Promise<post>}
  */
 const getPost = async filter => {
-  return Post.findOne(filter)
+  const post = await Post.findOne(filter)
+    .populate('postedBy')
+    .populate({
+      path: 'replyTo',
+      populate: {
+        path: 'postedBy',
+      },
+    })
+  return post
 }
 
 /**
@@ -68,7 +83,14 @@ const getTotalPosts = async (filter = {}) => {
  * @returns {Promise<post>}
  */
 const getPostById = async postId => {
-  const post = await Post.findById(postId).populate('postedBy')
+  const post = await Post.findById(postId)
+    .populate('postedBy')
+    .populate({
+      path: 'replyTo',
+      populate: {
+        path: 'postedBy',
+      },
+    })
   return post
 }
 
@@ -81,7 +103,14 @@ const getPostById = async postId => {
 const updatePostById = async (postId, postBody) => {
   const postUpdated = await Post.findByIdAndUpdate(postId, postBody, {
     new: true,
-  }).populate('postedBy')
+  })
+    .populate('postedBy')
+    .populate({
+      path: 'replyTo',
+      populate: {
+        path: 'postedBy',
+      },
+    })
   if (!postUpdated) {
     throw createError.NotFound()
   }

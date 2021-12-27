@@ -89,6 +89,20 @@ const retweetPost = async (postId, retweetButton) => {
   outputPost(post)
 }
 
+// reply-button
+const replyPost = async body => {
+  const { post } = await httpPost(`/posts/`, {
+    ...body,
+  })
+  emitNotification(post.replyTo.postedBy)
+  location.reload()
+}
+
+// reply-button
+const viewPost = async postId => {
+  location.href = `/posts/${postId}`
+}
+
 const handlePost = async () => {
   let postId = null
   let postContainer = null
@@ -99,10 +113,15 @@ const handlePost = async () => {
     }
 
     // Like post
-    if (e.target.closest('.like-button')) likePost(postId, e.target)
+    if (e.target.closest('.like-button')) {
+      return likePost(postId, e.target)
+    }
 
     // retweet post
-    if (e.target.closest('.retweet-button')) retweetPost(postId, e.target)
+    if (e.target.closest('.retweet-button')) {
+      retweetPost(postId, e.target)
+      return
+    }
 
     // Show modal img
     if (e.target.closest('.post-image__container img')) {
@@ -110,6 +129,12 @@ const handlePost = async () => {
       $('#createPostImageShowModal')
         .querySelector('.postImage-preview__container  img')
         .setAttribute('src', srcImageShow)
+      return
+    }
+
+    // View details
+    if (e.target.closest('.post_body')) {
+      return viewPost(postId)
     }
   }
 
@@ -133,6 +158,30 @@ const handlePost = async () => {
     e.target.onclick = async e => {
       if (e.target.closest('#submitDeletePost'))
         return deletePost(postId, postContainer)
+    }
+  })
+
+  $('#replyPostModal').addEventListener('shown.bs.modal', e => {
+    const postContainerEl = e.target.querySelector('.post-container')
+    const replyInput = e.target.querySelector('#replyInput')
+    let self = e.target
+    let content = null
+
+    postContainerEl.innerHTML = ''
+    postContainerEl.appendChild(postContainer)
+    replyInput.value = ''
+    replyInput.oninput = e => {
+      content = e.target.value
+      if (!content) {
+        self.querySelector('#submitReplyPost').setAttribute('disabled', true)
+        return
+      }
+      self.querySelector('#submitReplyPost').removeAttribute('disabled')
+    }
+
+    e.target.onclick = async e => {
+      if (e.target.closest('#submitReplyPost'))
+        return replyPost({ replyTo: postId, content })
     }
   })
 

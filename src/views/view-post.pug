@@ -2,11 +2,12 @@ extends ./layouts/main-layout
 block content
   script.
     var post= !{post};
+    var replies= !{replies};
 
   if success.length 
     +alertifySuccess(success)
     
-  .posts_container
+  .posts_container.view-posts__container
     .posts
 
     +createPostModal()

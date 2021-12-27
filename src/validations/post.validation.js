@@ -5,8 +5,11 @@ const createPost = {
   content: yup.string(),
   postImage: yup.string(),
   retweetData: yup.string(),
-  checkbox_selection: yup.string().when(['content', 'retweetData'], {
-    is: (content, retweetData) => !content && !retweetData,
+  replyTo: yup
+    .string()
+    .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
+  checkbox_selection: yup.string().when(['content', 'retweetData', 'replyTo'], {
+    is: (content, retweetData, replyTo) => !content && !retweetData && !replyTo,
     then: yup.string().required('Vui lòng nhập nội dung bài post.'),
   }),
 }
@@ -17,9 +20,12 @@ const getPosts = {
   postedBy: yup
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
-  replyTo: yup.string(),
+  replyTo: yup
+    .string()
+    .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
   retweetData: yup.string(),
   followingOnly: yup.string(),
+  isReply: yup.boolean().default(false),
   skip: yup.number(),
   page: yup.number().integer(),
   limit: yup.number().integer(),
