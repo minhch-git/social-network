@@ -50,5 +50,25 @@ const uploadPostImage = (req, res, next) => {
   }
   next()
 }
-export { uploadPostImage }
+const uploadMessageImage = (req, res, next) => {
+  if (req.file) {
+    // app use upload
+    const image = req.file.path
+    // file type
+    if (!config.app.message_image_types.includes(req.file.mimetype)) {
+      // remove file
+      fs.unlinkSync(image)
+      throw new createHttpError.BadRequest(transErrors.upload_not_supported)
+    }
+
+    // file size
+    if (req.file.size > config.app.message_image_limit) {
+      // remove file
+      fs.unlinkSync(image)
+      throw new createHttpError.BadRequest(transErrors.upload_limit_size)
+    }
+  }
+  next()
+}
+export { uploadPostImage, uploadMessageImage }
 export default upload

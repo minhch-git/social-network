@@ -3,7 +3,7 @@ import { requireLoggedIn } from '../middlewares/auth'
 import { postController } from '../controllers'
 import validate from '../middlewares/validate'
 import { postValidation } from '../validations'
-import upload, { uploadPostImage } from '../middlewares/upload'
+import { uploadPostImage } from '../middlewares/upload'
 import uploadStorage from '../middlewares/uploadStorage'
 
 const router = new Router()

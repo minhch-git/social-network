@@ -58,4 +58,19 @@ const uploadPostImage = async path => {
   const url = await upload(path, options)
   return url
 }
-export default { upload, uploadAvatar, uploadCoverPhoto, uploadPostImage }
+
+const uploadMessageImage = async path => {
+  const options = {
+    folder: 'messageImage',
+    crop: 'fill',
+  }
+  const url = await upload(path, options)
+  return url
+}
+export default {
+  upload,
+  uploadAvatar,
+  uploadCoverPhoto,
+  uploadPostImage,
+  uploadMessageImage,
+}

@@ -42,7 +42,11 @@ block content
             textarea#inputTextBox(name="messageInput", placeholder="Type a message...")
             button.send-message__button(disabled)
               i.fas.fa-paper-plane
-
+            .button-actions__container
+              button 
+                label(for="messageImage") 
+                  i.fas.fa-image
+                input#messageImage.d-none(type="file", name="messageImage")
       +createChatNameModal(chat)
 
 block sidebarChat 

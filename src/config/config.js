@@ -104,6 +104,9 @@ const config = {
     upload_directory: 'src/public/temp',
     upload_limit_size: 2097152, // 2097152 byte = 1MB
     image_types: ['image/jpg', 'image/png', 'image/jpeg'],
+
+    message_image_types: ['image/ipg', 'image/png', 'image/jpeg'],
+    message_image_limit: 3145728, //byte = 3B
   },
 }
 export default config

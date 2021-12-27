@@ -22,6 +22,7 @@ const messageSchema = new Schema(
       type: String,
       trim: true,
     },
+    image: String,
   },
   { timestamps: true }
 )
