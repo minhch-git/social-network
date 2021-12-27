@@ -22,6 +22,7 @@ $('.notifcations-list').onclick = async e => {
   const notificationId = e.target.closest('.list__item-link.active').dataset.id
   await httpPatch(`/notifications/${notificationId}`, { opened: true })
 }
+
 // mark all notifications as read
 $('span#markNotificationsAsRead').onclick = async e => {
   await httpPatch(`/notifications/markAsOpened`, { opened: true })

@@ -10,6 +10,7 @@ socket.on('message-received', message => addChatMessage(message))
 socket.on('notification-received', async newNotification => {
   const { notification } = await httpGet('/notifications/latest')
   alertify.set('notifier', 'position', 'top-right')
+
   let notifyHtml = `<div class="toast-notify">${createNotificationItemHtml(
     notification
   )}</div>`

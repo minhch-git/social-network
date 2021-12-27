@@ -51,6 +51,31 @@ mixin createPostImageShowModal()
           .postImage-preview__container 
               img(src="/assets/images/bg.jpg", alt="")
 
+mixin createReplyPostModal()
+  #replyPostModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          h3.modal-title.card-title.text-center.post-form-modal-title Reply
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body.p-0
+          .post-container
+
+          .post_form-container.border-0
+            .post-form__header
+              .user_image-container.d-flex
+                img(src="/assets/images/avatar-default.png", alt="User's profile picture")
+
+            .textarea_container
+              input#replyInput(placeholder="Reply ...", autofocus)
+
+        //- Modal footer
+        .modal-footer
+          button#submitReplyPost.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal', disabled) Reply
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+       
 mixin createCoverPhotoUploadModal()
   #coverPhotoUploadModal.modal.fade(tabindex='-1', aria-labelledby='coverPhotoModalLabel', aria-hidden='true')
     .modal-dialog
@@ -315,6 +340,7 @@ mixin createPostModal()
   +retweetPostModal()
   +createPostFormModal()
   +createPostImageShowModal()
+  +createReplyPostModal()
 
 mixin createChatImage(chatData, userLoggedIn)
   if !chatData 

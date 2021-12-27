@@ -2,7 +2,7 @@
 const loadPostsHome = async () => {
   let limit = 8
   const data = await httpGet(
-    `/posts/?followingOnly=true&sortBy=createdAt:desc&page=1&limit=${limit}`
+    `/posts/?followingOnly=true&isReply=false&sortBy=createdAt:desc&page=1&limit=${limit}`
   )
   let { posts, totalPages, page } = data
   $('.lds__post-home').remove()

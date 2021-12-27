@@ -1,8 +1,10 @@
 // Load posts
 const loadPostsProfile = async () => {
   let limit = 5
+
+  let isReply = selectedTab === 'replies' ? true : false
   const data = await httpGet(
-    `/posts?postedBy=${profileUserId}&sortBy=createdAt&page=1&limit=${limit}`
+    `/posts?postedBy=${profileUserId}&isReply=${isReply}&sortBy=createdAt&page=1&limit=${limit}`
   )
   const { posts, totalPages, page } = data
   $('.lds-profile').remove()

@@ -126,6 +126,21 @@ const createPostHtml = post => {
       } </div>
     `
   }
+
+  // Replies
+
+  let replyFlag = ''
+  if (post.replyTo) {
+    let replyToUsername =
+      post.replyTo.postedBy.fullName ||
+      post.replyTo.postedBy.firstName + post.replyTo.postedBy.lastName
+    replyFlag = `
+    <div class="reply_flag">
+      Replying to <a href="/profile/${post.replyTo.postedBy.username}">@${replyToUsername}</a>
+    </div>
+    `
+  }
+
   const timestamp = timeDifference(new Date(), new Date(post.createdAt))
 
   let content =
@@ -143,6 +158,14 @@ const createPostHtml = post => {
     </div>`
     : ''
 
+  let buttonReply = `
+    <button class="reply-button button_open-modal button_action-sm" 
+      data-bs-toggle="modal" 
+      data-bs-target="#replyPostModal"
+    >
+      <i class="remove-pointer-events far fa-comment"></i>
+    </button>
+    `
   return `
     <div class="post ${isRetweet ? 'post-retweet' : ''}" data-id="${post.id}" >
       ${pinnedText}
@@ -162,20 +185,18 @@ const createPostHtml = post => {
             ${buttonDelete}
           </div>
           <div class="post_body">
+            ${replyFlag}
             <span>${content}</span>
             ${postImage}
           </div>
 
           <div class="post_footer">
-            <div class="post_button-container">
+            <div class="post_button-container blue">
               <div class="post_button-container_content">
-                <button 
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#replyModal"
-                >
-                  <i class="far fa-comment"></i>
-                </button>
+                ${buttonReply}
+                <span class="number-replies">${
+                  post.replyUsers?.length ? post.replyUsers.length : ''
+                }</span>
               </div>
             </div>
 
@@ -325,13 +346,12 @@ const createPostSidebarRightHtml = post => {
           <div class="post_footer">
             <div class="post_button-container">
               <div class="post_button-container_content">
-                <button
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#replyModal"
-                >
+                <button type="button">
                   <i class="far fa-comment"></i>
                 </button>
+                 <span class="number-replies">${
+                   post.replyUsers?.length ? post.replyUsers.length : ''
+                 }</span>
               </div>
             </div>
             <div class="post_button-container green remove-pointer-events">
@@ -432,11 +452,16 @@ const getNotificationUrl = notification => {
     postRetweet: 'postRetweet',
     newMessage: 'newMessage',
     follow: 'follow',
+    reply: 'reply',
     newMessage: 'newMessage',
   }
   let url = '#'
   let typeNotify = notification.notificationType
-  if (typeNotify === types.postLike || typeNotify === types.postRetweet) {
+  if (
+    typeNotify === types.postLike ||
+    typeNotify === types.postRetweet ||
+    typeNotify === types.reply
+  ) {
     url = `/posts/${notification.entityId}`
   }
   if (typeNotify === types.follow) {
@@ -450,20 +475,24 @@ const createTextNotification = notificationType => {
     postRetweet: 'postRetweet',
     newMessage: 'newMessage',
     follow: 'follow',
+    reply: 'reply',
     newMessage: 'newMessage',
   }
   let text
   if (notificationType === types.postLike) {
     // text = 'liked one of your posts'
-    text = 'đã thích một trong những bài đăng của bạn'
+    text = 'đã thích một trong những bài đăng của bạn.'
   }
   if (notificationType === types.postRetweet) {
     // text = 'retweeted one of your posts'
-    text = 'đã chia sẻ lại một trong những bài đăng của bạn'
+    text = 'đã chia sẻ lại một trong những bài đăng của bạn.'
   }
   if (notificationType === types.follow) {
     // text = 'followed you'
-    text = 'đã theo đõi bạn'
+    text = 'đã theo đõi bạn.'
+  }
+  if (notificationType === types.reply) {
+    text = 'đã bình luận một trong những bài đăng của bạn.'
   }
   return text
 }
