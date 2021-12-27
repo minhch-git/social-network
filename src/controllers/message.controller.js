@@ -1,7 +1,12 @@
 import createError from 'http-errors'
 import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
-import { chatService, messageService, userService } from '../services'
+import {
+  chatService,
+  messageService,
+  uploadService,
+  userService,
+} from '../services'
 import { tranSuccess } from '../../lang/en'
 import User from '../models/user.model'
 
@@ -104,6 +109,10 @@ const getInboxPage = (req, res) => {
  * @access private
  */
 const createMessage = catchAsync(async (req, res) => {
+  if (req.file) {
+    const url = await uploadService.uploadMessageImage(req.file.path)
+    req.body = { ...req.body, image: url }
+  }
   const message = await messageService.createMessage({
     ...req.body,
     sender: req.user.id,

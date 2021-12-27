@@ -860,7 +860,13 @@ body {
 .message_owner .message_owner_text .message_owner_time {
   float: left;
 }
-
+.message_owner_text img {
+  max-width: 340px;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
 .message_chat_send {
   margin-top: 16px;
   height: 10%;
@@ -1587,6 +1593,13 @@ span.errorMessage {
   color: #f91880;
   font-size: 18px;
 }
+.message__container .footer .button-actions__container {
+  display: flex;
+  align-items: center;
+}
+.message__container .footer .button-actions__container label {
+  cursor: pointer;
+}
 
 .chat-header {
   display: flex;
@@ -2138,6 +2151,10 @@ button.send-message__button:disabled {
   .user_image-container {
     width: 34px;
     height: 34px;
+  }
+
+  .message_owner_text img {
+    max-width: 230px;
   }
 }
 

@@ -145,3 +145,68 @@ $('textarea#inputTextBox').onkeyup = e => {
 
   $('button.send-message__button').removeAttribute('disabled')
 }
+
+// Upload image
+let messageImageTypes = ['image/ipg', 'image/png', 'image/jpeg']
+let messageImageLimit = 3145728 //byte = 3B
+// Check file when upload
+let checkFileUpload = fileData => {
+  let types = messageImageTypes
+  let limit = messageImageLimit
+
+  if (!types.includes(fileData.type)) {
+    alertifyError('Kiểu file không hợp lệ, chỉ chấp nhận ảnh png, jpg và jpeg')
+    return false
+  }
+
+  if (fileData.size > limit) {
+    alertifyError(`Ảnh upload tối đa cho phép là ${limit / 1048576}`)
+    return false
+  }
+
+  return true
+}
+
+const uploadMessageImage = async formData => {
+  try {
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: `<span>Đang tải ảnh lên...</span>`,
+      showConfirmButton: false,
+      timer: 1500,
+      background: '#15202b',
+    })
+
+    const response = await fetch('/messages/', {
+      method: 'POST',
+      body: formData,
+    })
+    const result = await response.json()
+    // badrequest
+    if (!response.ok) throw new Error(result.message)
+    // success
+    addChatMessage(result.message)
+
+    // Socket message
+    if (connected) {
+      socket.emit('new-message', message)
+    }
+  } catch (error) {
+    alertify.notify(error.message, 'error', 6)
+  }
+}
+
+$('#messageImage').onchange = e => {
+  let input = e.target
+
+  if (!checkFileUpload(input.files[0])) {
+    input.value = ''
+    return
+  }
+
+  let formData = new FormData()
+  if (input.files[0]) formData.append('messageImage', input.files[0])
+  formData.append('chat', chatId)
+  uploadMessageImage(formData)
+}

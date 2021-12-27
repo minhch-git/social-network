@@ -13,6 +13,7 @@ const createMessage = {
   sender: yup
     .string()
     .matches(config.regexObjectId, transValidations.objectId_type_incorrect),
+  messageImage: yup.string(),
 }
 
 const getMessages = {

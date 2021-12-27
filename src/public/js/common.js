@@ -279,7 +279,12 @@ const createChatListHtml = chatData => {
   let markAsRead = false
   if (lastestMessage) {
     newMessage = lastestMessage.content
-    senderName = lastestMessage.sender.fullName
+      ? lastestMessage.content
+      : 'đã gửi một ảnh.'
+    senderName =
+      lastestMessage.sender.id == userLoggedIn.id
+        ? 'Bạn'
+        : lastestMessage.sender.fullName
     markAsRead = lastestMessage.readBy.includes(userLoggedIn.id)
   }
 
@@ -420,10 +425,11 @@ const createMessageHtml = message => {
       <img src="${profilePic}" alt="avatar" />
     </div>
     <div class="message_received_msg message_owner_msg">
-        <div class="message_received_text message_owner_text">
-            <p>${message.content}</p>
-            <span class="message_received_time message_owner_time">${timestamp}</span>
-        </div>
+      <div class="message_received_text message_owner_text">
+        ${message.image ? `<img src="${message.image}" alt="Images" />` : ''}
+        ${message.content ? `<p>${message.content}</p>` : ''}
+        <span class="message_received_time message_owner_time">${timestamp}</span>
+      </div>
     </div>
   </div>
   `
