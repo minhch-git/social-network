@@ -104,3 +104,106 @@
 - Deployment: Heroku
 
 
+
+# Feature 
+- Login Page: 
+      + Register 
+      + Login
+            + Local
+            + Facebook
+            + Google
+      + Verify email
+      + Forgot/Reset password
+
+- Home Page: 
+      + Load post by createdAt
+      + Create new post(content/image)
+      + Delete post
+      + Pin post 
+      + Comment
+      + Like
+      + Retweet
+      + View Image
+      + Show more 
+
+- Search Page: 
+      + User
+            + Load users
+            + Search user
+            + Show more
+      + Post
+            + Load posts
+            + Search post
+            + Show more
+
+- Notifications Page: 
+      + Show notification number
+      + Load notifications
+            + Like
+            + Retweet
+            + Follow
+            + Mark as read 
+            + Mark all as read
+
+- Inbox Page: 
+      + Show message number
+      + Show chat list
+      + Mark as read 
+      + Search/Create group chat
+      + Message page
+            + Show message name
+            + Update message name 
+            + Show message 
+            + Chat content/image
+
+- Profile Page: 
+      + Update cover photo
+      + Update profile picture
+      + Show Following/Followers
+      + Tab posts
+            + Show owner's posts
+            + Show pinned posts to the top
+            + Delete post
+            + Pin post 
+            + Comment
+            + Like
+            + Retweet
+            + View Image
+            + Show more 
+      + Tab replies
+            + Show comments
+
+- Follow Page: 
+      + Show following/followers
+
+- Real time:
+      + Like
+      + Retweet
+      + Comment
+      + Chat
+
+      + Show toast messages
+
+- Admin page: 
+      + Show models with the number of collections
+      + Table account
+            + Create new user
+            + Grant permission
+            + Delete user 
+            + Reset password
+            + Active account
+            + Block
+            + Paginations
+
+      + Table posts
+            + Delete post
+            + Paginations
+      
+      + Table Admin
+            + Update permission
+            + Delete post
+            + Paginations
+
+- Sidebar right: 
+      + Most Featured Posts
+      + User with the most followers
