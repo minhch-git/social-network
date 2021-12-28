@@ -2138,7 +2138,7 @@ button.send-message__button:disabled {
     padding: 0 4px;
   }
   .sidebar .logo {
-    display: none;
+    font-size: 12px;
   }
   ul.menu-list li.menu-item span:not(span.badge) {
     display: none;
@@ -2155,6 +2155,20 @@ button.send-message__button:disabled {
 
   .message_owner_text img {
     max-width: 230px;
+  }
+
+  .post_header span.username {
+    display: none;
+  }
+  .post_header a.displayName {
+    font-size: 14px;
+  }
+
+  .post_body {
+    font-size: 14px;
+  }
+  .reply_flag {
+    font-size: 11px;
   }
 }
 
