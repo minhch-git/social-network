@@ -2,23 +2,57 @@
 ;(async () => {
   let limit = 10
   const data = await httpGet(
-    `/notifications/content?sortBy=createdAt&page=1&limit=${limit}`
+    `/notifications/content?sortBy=createdAt:desc&page=1&limit=${limit}`
   )
   if (data.notifications.length === 0)
-    return $('.notifcations-list').insertAdjacentHTML(
+    return $('.notifications-list').insertAdjacentHTML(
       'afterbegin',
       '<span class="d-block text-center mt-3">Nothing to show</span>'
     )
   if (data.notifications.some(notification => !notification.opened)) {
     $('#markNotificationsAsRead').classList.add('active')
   }
+
+  // ================================
+  // READMORE
+  // ================================
+  const { totalPages, page } = data
+  if (+page < totalPages) {
+    let buttonShowMore =
+      '<div class="show-more__container text-center my-3"><span>xem thêm</span></div>'
+    $('.notifications-list').insertAdjacentHTML('afterend', buttonShowMore)
+  }
+
+  let buttonShowMore = $('.notifications-container .show-more__container')
+  if (buttonShowMore)
+    buttonShowMore.onclick = async e => {
+      let nextPage = Math.ceil(
+        $$('.notifications-list .list__item-link').length / limit + 1
+      )
+      const data = await httpGet(
+        `/notifications/content?sortBy=createdAt:desc&page=${nextPage}&limit=${limit}`
+      )
+      if (+data.page >= data.totalPages) {
+        buttonShowMore.remove()
+      }
+
+      if (data.notifications.length > 0) {
+        return data.notifications.forEach(notification =>
+          outputNotificationItem(notification)
+        )
+      }
+    }
+  // ================================
+  // END READMORE
+  // ================================
+
   data.notifications.forEach(notification =>
     outputNotificationItem(notification)
   )
 })()
 
 // mark a notificaiton as read
-$('.notifcations-list').onclick = async e => {
+$('.notifications-list').onclick = async e => {
   const notificationId = e.target.closest('.list__item-link.active').dataset.id
   await httpPatch(`/notifications/${notificationId}`, { opened: true })
 }

@@ -524,8 +524,8 @@ const createNotificationItemHtml = notification => {
 }
 const outputNotificationItem = (
   notification,
-  selector = '.notifcations-list',
-  position = 'afterbegin'
+  selector = '.notifications-list',
+  position = 'beforeend'
 ) => {
   const html = createNotificationItemHtml(notification)
   $(selector).insertAdjacentHTML(position, html)
