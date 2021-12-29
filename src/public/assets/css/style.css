@@ -2092,18 +2092,18 @@ button.send-message__button:disabled {
 }
 
 /* ---------------- Notifications -------------------- */
-.notifcations-list .list__item-link-details {
+.notifications-list .list__item-link-details {
   width: 100%;
   flex-direction: row;
   align-items: center;
 }
 
-.notifcations-list .list__item-link-details .heading {
+.notifications-list .list__item-link-details .heading {
   color: #dbdbdb;
   margin-right: 4px;
   font-weight: 600;
 }
-.notifcations-list .list__item-link-details .subText {
+.notifications-list .list__item-link-details .subText {
   flex: 1;
   font-size: 14px;
 }
