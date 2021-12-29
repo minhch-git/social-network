@@ -129,7 +129,7 @@ $('#searchInput').onkeyup = e => {
   searchButton.classList.add('text-primary')
 
   // Submit
-  $('#searchButton').onclick = () => {
+  searchButton.onclick = () => {
     // Remove button show more when submit
     let buttonShowMore = $('.users_container .show-more__container')
     if (buttonShowMore) {

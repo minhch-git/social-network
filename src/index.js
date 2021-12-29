@@ -76,6 +76,7 @@ const runningApp = () => {
     }
   })
 }
+runningApp()
 
 // const runningAppWithPem = () => {
 //   pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
@@ -93,5 +94,4 @@ const runningApp = () => {
 //   })
 // }
 
-runningApp()
 // runningAppWithPem()
