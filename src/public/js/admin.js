@@ -8,7 +8,8 @@ const limitPosts = 10
 const createUserRow = (user, isAdmin) => {
   let dataUser = {
     id: user.id,
-    email: user.local.email || user.facebook.email || user.google.email,
+    email:
+      user.local?.email || user.facebook?.email || user.google?.email || '',
     firstName: user.firstName,
     lastName: user.lastName,
     role: user.role,
@@ -20,14 +21,17 @@ const createUserRow = (user, isAdmin) => {
       <td>${user.firstName}</td>
       <td>${user.lastName}</td>
       <td>${user.username}</td>
-      <td>${user.local.email || user.facebook.email || user.google.email}</td>
+      <td>${
+        user.local?.email || user.facebook?.email || user.google?.email || ''
+      }</td>
       ${
         !isAdmin
           ? `
       <td>${
-        (user.local.email && 'Local') ||
-        (user.facebook.email && 'Facebook') ||
-        (user.google.email && 'Google')
+        (user.local?.email && 'Local') ||
+        (user.facebook?.email && 'Facebook') ||
+        (user.google?.email && 'Google') ||
+        'email ?'
       }</td>
       <td>${user.local.isActive ? 'Active' : 'Not Activate'}</td>
       `
@@ -51,7 +55,7 @@ const createUserRow = (user, isAdmin) => {
         <button class="btn-delete-user btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">Xóa</button>
         <button class="btn-reset-password btn btn-sm btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Reset-Pass</button>
         <button class="btn-verify-email btn btn-sm btn-success mx-1" data-bs-toggle="modal" data-bs-target="#verifyEmailModal" data-type="${
-          user.local.isActive ? 'block' : 'active'
+          user.local?.isActive ? 'block' : 'active'
         }" > ${user.local.isActive ? 'Block' : 'Active'}
         </button>`
             : `

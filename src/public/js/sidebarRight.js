@@ -1,5 +1,5 @@
 // Search
-const submitSearchUser = async (keyword, options = {}) => {
+const submitSearchUserSidebarRight = async (keyword, options = {}) => {
   const page = options?.page || 1
   const limit = options?.limit || 10
   const sortBy = options?.sortBy || 'createdAt:desc'
@@ -36,11 +36,11 @@ if ($('#searchUserInput'))
 
     // Submit
     searchButton.onclick = () => {
-      submitSearchUser(value)
+      submitSearchUserSidebarRight(value)
       input.value = ''
     }
     if (value && e.keyCode === 13) {
-      submitSearchUser(value)
+      submitSearchUserSidebarRight(value)
       input.value = ''
     }
   }
