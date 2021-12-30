@@ -51,11 +51,33 @@
   )
 })()
 
+let notificationId = ''
+let notificationItemContainer = ''
 // mark a notificaiton as read
 $('.notifications-list').onclick = async e => {
-  const notificationId = e.target.closest('.list__item-link.active').dataset.id
-  await httpPatch(`/notifications/${notificationId}`, { opened: true })
+  const notificationItemEl = e.target.closest('.list__item-link.active')
+  if (notificationItemEl) {
+    // Mark as read
+    notificationId = e.target.closest('.list__item-link.active').dataset.id
+    await httpPatch(`/notifications/${notificationId}`, { opened: true })
+    return
+  }
+
+  // Remove notifications
+  if (e.target.closest('.btn-delete-notification')) {
+    notificationItemContainer = e.target.parentElement.parentElement
+    notificationId = notificationItemContainer.dataset.id
+  }
 }
+
+$('#deleteNotificationModal').addEventListener('shown.bs.modal', async e => {
+  e.target.onclick = async e => {
+    if (e.target.closest('#submitDeleteNotification')) {
+      await httpDelete(`/notifications/${notificationId}`)
+      notificationItemContainer.remove()
+    }
+  }
+})
 
 // mark all notifications as read
 $('span#markNotificationsAsRead').onclick = async e => {

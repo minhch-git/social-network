@@ -378,3 +378,20 @@ mixin createChatNameModal(chat)
         .modal-footer
           button#submitChatNameButton.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Yes
           button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') No
+
+
+mixin createDeleteNotificationModal()
+  #deleteNotificationModal.modal.fade
+    .modal-dialog
+      .modal-content.bg-grey-dim
+        //- Modal Header
+        .modal-header
+          p.modal-title.text-primary Xóa thông báo?
+          button.button-close(type='button', data-bs-dismiss='modal') &times;
+        //- Modal body
+        .modal-body
+          span Xóa thông báo này khỏi mục thông báo của bạn?
+        //- Modal footer
+        .modal-footer
+          button#submitDeleteNotification.btn.btn-success.btn-sm(type='button', data-bs-dismiss='modal') Có
+          button.btn.btn-danger.btn-sm(type='button', data-bs-dismiss='modal') Không

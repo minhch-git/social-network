@@ -33,6 +33,13 @@ router.patch(
   notificationController.updateNotification
 )
 
+router.delete(
+  '/:notificationId',
+  requireLoggedIn,
+  validate(notificationValidation.deleteNotification),
+  notificationController.deleteNotification
+)
+
 router.get('/', requireLoggedIn, async (req, res) => {
   res.render('notifications', {
     errors: req.flash('errors'),

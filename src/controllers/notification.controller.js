@@ -3,6 +3,7 @@ import pick from '../utils/pick'
 import catchAsync from '../utils/catchAsync'
 import { chatService, notificationService, userService } from '../services'
 import User from '../models/user.model'
+import { tranSuccess } from '../../lang/vi'
 
 /**
  * Create a new notification
