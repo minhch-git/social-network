@@ -1,5 +1,5 @@
 let connected = false
-const socket = io('http://localhost:8888')
+const socket = io()
 
 socket.emit('setup', userLoggedIn)
 
