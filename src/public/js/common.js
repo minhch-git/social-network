@@ -301,7 +301,7 @@ const createChatListHtml = chatData => {
           <span class="heading ellipsis">${chatName}</span>
           <span class="subText ellipsis"><b>${
             senderName ? senderName : ''
-          }</b>: ${newMessage ? newMessage : ''}</span>
+          }</b>: <span>${newMessage ? newMessage : ''}</span></span>
           <span class="text-xs">${timestamps}</span>
         </div>
       </a>
